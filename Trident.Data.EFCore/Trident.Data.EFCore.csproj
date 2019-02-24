@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="ReadMe.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="ReadMe.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.0.0-preview.19074.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Cosmos" Version="3.0.0-preview.19074.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.0.0-preview.19074.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Trident.EF\Trident.EF.csproj" />
+  </ItemGroup>
+
+</Project>
