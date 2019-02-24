@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,9 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.0.0-preview.19074.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Cosmos" Version="3.0.0-preview.19074.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.0.0-preview.19074.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.0.0-preview*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Cosmos" Version="3.0.0-preview*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.0.0-preview*" />
   </ItemGroup>
 
   <ItemGroup>
