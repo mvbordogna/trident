@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -33,10 +33,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Trident.AutoMapper\Trident.AutoMapper.csproj" />
-    <ProjectReference Include="..\Trident.Core\Trident.Core.csproj" />
-    <ProjectReference Include="..\Trident.Testing\Trident.Testing.csproj" />
-    <ProjectReference Include="..\Trident\Trident.csproj" />
+    <ProjectReference Include="..\..\..\Trident\Trident.csproj" />
+    <ProjectReference Include="..\..\..\Trident.AutoMapper\Trident.AutoMapper.csproj" />
+    <ProjectReference Include="..\..\..\Trident.Core\Trident.Core.csproj" />
+    <ProjectReference Include="..\..\..\Trident.Testing\Trident.Testing.csproj" />
   </ItemGroup>
 
 </Project>

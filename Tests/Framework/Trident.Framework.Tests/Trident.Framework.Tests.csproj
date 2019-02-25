@@ -1,13 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8D1D34BC-9DAE-4560-AB5B-46684A298173}</ProjectGuid>
+    <ProjectGuid>{474EA6B3-936A-4564-ADEC-F2A9D82EF526}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Trident.Core.Web.Tests</RootNamespace>
-    <AssemblyName>Trident.Core.Web.Tests</AssemblyName>
+    <RootNamespace>Trident.Framework.Tests</RootNamespace>
+    <AssemblyName>Trident.Framework.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -38,51 +39,44 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\AppSettingsTests.cs" />
+    <Compile Include="Common\ConnectionStringSettingsTests.cs" />
+    <Compile Include="Data\SharedConnectionStringResolverTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Security\WebApi\" />
-    <Folder Include="Validation\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Trident.Framework.Web\Trident.Framework.Web.csproj">
-      <Project>{736b7e76-dad7-4206-b464-34b33ecb17e6}</Project>
-      <Name>Trident.Framework.Web</Name>
+    <ProjectReference Include="..\..\..\Trident.Contracts\Trident.Contracts.csproj">
+      <Project>{f95afc22-8ea3-40ac-9d83-37be67989ee6}</Project>
+      <Name>Trident.Contracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Trident.TestHelpers\Trident.Framework.Testing.csproj">
-      <Project>{4c1b4817-d5e9-40f5-a388-c35a9eab7bab}</Project>
-      <Name>Trident.Framework.Testing</Name>
+    <ProjectReference Include="..\..\..\Trident.Framework\Trident.Framework.csproj">
+      <Project>{46486879-7b58-4731-8b0e-84d0b0fa37a4}</Project>
+      <Name>Trident.Framework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Trident.Testing\Trident.Testing.csproj">
+    <ProjectReference Include="..\..\..\Trident.Testing\Trident.Testing.csproj">
       <Project>{ebe9653d-c8ea-4004-bff6-984a93d58b2b}</Project>
       <Name>Trident.Testing</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Trident.Web\Trident.Web.csproj">
-      <Project>{fac02538-bb2b-42e2-be7b-0301ad99c636}</Project>
-      <Name>Trident.Web</Name>
+    <ProjectReference Include="..\..\..\Trident\Trident.csproj">
+      <Project>{af4eb9a2-0356-48d1-bb2a-1b95faf79b1e}</Project>
+      <Name>Trident</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Autofac">
-      <Version>4.9.1</Version>
-    </PackageReference>
-    <PackageReference Include="Autofac.Extras.Moq">
-      <Version>4.3.0</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.AspNet.WebApi">
-      <Version>5.2.7</Version>
-    </PackageReference>
     <PackageReference Include="Moq">
       <Version>4.10.1</Version>
     </PackageReference>
@@ -92,29 +86,14 @@
     <PackageReference Include="MSTest.TestFramework">
       <Version>2.0.0-beta2</Version>
     </PackageReference>
-    <PackageReference Include="Newtonsoft.Json">
-      <Version>12.0.1</Version>
+    <PackageReference Include="System.Configuration.ConfigurationManager">
+      <Version>4.5.0</Version>
     </PackageReference>
-    <PackageReference Include="System.ComponentModel.TypeConverter">
-      <Version>4.3.0</Version>
-    </PackageReference>
-    <PackageReference Include="System.Net.Http">
-      <Version>4.3.4</Version>
-    </PackageReference>
-    <PackageReference Include="System.Runtime">
-      <Version>4.3.1</Version>
-    </PackageReference>
-    <PackageReference Include="System.Security.Cryptography.Algorithms">
-      <Version>4.3.1</Version>
-    </PackageReference>
-    <PackageReference Include="System.Security.Cryptography.X509Certificates">
-      <Version>4.3.2</Version>
+    <PackageReference Include="System.Security.Principal.Windows">
+      <Version>4.5.1</Version>
     </PackageReference>
     <PackageReference Include="System.Threading.Tasks.Extensions">
       <Version>4.5.2</Version>
-    </PackageReference>
-    <PackageReference Include="System.ValueTuple">
-      <Version>4.5.0</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
