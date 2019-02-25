@@ -16,7 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{A7A09B09-4
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trident.Data.EntityFramework", "Framework\Trident.Data.EntityFramework\Trident.Data.EntityFramework.csproj", "{23E632BC-E094-487A-829D-6FE8C0AA3B89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trident.Framework.Testing", "Framework\Trident.TestHelpers\Trident.Framework.Testing.csproj", "{4C1B4817-D5E9-40F5-A388-C35A9EAB7BAB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trident.Framework.Testing", "Framework\Trident.Framework.Testing\Trident.Framework.Testing.csproj", "{4C1B4817-D5E9-40F5-A388-C35A9EAB7BAB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident.Contracts", "Standard\Trident.Contracts\Trident.Contracts.csproj", "{F95AFC22-8EA3-40AC-9D83-37BE67989EE6}"
 EndProject

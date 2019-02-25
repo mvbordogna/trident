@@ -7,8 +7,8 @@
     <ProjectGuid>{4C1B4817-D5E9-40F5-A388-C35A9EAB7BAB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TestHelpers</RootNamespace>
-    <AssemblyName>TestHelpers</AssemblyName>
+    <RootNamespace>Trident.Framework.Testing</RootNamespace>
+    <AssemblyName>Trident.Framework.Testing</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
