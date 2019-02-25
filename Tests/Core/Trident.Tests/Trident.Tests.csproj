@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -17,6 +17,10 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\..\Solution Items\GlobalAssembly.cs" Link="Properties\GlobalAssembly.cs" />
   </ItemGroup>
 
   <ItemGroup>
