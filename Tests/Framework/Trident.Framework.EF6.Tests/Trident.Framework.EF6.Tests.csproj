@@ -73,6 +73,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\Solution Items\GlobalAssembly.cs">
+      <Link>Properties\GlobalAssembly.cs</Link>
+    </Compile>
     <Compile Include="EFRepositoryTests.cs" />
     <Compile Include="EFSharedContextFactoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

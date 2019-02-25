@@ -50,6 +50,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\Solution Items\GlobalAssembly.cs">
+      <Link>Properties\GlobalAssembly.cs</Link>
+    </Compile>
     <Compile Include="Common\AppSettingsTests.cs" />
     <Compile Include="Common\ConnectionStringSettingsTests.cs" />
     <Compile Include="Data\SharedConnectionStringResolverTests.cs" />

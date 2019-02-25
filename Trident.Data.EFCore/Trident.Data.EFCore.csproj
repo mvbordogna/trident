@@ -3,10 +3,15 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="ReadMe.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Solution Items\GlobalAssembly.cs" Link="Properties\GlobalAssembly.cs" />
   </ItemGroup>
 
   <ItemGroup>

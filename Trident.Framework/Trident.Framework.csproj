@@ -48,6 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Solution Items\GlobalAssembly.cs">
+      <Link>Properties\GlobalAssembly.cs</Link>
+    </Compile>
     <Compile Include="Common\ConnectionStringSettings.cs" />
     <Compile Include="Common\EntityComparer.cs" />
     <Compile Include="Common\IEntityComparer.cs" />
