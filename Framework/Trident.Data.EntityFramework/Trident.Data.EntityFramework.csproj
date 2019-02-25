@@ -7,8 +7,8 @@
     <ProjectGuid>{23E632BC-E094-487A-829D-6FE8C0AA3B89}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Trident.Core.Data.EntityFramework</RootNamespace>
-    <AssemblyName>Trident.Core.Data.EntityFramework</AssemblyName>
+    <RootNamespace>Trident.Framework.EF6</RootNamespace>
+    <AssemblyName>Trident.Framework.EF6</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
