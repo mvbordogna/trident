@@ -57,35 +57,35 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Trident.Autofac\Trident.Autofac.csproj">
+    <ProjectReference Include="..\..\..\Standard\Trident.Autofac\Trident.Autofac.csproj">
       <Project>{c31bb417-e079-4434-a24c-0bfcdc3c2601}</Project>
       <Name>Trident.Autofac</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Trident.Contracts\Trident.Contracts.csproj">
+    <ProjectReference Include="..\..\..\Standard\Trident.Contracts\Trident.Contracts.csproj">
       <Project>{f95afc22-8ea3-40ac-9d83-37be67989ee6}</Project>
       <Name>Trident.Contracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Trident.Data.EntityFramework\Trident.Data.EntityFramework.csproj">
+    <ProjectReference Include="..\..\..\Framework\Trident.Data.EntityFramework\Trident.Data.EntityFramework.csproj">
       <Project>{23e632bc-e094-487a-829d-6fe8c0aa3b89}</Project>
       <Name>Trident.Data.EntityFramework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Trident.EF\Trident.EF.csproj">
+    <ProjectReference Include="..\..\..\Standard\Trident.EF\Trident.EF.csproj">
       <Project>{4f94caac-f241-490e-99f5-efd747136338}</Project>
       <Name>Trident.EF</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Trident.Framework\Trident.Framework.csproj">
+    <ProjectReference Include="..\..\..\Framework\Trident.Framework\Trident.Framework.csproj">
       <Project>{46486879-7b58-4731-8b0e-84d0b0fa37a4}</Project>
       <Name>Trident.Framework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Trident.TestHelpers\Trident.Framework.Testing.csproj">
+    <ProjectReference Include="..\..\..\Framework\Trident.TestHelpers\Trident.Framework.Testing.csproj">
       <Project>{4c1b4817-d5e9-40f5-a388-c35a9eab7bab}</Project>
       <Name>Trident.Framework.Testing</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Trident.Testing\Trident.Testing.csproj">
+    <ProjectReference Include="..\..\..\Standard\Trident.Testing\Trident.Testing.csproj">
       <Project>{ebe9653d-c8ea-4004-bff6-984a93d58b2b}</Project>
       <Name>Trident.Testing</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Trident\Trident.csproj">
+    <ProjectReference Include="..\..\..\Standard\Trident\Trident.csproj">
       <Project>{af4eb9a2-0356-48d1-bb2a-1b95faf79b1e}</Project>
       <Name>Trident</Name>
     </ProjectReference>

@@ -14,49 +14,49 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Solution Items", ".Solutio
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{A7A09B09-4A3A-464D-AF80-0A5D11B5E019}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trident.Data.EntityFramework", "Trident.Data.EntityFramework\Trident.Data.EntityFramework.csproj", "{23E632BC-E094-487A-829D-6FE8C0AA3B89}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trident.Data.EntityFramework", "Framework\Trident.Data.EntityFramework\Trident.Data.EntityFramework.csproj", "{23E632BC-E094-487A-829D-6FE8C0AA3B89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trident.Framework.Testing", "Trident.TestHelpers\Trident.Framework.Testing.csproj", "{4C1B4817-D5E9-40F5-A388-C35A9EAB7BAB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trident.Framework.Testing", "Framework\Trident.TestHelpers\Trident.Framework.Testing.csproj", "{4C1B4817-D5E9-40F5-A388-C35A9EAB7BAB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident.Contracts", "Trident.Contracts\Trident.Contracts.csproj", "{F95AFC22-8EA3-40AC-9D83-37BE67989EE6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident.Contracts", "Standard\Trident.Contracts\Trident.Contracts.csproj", "{F95AFC22-8EA3-40AC-9D83-37BE67989EE6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident.Azure", "Trident.Azure\Trident.Azure.csproj", "{8F1D74C5-7123-4AF1-B1D6-904E5C4960C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident.Azure", "Standard\Trident.Azure\Trident.Azure.csproj", "{8F1D74C5-7123-4AF1-B1D6-904E5C4960C8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident.Autofac", "Trident.Autofac\Trident.Autofac.csproj", "{C31BB417-E079-4434-A24C-0BFCDC3C2601}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident.Autofac", "Standard\Trident.Autofac\Trident.Autofac.csproj", "{C31BB417-E079-4434-A24C-0BFCDC3C2601}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident.AutoMapper", "Trident.AutoMapper\Trident.AutoMapper.csproj", "{D680BC7C-71B8-4C02-9CCB-83048249E026}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident.AutoMapper", "Standard\Trident.AutoMapper\Trident.AutoMapper.csproj", "{D680BC7C-71B8-4C02-9CCB-83048249E026}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident.EF", "Trident.EF\Trident.EF.csproj", "{4F94CAAC-F241-490E-99F5-EFD747136338}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident.EF", "Standard\Trident.EF\Trident.EF.csproj", "{4F94CAAC-F241-490E-99F5-EFD747136338}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident.Serilog", "Trident.Serilog\Trident.Serilog.csproj", "{FB32B811-C654-4C3C-8B6C-0395CD7FCC5C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident.Serilog", "Standard\Trident.Serilog\Trident.Serilog.csproj", "{FB32B811-C654-4C3C-8B6C-0395CD7FCC5C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident.Web", "Trident.Web\Trident.Web.csproj", "{FAC02538-BB2B-42E2-BE7B-0301AD99C636}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident.Web", "Standard\Trident.Web\Trident.Web.csproj", "{FAC02538-BB2B-42E2-BE7B-0301AD99C636}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident.Core.Web", "Trident.Core.Web\Trident.Core.Web.csproj", "{937671DF-73D7-4F4D-9177-69056ADAEC08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident.Core.Web", "Core\Trident.Core.Web\Trident.Core.Web.csproj", "{937671DF-73D7-4F4D-9177-69056ADAEC08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trident.Framework.Web", "Trident.Framework.Web\Trident.Framework.Web.csproj", "{736B7E76-DAD7-4206-B464-34B33ECB17E6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trident.Framework.Web", "Framework\Trident.Framework.Web\Trident.Framework.Web.csproj", "{736B7E76-DAD7-4206-B464-34B33ECB17E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trident.Framework", "Trident.Framework\Trident.Framework.csproj", "{46486879-7B58-4731-8B0E-84D0B0FA37A4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trident.Framework", "Framework\Trident.Framework\Trident.Framework.csproj", "{46486879-7B58-4731-8B0E-84D0B0FA37A4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Standard", "Standard", "{667AA669-79F9-4392-BB08-D3BA51961F4A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{6A3A7D84-9839-4D56-B0BD-5B46EA357754}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident.RestSharp", "Trident.RestSharp\Trident.RestSharp.csproj", "{3DA8E98A-A7B6-4313-8708-6327A80B066A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident.RestSharp", "Standard\Trident.RestSharp\Trident.RestSharp.csproj", "{3DA8E98A-A7B6-4313-8708-6327A80B066A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident.Tests", "Tests\Core\Trident.Tests\Trident.Tests.csproj", "{C10236AE-F97C-417B-A882-67B1CF2CE7F7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident.Testing", "Trident.Testing\Trident.Testing.csproj", "{EBE9653D-C8EA-4004-BFF6-984A93D58B2B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident.Testing", "Standard\Trident.Testing\Trident.Testing.csproj", "{EBE9653D-C8EA-4004-BFF6-984A93D58B2B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trident.Framework.Tests", "Tests\Framework\Trident.Framework.Tests\Trident.Framework.Tests.csproj", "{474EA6B3-936A-4564-ADEC-F2A9D82EF526}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trident.Framework.Web.Tests", "Tests\Framework\Trident.Framework.Web.Tests\Trident.Framework.Web.Tests.csproj", "{8D1D34BC-9DAE-4560-AB5B-46684A298173}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident.Data.EFCore", "Trident.Data.EFCore\Trident.Data.EFCore.csproj", "{9BF22A1B-6488-4746-925A-B4F9BA66BC33}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident.Data.EFCore", "Core\Trident.Data.EFCore\Trident.Data.EFCore.csproj", "{9BF22A1B-6488-4746-925A-B4F9BA66BC33}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident.Core", "Trident.Core\Trident.Core.csproj", "{7047D8F5-3E3A-46D7-8029-3B51917BF653}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident.Core", "Core\Trident.Core\Trident.Core.csproj", "{7047D8F5-3E3A-46D7-8029-3B51917BF653}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident", "Trident\Trident.csproj", "{AF4EB9A2-0356-48D1-BB2A-1B95FAF79B1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident", "Standard\Trident\Trident.csproj", "{AF4EB9A2-0356-48D1-BB2A-1B95FAF79B1E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident.Core.Tests", "Tests\Core\Trident.Core.Tests\Trident.Core.Tests.csproj", "{575AC605-68AD-468B-A3C5-C0D1273AD40E}"
 EndProject

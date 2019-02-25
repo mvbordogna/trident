@@ -60,19 +60,19 @@
     <Folder Include="Validation\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Trident.Framework.Web\Trident.Framework.Web.csproj">
+    <ProjectReference Include="..\..\..\Framework\Trident.Framework.Web\Trident.Framework.Web.csproj">
       <Project>{736b7e76-dad7-4206-b464-34b33ecb17e6}</Project>
       <Name>Trident.Framework.Web</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Trident.TestHelpers\Trident.Framework.Testing.csproj">
+    <ProjectReference Include="..\..\..\Framework\Trident.TestHelpers\Trident.Framework.Testing.csproj">
       <Project>{4c1b4817-d5e9-40f5-a388-c35a9eab7bab}</Project>
       <Name>Trident.Framework.Testing</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Trident.Testing\Trident.Testing.csproj">
+    <ProjectReference Include="..\..\..\Standard\Trident.Testing\Trident.Testing.csproj">
       <Project>{ebe9653d-c8ea-4004-bff6-984a93d58b2b}</Project>
       <Name>Trident.Testing</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Trident.Web\Trident.Web.csproj">
+    <ProjectReference Include="..\..\..\Standard\Trident.Web\Trident.Web.csproj">
       <Project>{fac02538-bb2b-42e2-be7b-0301ad99c636}</Project>
       <Name>Trident.Web</Name>
     </ProjectReference>

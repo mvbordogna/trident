@@ -37,10 +37,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Trident\Trident.csproj" />
-    <ProjectReference Include="..\..\..\Trident.AutoMapper\Trident.AutoMapper.csproj" />
-    <ProjectReference Include="..\..\..\Trident.Core\Trident.Core.csproj" />
-    <ProjectReference Include="..\..\..\Trident.Testing\Trident.Testing.csproj" />
+    <ProjectReference Include="..\..\..\Standard\Trident\Trident.csproj" />
+    <ProjectReference Include="..\..\..\Standard\Trident.AutoMapper\Trident.AutoMapper.csproj" />
+    <ProjectReference Include="..\..\..\Core\Trident.Core\Trident.Core.csproj" />
+    <ProjectReference Include="..\..\..\Standard\Trident.Testing\Trident.Testing.csproj" />
   </ItemGroup>
 
 </Project>
