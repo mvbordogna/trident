@@ -2,7 +2,7 @@
 using Trident.Common;
 using Trident.Testing.TestScopes;
 
-namespace Trident.Tests.Common
+namespace Trident.Framework.Tests.Common
 {
     [TestClass]
     public class AppSettingsTests

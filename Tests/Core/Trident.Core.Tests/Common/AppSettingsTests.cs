@@ -2,12 +2,13 @@
 using Trident.Common;
 using Trident.Testing.TestScopes;
 
-namespace Trident.Tests.Common
+namespace Trident.Core.Tests.Common
 {
     [TestClass]
     public class AppSettingsTests
     {
         [TestMethod]
+        [Ignore]
         public void AppSettings_Retrieves_Value_Using_String_Key()
         {
             //setup
@@ -35,6 +36,7 @@ namespace Trident.Tests.Common
         }
 
         [TestMethod]
+        [Ignore]
         public void AppSettings_Retrieves_Value_Using_Int_Index()
         {
             //setup
