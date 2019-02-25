@@ -2,7 +2,7 @@ using Trident.IoC;
 using Trident.Autofac;
 using System;
 
-namespace TestHelpers.TestScopes
+namespace Trident.Testing.TestScopes
 {
     public class DisposableTestScope<T> : Disposable where T : IDisposable
     {

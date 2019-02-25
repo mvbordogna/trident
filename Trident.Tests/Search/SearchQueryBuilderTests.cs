@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Trident.Search;
-using TestHelpers.TestScopes;
+using Trident.Testing.TestScopes;
 
 namespace Trident.Tests.Search
 {

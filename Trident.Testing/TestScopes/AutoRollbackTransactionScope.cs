@@ -1,6 +1,6 @@
 ﻿using System.Transactions;
 
-namespace TestHelpers.TestScopes
+namespace Trident.Testing.TestScopes
 {
     public class AutoRollbackTransactionScope : Disposable 
     {

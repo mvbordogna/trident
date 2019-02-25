@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TestHelpers.TestScopes
+namespace Trident.Testing.TestScopes
 {
     public class AutoMockTestScope<T> : TestScope<T>, IAutoMockTestScope where T : class
     {

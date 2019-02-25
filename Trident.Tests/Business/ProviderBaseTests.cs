@@ -3,7 +3,7 @@ using Moq;
 using Trident.Data.Contracts;
 using Trident.Domain;
 using Trident.Search;
-using TestHelpers.TestScopes;
+using Trident.Testing.TestScopes;
 
 namespace Trident.Tests.Business
 {

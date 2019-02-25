@@ -13,7 +13,7 @@ using Trident.Autofac;
 
 //[assembly: OwinStartup("TestingConfiguration", typeof(StartupDemo.TestStartup))]
 
-namespace TestHelpers.TestScopes
+namespace Trident.Testing.TestScopes
 {
 
 
@@ -68,7 +68,7 @@ namespace TestHelpers.TestScopes
         {
             JsonFormatter = new JsonMediaTypeFormatter();
             _httpConfig = new HttpConfiguration();
-            var builder = new Autofac.ContainerBuilder();          
+            var builder = new ContainerBuilder();          
             builder.RegisterType<T>();
             InitializeScope(builder, _httpConfig);
             _container = builder.Build();

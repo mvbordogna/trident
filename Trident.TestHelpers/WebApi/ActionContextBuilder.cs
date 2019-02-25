@@ -5,7 +5,7 @@ using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Hosting;
 
-namespace TestHelpers.WebApi
+namespace Trident.Testing.WebApi
 {
     public static class ActionContextBuilder
     {

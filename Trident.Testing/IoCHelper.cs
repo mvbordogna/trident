@@ -3,7 +3,7 @@ using Trident.Autofac;
 using Moq;
 using Trident.IoC;
 
-namespace TestHelpers
+namespace Trident.Testing
 {
     public static class IoCHelper
     {

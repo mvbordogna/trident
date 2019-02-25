@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TestHelpers
+namespace Trident.Testing
 {
     public abstract class Disposable : IDisposable
     {

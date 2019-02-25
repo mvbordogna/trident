@@ -4,7 +4,7 @@ using Trident.Workflow;
 using Trident.Domain;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using TestHelpers;
+using Trident.Testing;
 
 namespace Trident.Tests.Workflow
 {

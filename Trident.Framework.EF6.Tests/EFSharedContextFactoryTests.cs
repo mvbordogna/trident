@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TestHelpers.TestScopes;
+using Trident.Testing.TestScopes;
 using Trident.IoC;
 using Trident.Data.EntityFramework.Contracts;
 using Trident.Data.Contracts;
@@ -8,8 +8,9 @@ using Trident.Contracts.Enums;
 using System.Linq;
 using System.Data;
 using Moq;
+using Trident.Data.EntityFramework;
 
-namespace Trident.Data.EntityFramework.Tests
+namespace Trident.Framework.EF6.Tests
 {
     [TestClass]
     public class EFSharedContextFactoryTests

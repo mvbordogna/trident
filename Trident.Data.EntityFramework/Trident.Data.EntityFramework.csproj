@@ -77,7 +77,6 @@
     </Compile>
     <Compile Include="AnnotationModelBuilder.cs" />
     <Compile Include="Contracts\IDbModelBuilder.cs" />
-    <Compile Include="Contracts\IEFDbContext.cs" />
     <Compile Include="Contracts\IModelBuilderFactory.cs" />
     <Compile Include="DbExceptionExt.cs" />
     <Compile Include="EFReadOnlyRepository.cs" />

@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TestHelpers.TestScopes;
+using Trident.Testing.TestScopes;
 using Trident.Data;
 using Trident.Data.Contracts;
 using Moq;
@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using TestHelpers;
+using Trident.Testing;
 using System.Threading;
 
 namespace Trident.Tests.Data

@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TestHelpers.EF
+namespace Trident.Testing.EF
 {
     public class TestDbAsyncQueryProvider<TEntity> : IDbAsyncQueryProvider
     {

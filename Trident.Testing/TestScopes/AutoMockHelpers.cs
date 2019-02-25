@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TestHelpers.TestScopes
+namespace Trident.Testing.TestScopes
 {
     public static class AutoMockHelpers
     {

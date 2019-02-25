@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Linq.Expressions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TestHelpers.TestScopes;
+using Trident.Testing.TestScopes;
 using Trident.Data.Contracts;
 using System.Threading.Tasks;
-using TestHelpers;
+using Trident.Testing;
 using System.Collections.Generic;
 using System.Linq;
-using TestHelpers.EF;
+using Trident.Testing.EF;
 using Moq;
 using Trident.Domain;
+using Trident.Data.EntityFramework;
 
-namespace Trident.Data.EntityFramework.Tests
+namespace Trident.Framework.EF6.Tests
 {
     [TestClass]
     public class EFRepositoryTests

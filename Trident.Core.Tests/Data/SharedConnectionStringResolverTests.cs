@@ -5,7 +5,7 @@ using Trident.Common;
 using Trident.Contracts.Enums;
 using Trident.Data;
 using Trident.Data.Contracts;
-using TestHelpers.TestScopes;
+using Trident.Testing.TestScopes;
 
 namespace Trident.Tests.Data
 {

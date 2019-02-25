@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 
-namespace TestHelpers.Sql
+namespace Trident.Testing.Sql
 {
     public class SqlExceptionCreator
     {

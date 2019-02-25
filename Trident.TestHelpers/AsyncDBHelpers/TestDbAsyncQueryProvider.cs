@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using System.Threading; 
 using System.Threading.Tasks; 
 
-namespace TestHelpers.AsyncDBHelpers
+namespace Trident.Testing.AsyncDBHelpers
 {
 	public class TestDbAsyncQueryProvider<TEntity> : IDbAsyncQueryProvider
 	{

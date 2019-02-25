@@ -1,4 +1,4 @@
-﻿namespace TestHelpers
+﻿namespace Trident.Testing
 {
     public static class TestCategory
     {

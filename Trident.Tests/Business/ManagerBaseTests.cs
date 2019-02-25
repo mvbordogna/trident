@@ -9,7 +9,7 @@ using Trident.Transactions;
 using Trident.Validation;
 using Trident.Workflow;
 using System.Threading.Tasks;
-using TestHelpers.TestScopes;
+using Trident.Testing.TestScopes;
 
 namespace Trident.Tests.Business
 {
