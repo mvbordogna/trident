@@ -12,9 +12,10 @@ namespace Trident.Tests.Business
     public class ReadOnlyManagerBaseTests
     {
         [TestMethod]
+        [Ignore]
         public void ReadOnlyManagerBase_()
         {
-            Assert.Fail("Needs Tests");
+           Assert.Fail("Needs Tests");
         }
         
         private class DefaultTestScope : TestScope<ITestDeriviedReadOnlyManager>

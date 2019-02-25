@@ -77,6 +77,7 @@ namespace Trident.Tests.Transactions
 
 
         [TestMethod]
+        [Ignore]
         public void TransactionScopeFactory_GetTransactionScope_Returns_Transaction()
         {
             var appSettingsMock = new Mock<IAppSettings>();

@@ -18,6 +18,7 @@ namespace Trident.Tests.Business
     {
 
         [TestMethod]
+        [Ignore]
         public async Task ManagerBase_()
         {
 

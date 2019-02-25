@@ -10,6 +10,7 @@ namespace Trident.Tests.Search
     {
 
         [TestMethod]
+        [Ignore]
         public void SearchResultsBuilder_()
         {
             Assert.Fail("Needs tests");

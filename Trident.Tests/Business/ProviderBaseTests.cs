@@ -12,6 +12,7 @@ namespace Trident.Tests.Business
     public class ProviderBaseTests
     {
         [TestMethod]
+        [Ignore]
         public void ProviderBase_()
         {
             Assert.Fail("Needs Tests");

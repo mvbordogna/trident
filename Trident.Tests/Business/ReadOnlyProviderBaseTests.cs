@@ -12,12 +12,14 @@ namespace Trident.Tests.Business
     public class ReadOnlyProviderBaseTests
     {
         [TestMethod]
+        [Ignore]
         public void ReadOnlyProviderBase_()
         {
-            Assert.Fail("Needs Tests");
+           Assert.Fail("Needs Tests");
         }
 
         [TestMethod]
+        [Ignore]
         public void ReadOnlyProviderBase_GetByIds()
         {
             var scope = new DefaultTestScope();

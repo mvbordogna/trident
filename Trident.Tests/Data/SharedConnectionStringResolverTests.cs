@@ -64,6 +64,7 @@ namespace Trident.Tests.Data
         }
 
         [TestMethod]
+        [Ignore]
         public void SharedConnectionStringResolver_GetConnection_Returns_ConnectionString_When_Found_Defaults_To_SQL_Provider()
         {
             //setup
@@ -79,6 +80,7 @@ namespace Trident.Tests.Data
 
 
         [TestMethod]
+        [Ignore]
         public void SharedConnectionStringResolver_GetConnection_Returns_ConnectionString_When_Found_()
         {
             //setup

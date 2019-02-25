@@ -19,15 +19,18 @@ namespace Trident.Contracts.Enums
         /// <summary>
         /// The unspecified error
         /// </summary>
+        [Description("An unknown error occured.")]
         UnspecifiedError = 0,
         /// <summary>
         /// The email already in use
         /// </summary>
-        EmailAlreadyInUse =1,
+       [Description("Email Already in use.")]
+        EmailAlreadyInUse = 1,
         /// <summary>
         /// The external identifier already in use
         /// </summary>
-        ExternalIdAlreadyInUse=2,     
+        [Description("External id is already in use.")]
+        ExternalIdAlreadyInUse =2,     
       
         [Description("Password must be at least 10 characters.")]
         PasswordMinimumLength,
