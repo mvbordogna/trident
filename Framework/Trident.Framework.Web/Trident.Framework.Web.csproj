@@ -7,8 +7,8 @@
     <ProjectGuid>{736B7E76-DAD7-4206-B464-34B33ECB17E6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Swift.Core.Web</RootNamespace>
-    <AssemblyName>Swift.Core.Web</AssemblyName>
+    <RootNamespace>Trident.Framework.Web</RootNamespace>
+    <AssemblyName>Trident.Framework.Web</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
