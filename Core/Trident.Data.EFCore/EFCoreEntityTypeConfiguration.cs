@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Trident.Data.EntityFramework.EFCore
+namespace Trident.EFCore
 {
     /// <summary>
     /// Class EFCoreEntityTypeConfiguration.

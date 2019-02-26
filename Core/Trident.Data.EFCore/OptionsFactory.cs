@@ -1,14 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Trident.IoC;
-using Trident.Data.EntityFramework.EFCore.Contracts;
+using Trident.EFCore.Contracts;
 
-namespace Trident.Data.EntityFramework.EFCore
+namespace Trident.EFCore
 {
     /// <summary>
     /// Class OptionsFactory.
-    /// Implements the <see cref="Trident.Data.EntityFramework.EFCore.Contracts.IOptionsFactory" />
+    /// Implements the <see cref="Trident.EFCore.Contracts.IOptionsFactory" />
     /// </summary>
-    /// <seealso cref="Trident.Data.EntityFramework.EFCore.Contracts.IOptionsFactory" />
+    /// <seealso cref="Trident.EFCore.Contracts.IOptionsFactory" />
     public class OptionsFactory : IOptionsFactory
     {
         /// <summary>

@@ -9,14 +9,14 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Trident.Data.EntityFramework.EFCore.AsyncWorkaround
+namespace Trident.EFCore.AsyncWorkaround
 {
     /// <summary>
     /// Class EFCoreAsyncCosmosWorkaroundRepository.
-    /// Implements the <see cref="Trident.Data.EntityFramework.EFCore.EFCoreRepository{TEntity}" />
+    /// Implements the <see cref="Trident.EFCore.EFCoreRepository{TEntity}" />
     /// </summary>
     /// <typeparam name="TEntity">The type of the t entity.</typeparam>
-    /// <seealso cref="Trident.Data.EntityFramework.EFCore.EFCoreRepository{TEntity}" />
+    /// <seealso cref="Trident.EFCore.EFCoreRepository{TEntity}" />
     public abstract class EFCoreAsyncCosmosWorkaroundRepository<TEntity> : EFCoreRepository<TEntity>
         where TEntity : Entity
     {

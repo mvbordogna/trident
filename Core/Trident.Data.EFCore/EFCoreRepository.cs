@@ -10,7 +10,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Trident.Data.EntityFramework.EFCore
+namespace Trident.EFCore
 {
     /// <summary>
     /// Class EFCoreRepository.

@@ -3,10 +3,10 @@ using Trident.Contracts.Enums;
 using Trident.Data.Contracts;
 using Trident.IoC;
 using Trident.Data.EntityFramework.Contracts;
-using Trident.Data.EntityFramework.EFCore.Contracts;
+using Trident.EFCore.Contracts;
 using System;
 
-namespace Trident.Data.EntityFramework.EFCore
+namespace Trident.EFCore
 {
     /// <summary>
     /// Class EFCoreTenantContextFactory.

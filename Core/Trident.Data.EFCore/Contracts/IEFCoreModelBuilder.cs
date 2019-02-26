@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Trident.Data.EntityFramework.EFCore.Contracts
+namespace Trident.EFCore.Contracts
 {
     /// <summary>
     /// Interface IDbModelBuilder

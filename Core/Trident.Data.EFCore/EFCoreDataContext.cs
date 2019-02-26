@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Trident.Data.EntityFramework.Contracts;
-using Trident.Data.EntityFramework.EFCore.Contracts;
+using Trident.EFCore.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Trident.Data.EntityFramework.EFCore
+namespace Trident.EFCore
 {
 
     /// <summary>

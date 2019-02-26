@@ -3,16 +3,16 @@ using Trident.Contracts.Enums;
 using Trident.Data;
 using Trident.Data.Contracts;
 using Trident.Extensions;
-using Trident.Data.EntityFramework.EFCore.Contracts;
+using Trident.EFCore.Contracts;
 using System;
 
-namespace Trident.Data.EntityFramework.EFCore
+namespace Trident.EFCore
 {
     /// <summary>
     /// Class CosmosDbOptionsBuilder.
-    /// Implements the <see cref="Trident.Data.EntityFramework.EFCore.Contracts.IOptionsBuilder" />
+    /// Implements the <see cref="Trident.EFCore.Contracts.IOptionsBuilder" />
     /// </summary>
-    /// <seealso cref="Trident.Data.EntityFramework.EFCore.Contracts.IOptionsBuilder" />
+    /// <seealso cref="Trident.EFCore.Contracts.IOptionsBuilder" />
     public class CosmosDbOptionsBuilder : IOptionsBuilder       
     {
         /// <summary>

@@ -1,16 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Trident.Contracts.Enums;
 using Trident.Data.Contracts;
-using Trident.Data.EntityFramework.EFCore.Contracts;
+using Trident.EFCore.Contracts;
 using System;
 
-namespace Trident.Data.EntityFramework.EFCore
+namespace Trident.EFCore
 {
     /// <summary>
     /// Class SqlServerOptionsBuilder.
-    /// Implements the <see cref="Trident.Data.EntityFramework.EFCore.Contracts.IOptionsBuilder" />
+    /// Implements the <see cref="Trident.EFCore.Contracts.IOptionsBuilder" />
     /// </summary>
-    /// <seealso cref="Trident.Data.EntityFramework.EFCore.Contracts.IOptionsBuilder" />
+    /// <seealso cref="Trident.EFCore.Contracts.IOptionsBuilder" />
     public class SqlServerOptionsBuilder : IOptionsBuilder
     {
         /// <summary>

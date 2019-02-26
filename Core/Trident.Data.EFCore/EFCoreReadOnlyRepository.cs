@@ -1,7 +1,8 @@
 ﻿using Trident.Data.Contracts;
 using System;
+using Trident.Data;
 
-namespace Trident.Data.EntityFramework.EFCore
+namespace Trident.EFCore
 {
     /// <summary>
     /// Class EFCoreReadOnlyRepository.

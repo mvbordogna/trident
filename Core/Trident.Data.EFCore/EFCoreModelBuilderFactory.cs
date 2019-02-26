@@ -1,13 +1,13 @@
 ﻿using Trident.IoC;
-using Trident.Data.EntityFramework.EFCore.Contracts;
+using Trident.EFCore.Contracts;
 
-namespace Trident.Data.EntityFramework.EFCore
+namespace Trident.EFCore
 {
     /// <summary>
     /// Class EFCoreModelBuilderFactory.
-    /// Implements the <see cref="Trident.Data.EntityFramework.EFCore.Contracts.IEFCoreModelBuilderFactory" />
+    /// Implements the <see cref="Trident.EFCore.Contracts.IEFCoreModelBuilderFactory" />
     /// </summary>
-    /// <seealso cref="Trident.Data.EntityFramework.EFCore.Contracts.IEFCoreModelBuilderFactory" />
+    /// <seealso cref="Trident.EFCore.Contracts.IEFCoreModelBuilderFactory" />
     public class EFCoreModelBuilderFactory : IEFCoreModelBuilderFactory
     {
         /// <summary>

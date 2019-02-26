@@ -50,7 +50,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trident.Framework.Tests", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trident.Framework.Web.Tests", "Tests\Framework\Trident.Framework.Web.Tests\Trident.Framework.Web.Tests.csproj", "{8D1D34BC-9DAE-4560-AB5B-46684A298173}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident.Data.EFCore", "Core\Trident.Data.EFCore\Trident.Data.EFCore.csproj", "{9BF22A1B-6488-4746-925A-B4F9BA66BC33}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident.EFCore", "Core\Trident.Data.EFCore\Trident.EFCore.csproj", "{9BF22A1B-6488-4746-925A-B4F9BA66BC33}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident.Core", "Core\Trident.Core\Trident.Core.csproj", "{7047D8F5-3E3A-46D7-8029-3B51917BF653}"
 EndProject
@@ -58,7 +58,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident", "Standard\Trident
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident.Core.Tests", "Tests\Core\Trident.Core.Tests\Trident.Core.Tests.csproj", "{575AC605-68AD-468B-A3C5-C0D1273AD40E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trident.Framework.EF6.Tests", "Tests\Framework\Trident.Framework.EF6.Tests\Trident.Framework.EF6.Tests.csproj", "{0252A330-1DA3-4379-B17B-34F40751119C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trident.EF6.Tests", "Tests\Framework\Trident.EF6.Tests\Trident.EF6.Tests.csproj", "{0252A330-1DA3-4379-B17B-34F40751119C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C9C1A131-9CA7-4766-9506-54E9C8DA04BB}"
 EndProject
@@ -67,6 +67,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{DC2901D4-6FD0-4EE8-862D-BC79B27506C9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trident.EF6", "Framework\Trident.EF6\Trident.EF6.csproj", "{547199A9-3CC0-490F-BDF9-B35C1F35CF7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trident.EFCore.Tests", "Tests\Core\Trident.EFCore.Tests\Trident.EFCore.Tests.csproj", "{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1152,6 +1154,54 @@ Global
 		{547199A9-3CC0-490F-BDF9-B35C1F35CF7A}.UAT|Mixed Platforms.Build.0 = UAT|Any CPU
 		{547199A9-3CC0-490F-BDF9-B35C1F35CF7A}.UAT|x86.ActiveCfg = UAT|Any CPU
 		{547199A9-3CC0-490F-BDF9-B35C1F35CF7A}.UAT|x86.Build.0 = UAT|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Debug|x86.Build.0 = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Demo|Any CPU.ActiveCfg = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Demo|Any CPU.Build.0 = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Demo|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Demo|Mixed Platforms.Build.0 = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Demo|x86.ActiveCfg = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Demo|x86.Build.0 = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Dev|Any CPU.Build.0 = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Dev|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Dev|Mixed Platforms.Build.0 = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Dev|x86.ActiveCfg = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Dev|x86.Build.0 = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Develop|Any CPU.ActiveCfg = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Develop|Any CPU.Build.0 = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Develop|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Develop|Mixed Platforms.Build.0 = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Develop|x86.ActiveCfg = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Develop|x86.Build.0 = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.QA|Any CPU.ActiveCfg = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.QA|Any CPU.Build.0 = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.QA|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.QA|Mixed Platforms.Build.0 = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.QA|x86.ActiveCfg = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.QA|x86.Build.0 = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Release|x86.ActiveCfg = Release|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Release|x86.Build.0 = Release|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Staging|Any CPU.ActiveCfg = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Staging|Any CPU.Build.0 = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Staging|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Staging|Mixed Platforms.Build.0 = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Staging|x86.ActiveCfg = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.Staging|x86.Build.0 = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.UAT|Any CPU.ActiveCfg = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.UAT|Any CPU.Build.0 = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.UAT|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.UAT|Mixed Platforms.Build.0 = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.UAT|x86.ActiveCfg = Debug|Any CPU
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D}.UAT|x86.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1181,6 +1231,7 @@ Global
 		{6994F533-F157-4651-B13B-50167186F481} = {C9C1A131-9CA7-4766-9506-54E9C8DA04BB}
 		{DC2901D4-6FD0-4EE8-862D-BC79B27506C9} = {C9C1A131-9CA7-4766-9506-54E9C8DA04BB}
 		{547199A9-3CC0-490F-BDF9-B35C1F35CF7A} = {6A3A7D84-9839-4D56-B0BD-5B46EA357754}
+		{80304BD2-BBE2-4BF5-931F-BC00A00A4C2D} = {6994F533-F157-4651-B13B-50167186F481}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4EECB098-25B0-464C-8613-F1870D6108DE}

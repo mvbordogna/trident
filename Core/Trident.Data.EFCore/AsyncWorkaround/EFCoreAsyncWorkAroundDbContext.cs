@@ -1,18 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Trident.Data.EntityFramework.EFCore.Contracts;
+using Trident.EFCore.Contracts;
 using System;
 using System.Threading.Tasks;
 
-namespace Trident.Data.EntityFramework.EFCore.AsyncWorkaround
+namespace Trident.EFCore.AsyncWorkaround
 {
     /// <summary>
     /// After the next release of EFCore 2.2.0+, this class should be removed
     /// it is only here as an async shim until async works for Cosmos.Sql db Provider of EFCore
     /// note that Async works for Sql Server Provider and this is not needed for thos db contexts
     /// Workaround repo bases have been added as well.
-    /// Implements the <see cref="Trident.Data.EntityFramework.EFCore.EFCoreDataContext" />
+    /// Implements the <see cref="Trident.EFCore.EFCoreDataContext" />
     /// </summary>
-    /// <seealso cref="Trident.Data.EntityFramework.EFCore.EFCoreDataContext" />
+    /// <seealso cref="Trident.EFCore.EFCoreDataContext" />
     public abstract class EFCoreAsyncWorkAroundDbContext : EFCoreDataContext
     {
         /// <summary>

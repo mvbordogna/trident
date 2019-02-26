@@ -2,21 +2,21 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Trident.Data;
-using Trident.Data.EntityFramework.EFCore.Contracts;
+using Trident.EFCore.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Reflection;
 
-namespace Trident.Data.EntityFramework.EFCore
+namespace Trident.EFCore
 {
     /// <summary>
     /// Provides an abstract implemenation of an assembly scanning IDbModelBuilder
-    /// Implements the <see cref="Trident.Data.EntityFramework.EFCore.Contracts.IEFCoreModelBuilder" />
+    /// Implements the <see cref="Trident.EFCore.Contracts.IEFCoreModelBuilder" />
     /// </summary>
     /// <typeparam name="TEntity">The base Type that is the primary filter for entities to be registered with the EFDataContext</typeparam>
-    /// <seealso cref="Trident.Data.EntityFramework.EFCore.Contracts.IEFCoreModelBuilder" />
+    /// <seealso cref="Trident.EFCore.Contracts.IEFCoreModelBuilder" />
     public abstract class EFCoreAnnotationDirectiveModelBuilder<TEntity> : IEFCoreModelBuilder
     {
         /// <summary>
