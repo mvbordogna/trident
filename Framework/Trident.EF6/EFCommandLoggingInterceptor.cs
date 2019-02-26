@@ -2,7 +2,7 @@
 using System.Data.Entity.Infrastructure.Interception;
 using Trident.Logging;
 
-namespace Trident.Data.EntityFramework
+namespace Trident.EF6
 {
     /// <summary>
     /// Class EFCommandLoggingInterceptorclass.

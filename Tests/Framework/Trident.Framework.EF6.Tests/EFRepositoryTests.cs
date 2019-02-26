@@ -10,7 +10,7 @@ using System.Linq;
 using Trident.Testing.EF;
 using Moq;
 using Trident.Domain;
-using Trident.Data.EntityFramework;
+using Trident.EF6;
 
 namespace Trident.Framework.EF6.Tests
 {

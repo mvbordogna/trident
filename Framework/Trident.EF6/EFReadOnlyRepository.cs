@@ -1,7 +1,8 @@
 ﻿using Trident.Data.Contracts;
 using System;
+using Trident.Data;
 
-namespace Trident.Data.EntityFramework
+namespace Trident.EF6
 {
     /// <summary>
     /// Class EFReadOnlyRepository.

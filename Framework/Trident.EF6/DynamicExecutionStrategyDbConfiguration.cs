@@ -3,7 +3,7 @@ using System.Data.Entity.Infrastructure;
 using System.Data.Entity.SqlServer;
 using System.Runtime.Remoting.Messaging;
 
-namespace Trident.Data.EntityFramework
+namespace Trident.EF6
 {
     /// <summary>
     /// Class DynamicExecutionStrategyDbConfiguration.

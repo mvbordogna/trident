@@ -10,7 +10,7 @@ using Trident.Data;
 using Trident.Data.Contracts;
 using Trident.Domain;
 
-namespace Trident.Data.EntityFramework
+namespace Trident.EF6
 {
     /// <summary>
     /// Class EFRepository.

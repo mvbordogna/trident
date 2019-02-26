@@ -3,7 +3,7 @@ using System.Data.Common;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 
-namespace Trident.Data.EntityFramework.Contracts
+namespace Trident.EF6.Contracts
 {
     /// <summary>
     /// Interface IDbModelBuilder

@@ -8,7 +8,7 @@ using System.Data.Entity;
 using Trident.Domain;
 using System;
 
-namespace Trident.Data.EntityFramework
+namespace Trident.EF6
 {
     /// <summary>
     /// Abstract Class SearchRepositoryBase.
@@ -18,7 +18,7 @@ namespace Trident.Data.EntityFramework
     /// <typeparam name="TSummery">The type of the t summery.</typeparam>
     /// <typeparam name="TCriteria">The type of the t criteria.</typeparam>
     /// <seealso cref="Trident.Search.ISearchRepository{TEntity, TSummery, TCriteria}" />
-    /// <seealso cref="Trident.Data.EntityFramework.EFRepository{TEntity}" />
+    /// <seealso cref="Trident.EF6.EFRepository{TEntity}" />
     /// <seealso cref="Trident.TimeSummit.Repositories.Contracts.ISearchRepositoryBase{TEntity, TSummery, TCriteria}" />
     public abstract class EFSearchRepositoryBase<TEntity, TSummery, TCriteria> : EFRepository<TEntity>, ISearchRepository<TEntity, TSummery, TCriteria>
         where TEntity : Entity
@@ -168,7 +168,7 @@ namespace Trident.Data.EntityFramework
     /// </summary>
     /// <typeparam name="TEntity">The type of the t entity.</typeparam>
     /// <typeparam name="TSummery">The type of the t summery.</typeparam>
-    /// <seealso cref="Trident.Data.EntityFramework.EFSearchRepositoryBase{TEntity, TSummery, Trident.Search.SearchCriteria}" />
+    /// <seealso cref="Trident.EF6.EFSearchRepositoryBase{TEntity, TSummery, Trident.Search.SearchCriteria}" />
     /// <seealso cref="Trident.Search.ISearchRepository{TEntity, TSummery, Trident.Search.SearchCriteria}" />
     public abstract class EFSearchRepositoryBase<TEntity, TSummery> : EFSearchRepositoryBase<TEntity, TSummery, SearchCriteria>, ISearchRepository<TEntity, TSummery, SearchCriteria>
        where TEntity : Entity
@@ -191,11 +191,11 @@ namespace Trident.Data.EntityFramework
 
     /// <summary>
     /// Class EFSearchRepositoryBase.
-    /// Implements the <see cref="Trident.Data.EntityFramework.EFSearchRepositoryBase{TEntity, TEntity}" />
+    /// Implements the <see cref="Trident.EF6.EFSearchRepositoryBase{TEntity, TEntity}" />
     /// Implements the <see cref="Trident.Search.ISearchRepository{TEntity, TEntity}" />
     /// </summary>
     /// <typeparam name="TEntity">The type of the t entity.</typeparam>
-    /// <seealso cref="Trident.Data.EntityFramework.EFSearchRepositoryBase{TEntity, TEntity}" />
+    /// <seealso cref="Trident.EF6.EFSearchRepositoryBase{TEntity, TEntity}" />
     /// <seealso cref="Trident.Search.ISearchRepository{TEntity, TEntity}" />
     public abstract class EFSearchRepositoryBase<TEntity> : EFSearchRepositoryBase<TEntity, TEntity>, ISearchRepository<TEntity, TEntity>
      where TEntity : Entity

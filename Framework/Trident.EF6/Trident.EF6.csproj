@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{23E632BC-E094-487A-829D-6FE8C0AA3B89}</ProjectGuid>
+    <ProjectGuid>{547199A9-3CC0-490F-BDF9-B35C1F35CF7A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Trident.Framework.EF6</RootNamespace>

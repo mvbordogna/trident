@@ -1,7 +1,7 @@
 ﻿using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
 
-namespace Trident.Data.EntityFramework
+namespace Trident.EF6
 {
     /// <summary>
     /// Class DbExceptionExt.

@@ -7,7 +7,7 @@ using System.Data.Entity.SqlServer;
 using System.Linq;
 using System.Reflection;
 
-namespace Trident.Data.EntityFramework
+namespace Trident.EF6
 {
 
     /// <summary>
@@ -20,7 +20,7 @@ namespace Trident.Data.EntityFramework
     /// <summary>
     /// Class EFResilientAsyncTransactionProxyFactory.
     /// </summary>
-    /// <seealso cref="Trident.Data.EntityFramework.IEFResilientAsyncTransactionProxyFactory" />
+    /// <seealso cref="Trident.EF6.IEFResilientAsyncTransactionProxyFactory" />
     public class EFResilientAsyncTransactionProxyFactory : IEFResilientAsyncTransactionProxyFactory
     {
         /// <summary>

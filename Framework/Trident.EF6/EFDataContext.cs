@@ -1,5 +1,5 @@
 ﻿using Trident.Data;
-using Trident.Data.EntityFramework.Contracts;
+using Trident.EF6.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -7,14 +7,15 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Trident.Data.EntityFramework.Contracts;
 
-namespace Trident.Data.EntityFramework
+namespace Trident.EF6
 {
     /// <summary>
     /// Class EFDataContext.
     /// </summary>
     /// <seealso cref="System.Data.Entity.DbContext" />
-    /// <seealso cref="Trident.Data.EntityFramework.Contracts.IEFDbContext" />
+    /// <seealso cref="Trident.EF6.Contracts.IEFDbContext" />
     /// <seealso cref="Trident.Data.IConnectionManager" />
     [DbConfigurationType(typeof(DynamicExecutionStrategyDbConfiguration))]
     public class EFDataContext : DbContext, IEFDbContext, IConnectionManager

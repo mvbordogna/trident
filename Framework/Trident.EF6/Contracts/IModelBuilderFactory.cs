@@ -1,4 +1,4 @@
-﻿namespace Trident.Data.EntityFramework.Contracts
+﻿namespace Trident.EF6.Contracts
 {
     /// <summary>
     /// Interface IModelBuilderFactory

@@ -1,5 +1,5 @@
 ﻿using Trident.Domain;
-using Trident.Data.EntityFramework.Contracts;
+using Trident.EF6.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -14,10 +14,10 @@ namespace Trident.Business.Data
 {
     /// <summary>
     /// Provides an abstract implemenation of an assembly scanning IDbModelBuilder
-    /// Implements the <see cref="Trident.Data.EntityFramework.Contracts.IDbModelBuilder" />
+    /// Implements the <see cref="Trident.EF6.Contracts.IDbModelBuilder" />
     /// </summary>
     /// <typeparam name="TEntity">The base Type that is the primary filter for entities to be registered with the EFDataContext</typeparam>
-    /// <seealso cref="Trident.Data.EntityFramework.Contracts.IDbModelBuilder" />
+    /// <seealso cref="Trident.EF6.Contracts.IDbModelBuilder" />
     public abstract class AnnotationDirectiveModelBuilder<TEntity> : IDbModelBuilder
     {
         /// <summary>

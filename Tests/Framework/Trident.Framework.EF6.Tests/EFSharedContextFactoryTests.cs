@@ -8,7 +8,8 @@ using Trident.Contracts.Enums;
 using System.Linq;
 using System.Data;
 using Moq;
-using Trident.Data.EntityFramework;
+using Trident.EF6;
+using Trident.EF6.Contracts;
 
 namespace Trident.Framework.EF6.Tests
 {
