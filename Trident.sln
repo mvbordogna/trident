@@ -50,7 +50,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trident.Framework.Tests", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trident.Framework.Web.Tests", "Tests\Framework\Trident.Framework.Web.Tests\Trident.Framework.Web.Tests.csproj", "{8D1D34BC-9DAE-4560-AB5B-46684A298173}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident.EFCore", "Core\Trident.Data.EFCore\Trident.EFCore.csproj", "{9BF22A1B-6488-4746-925A-B4F9BA66BC33}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident.EFCore", "Core\Trident.EFCore\Trident.EFCore.csproj", "{9BF22A1B-6488-4746-925A-B4F9BA66BC33}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trident.Core", "Core\Trident.Core\Trident.Core.csproj", "{7047D8F5-3E3A-46D7-8029-3B51917BF653}"
 EndProject

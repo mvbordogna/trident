@@ -1,5 +1,4 @@
-﻿using Trident.Domain;
-using Trident.EF6.Contracts;
+﻿using Trident.EF6.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,7 +9,7 @@ using System.Data.Entity.ModelConfiguration;
 using System.Linq;
 using System.Reflection;
 
-namespace Trident.Business.Data
+namespace Trident.EF6
 {
     /// <summary>
     /// Provides an abstract implemenation of an assembly scanning IDbModelBuilder
