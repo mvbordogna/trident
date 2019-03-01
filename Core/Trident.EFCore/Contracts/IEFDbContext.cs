@@ -1,6 +1,6 @@
 ﻿using Trident.Data.Contracts;
 
-namespace Trident.Data.EntityFramework.Contracts
+namespace Trident.EFCore.Contracts
 {
     /// <summary>
     /// Interface IEFDbContext

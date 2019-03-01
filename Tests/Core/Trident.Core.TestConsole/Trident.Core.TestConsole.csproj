@@ -21,7 +21,6 @@
     <ProjectReference Include="..\..\..\Core\Trident.EFCore\Trident.EFCore.csproj" />
     <ProjectReference Include="..\..\..\Standard\Trident.Azure\Trident.Azure.csproj" />
     <ProjectReference Include="..\..\..\Standard\Trident.Contracts\Trident.Contracts.csproj" />
-    <ProjectReference Include="..\..\..\Standard\Trident.EF\Trident.EF.csproj" />
     <ProjectReference Include="..\..\..\Standard\Trident.Serilog\Trident.Serilog.csproj" />
     <ProjectReference Include="..\..\..\Standard\Trident.Web\Trident.Web.csproj" />
     <ProjectReference Include="..\..\..\Standard\Trident\Trident.csproj" />

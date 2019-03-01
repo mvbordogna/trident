@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Trident.Contracts.Enums;
 using Trident.Data.Contracts;
 using Trident.IoC;
-using Trident.Data.EntityFramework.Contracts;
 using Trident.EFCore.Contracts;
 using System;
 

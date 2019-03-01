@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Data;
-using Trident.Contracts.Enums;
 using Trident.Data.Contracts;
 using Trident.IoC;
 using Trident.EF6.Contracts;
-using Trident.Data.EntityFramework.Contracts;
 
 namespace Trident.EF6
 {

@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Trident.Data.EntityFramework.Contracts;
 using Trident.EFCore.Contracts;
 using System;
 using System.Collections.Generic;

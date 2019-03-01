@@ -2,7 +2,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Trident.Testing.TestScopes;
 using Trident.IoC;
-using Trident.Data.EntityFramework.Contracts;
 using Trident.Data.Contracts;
 using Trident.Contracts.Enums;
 using System.Linq;

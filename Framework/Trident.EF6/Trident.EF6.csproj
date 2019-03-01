@@ -77,6 +77,7 @@
     </Compile>
     <Compile Include="AnnotationModelBuilder.cs" />
     <Compile Include="Contracts\IDbModelBuilder.cs" />
+    <Compile Include="Contracts\IEFDbContext.cs" />
     <Compile Include="Contracts\IModelBuilderFactory.cs" />
     <Compile Include="DbExceptionExt.cs" />
     <Compile Include="EFReadOnlyRepository.cs" />
@@ -97,10 +98,6 @@
     <ProjectReference Include="..\..\Standard\Trident.Contracts\Trident.Contracts.csproj">
       <Project>{f95afc22-8ea3-40ac-9d83-37be67989ee6}</Project>
       <Name>Trident.Contracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Standard\Trident.EF\Trident.EF.csproj">
-      <Project>{4f94caac-f241-490e-99f5-efd747136338}</Project>
-      <Name>Trident.EF</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Standard\Trident\Trident.csproj">
       <Project>{af4eb9a2-0356-48d1-bb2a-1b95faf79b1e}</Project>

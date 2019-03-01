@@ -65,10 +65,6 @@
       <Project>{f95afc22-8ea3-40ac-9d83-37be67989ee6}</Project>
       <Name>Trident.Contracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Standard\Trident.EF\Trident.EF.csproj">
-      <Project>{4f94caac-f241-490e-99f5-efd747136338}</Project>
-      <Name>Trident.EF</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Framework\Trident.Framework\Trident.Framework.csproj">
       <Project>{46486879-7b58-4731-8b0e-84d0b0fa37a4}</Project>
       <Name>Trident.Framework</Name>

@@ -1,13 +1,11 @@
 ﻿using Trident.Data;
 using Trident.EF6.Contracts;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Trident.Data.EntityFramework.Contracts;
 
 namespace Trident.EF6
 {
