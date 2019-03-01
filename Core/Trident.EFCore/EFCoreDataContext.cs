@@ -39,6 +39,9 @@ namespace Trident.EFCore
         {
             _modelBuilderFactory = modelBuilderFactory;
             _dataSource = dataSource;
+
+            
+
         }
 
         /// <summary>

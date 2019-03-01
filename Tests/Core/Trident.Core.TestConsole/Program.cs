@@ -4,6 +4,7 @@ using System.Reflection;
 using Trident.Core.TestRepositories;
 using Trident.Data.Contracts;
 using Trident.TestTargetProject;
+using Trident.TestTargetProject.Domain;
 
 namespace Trident.Core.TestConsole
 {
@@ -36,8 +37,18 @@ namespace Trident.Core.TestConsole
 
            appContext.IocProvider.VerifyAndThrow();
 
-            var testRepo = appContext.IocProvider.Get<IRepository<TestTargetProject.Domain.TestEntity>>();
-            var result = testRepo.GetById(Guid.Parse("e9ac7c9a-961c-4d53-a255-7372e6f223db")).Result;
+            var testRepo = appContext.IocProvider.Get<IRepository<TestTargetProject.Domain.Organisation>>();
+
+            Organisation temp = null;
+
+            testRepo.Insert(temp = new Organisation()
+            {
+                Id = Guid.NewGuid(),
+                Name = "MyOrg",
+                Created = DateTimeOffset.Now
+            }).Wait();
+
+            var result = testRepo.GetById(temp.Id).Result;
 
             var myEntity = result;
         }

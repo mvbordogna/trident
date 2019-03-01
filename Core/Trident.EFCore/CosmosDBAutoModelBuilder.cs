@@ -1,6 +1,9 @@
 ﻿using Trident.Data;
 using Trident.Domain;
 using System.Reflection;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace Trident.EFCore
 {
@@ -22,6 +25,21 @@ namespace Trident.EFCore
             string dataSource,         
             params Assembly[] assembliesToScan)
             : base(dataSourceType, dataSource, false, assembliesToScan)
-        { }
+        {
+        }
+
+
+
+        protected override void ApplyAttributeSpecs(Type entityType, EntityTypeBuilder modelBinding)
+        {
+            var nameValue = entityType.GetCustomAttribute<ContainerAttribute>()?.Name;
+            nameValue = string.IsNullOrWhiteSpace(nameValue)
+                ? entityType.Name
+                : nameValue;
+
+            modelBinding.ToContainer(nameValue);
+
+        }
+
     }
 }

@@ -5,10 +5,10 @@ using Trident.Data;
 using Trident.EFCore.Contracts;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Reflection;
 using Trident.Contracts.Enums;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Trident.EFCore
 {
@@ -49,7 +49,7 @@ namespace Trident.EFCore
         /// Construct a new instance of the AnnotationDirectiveModelBuilder class assuming it will scan its Host assembly for Models to register with EF
         /// </summary>
         protected EFCoreAnnotationDirectiveModelBuilder()
-            : this( DataSourceType.Default, "", false) {  }
+            : this(DataSourceType.Default, "", false) { }
 
         /// <summary>
         /// Construct a new instance of the AnnotationDirectiveModelBuilder class that will scan its Host assembly for Models to register with EF if specified
@@ -59,18 +59,19 @@ namespace Trident.EFCore
         /// <param name="dataSource">The data source.</param>
         /// <param name="scanSelfAssembly">Scans the Assmily in which the AnnotationDirectiveModelBuilder lives for models to register with EF</param>
         /// <param name="modelAssemblies">The model assemblies.</param>
-        protected EFCoreAnnotationDirectiveModelBuilder(DataSourceType dataSourceType, string dataSource, bool scanSelfAssembly,  params Assembly[] modelAssemblies)          
+        protected EFCoreAnnotationDirectiveModelBuilder(DataSourceType dataSourceType, string dataSource, bool scanSelfAssembly, params Assembly[] modelAssemblies)
         {
             this._dataSourceType = dataSourceType;
             this._dataSource = dataSource;
 
             List<Assembly> assemblies = new List<Assembly>();
 
-            if(modelAssemblies == null || scanSelfAssembly) {
+            if (modelAssemblies == null || scanSelfAssembly)
+            {
                 assemblies.Add(this.GetType().Assembly);
             }
-            
-            if(modelAssemblies != null)
+
+            if (modelAssemblies != null)
             {
                 assemblies.AddRange(modelAssemblies);
             }
@@ -96,9 +97,16 @@ namespace Trident.EFCore
 
             foreach (var mapType in mapTypes)
             {
-                modelBuilder.Entity(mapType);
-            }           
+                var modelBinding = modelBuilder.Entity(mapType);
+                this.ApplyAttributeSpecs(mapType, modelBinding);
+            }
         }
+
+        protected virtual void ApplyAttributeSpecs(Type entityType,  EntityTypeBuilder modelBinding)
+        {
+           
+        }
+
         /// <summary>
         /// Applies the data source filter.
         /// </summary>
