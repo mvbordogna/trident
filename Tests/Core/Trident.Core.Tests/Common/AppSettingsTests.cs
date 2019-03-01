@@ -71,7 +71,7 @@ namespace Trident.Core.Tests.Common
 
             public DefaultTestScope()
             {
-                InstanceUnderTest = new AppSettings();
+                InstanceUnderTest = new XmlAppSettings();
             }
         }
 

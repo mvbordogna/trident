@@ -7,7 +7,7 @@ using RestSharpParameterType = RestSharp.ParameterType;
 using RestSharpRestRequest = RestSharp.RestRequest;
 using RestSharpRestParameter = RestSharp.Parameter;
 
-namespace Trident.Business.RestSharp
+namespace Trident.Data.RestSharp
 {
     /// <summary>
     /// Class RestSharpMapperProfile.

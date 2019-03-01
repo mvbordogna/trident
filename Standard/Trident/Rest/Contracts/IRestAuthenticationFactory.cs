@@ -12,6 +12,6 @@ namespace Trident.Rest.Contracts
         /// </summary>
         /// <param name="dataSource">The data source.</param>
         /// <returns>IRestAuthenticationProvider.</returns>
-        IRestAuthenticationProvider GetAuthenticationProvider(SharedDataSource dataSource);
+        IRestAuthenticationProvider GetAuthenticationProvider(string dataSource);
     }
 }

@@ -1,10 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Trident.Contracts.Enums;
 using Trident.Data;
 using Trident.Data.Contracts;
 using Trident.Extensions;
 using Trident.EFCore.Contracts;
-using System;
 
 namespace Trident.EFCore
 {
@@ -13,7 +11,7 @@ namespace Trident.EFCore
     /// Implements the <see cref="Trident.EFCore.Contracts.IOptionsBuilder" />
     /// </summary>
     /// <seealso cref="Trident.EFCore.Contracts.IOptionsBuilder" />
-    public class CosmosDbOptionsBuilder : IOptionsBuilder       
+    public class CosmosDbOptionsBuilder : IOptionsBuilder
     {
         /// <summary>
         /// The shared connection string resolver
@@ -25,7 +23,7 @@ namespace Trident.EFCore
         /// </summary>
         /// <param name="sharedConnectionStringResolver">The shared connection string resolver.</param>
         public CosmosDbOptionsBuilder(ISharedConnectionStringResolver sharedConnectionStringResolver)
-        {  
+        {
             _sharedConnectionStringResolver = sharedConnectionStringResolver;
         }
 
@@ -37,21 +35,16 @@ namespace Trident.EFCore
         /// <exception cref="System.Configuration.ConfigurationErrorsException">SharedDataSource Type not found</exception>
         public DbContextOptions GetOptions(string sharedDataSource)
         {
-            if (Enum.TryParse<SharedDataSource>(sharedDataSource, out var dataSource))
-            {
-                var conn = new CosmosDbConnection(_sharedConnectionStringResolver.GetConnectionString(dataSource));
-                var builder = new DbContextOptionsBuilder<EFCoreDataContext>()         
-                .UseCosmos(conn.AccountEndpoint, conn.AccountKey.ToUnsecureString(), conn.DatabaseName, (t) =>
-                   {
+
+            var conn = new CosmosDbConnection(_sharedConnectionStringResolver.GetConnectionString(sharedDataSource));
+            var builder = new DbContextOptionsBuilder<EFCoreDataContext>()
+            .UseCosmos(conn.AccountEndpoint, conn.AccountKey.ToUnsecureString(), conn.DatabaseName, (t) =>
+               { 
                        //when they add some options to the class we may do some stuff here
+                       
+               });
 
-                   });
-
-
-                return builder.Options;
-            }
-
-            throw new System.Configuration.ConfigurationErrorsException("SharedDataSource Type not found");
+            return builder.Options;
         }
     }
 }

@@ -34,7 +34,7 @@ namespace Trident.Azure
         /// <param name="entityType">Type of the entity.</param>
         /// <param name="dataSource">The data source.</param>
         /// <returns>CloudQueueClient.</returns>
-        public CloudQueueClient Get(Type entityType, SharedDataSource dataSource)
+        public CloudQueueClient Get(Type entityType, string dataSource)
         {
             var connectionString = _sharedConnectionStringResolver.GetConnectionString(dataSource);
             var storageAccount = CloudStorageAccount.Parse(connectionString);

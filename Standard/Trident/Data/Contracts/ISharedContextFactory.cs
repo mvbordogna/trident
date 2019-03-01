@@ -21,6 +21,6 @@ namespace Trident.Data.Contracts
         /// <param name="entityType">Type of the entity.</param>
         /// <param name="dataSource">The data source.</param>
         /// <returns>T.</returns>
-        T Get(Type entityType, SharedDataSource dataSource);
+        T Get(Type entityType, string dataSource);
     }
 }

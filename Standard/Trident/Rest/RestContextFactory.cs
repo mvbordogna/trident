@@ -40,7 +40,7 @@ namespace Trident.Rest
         /// <param name="entityType">Type of the entity.</param>
         /// <param name="dataSource">The data source.</param>
         /// <returns>IRestContext.</returns>
-        public IRestContext Get(Type entityType, SharedDataSource dataSource)
+        public IRestContext Get(Type entityType, string dataSource)
         {
             var connection = _restConnectionStringResolver.GetConnection(dataSource);
 

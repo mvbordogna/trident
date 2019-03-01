@@ -54,7 +54,7 @@ namespace Trident.Data
             T context = default(T);
             var attr = entityType.GetCustomAttribute<UseSharedDataSourceAttribute>();
 
-            var dataSourceName = (attr != null && attr.DataSource != SharedDataSource.Undefined) ? attr.DataSource : SharedDataSource.DefaultDB;
+            var dataSourceName = (!string.IsNullOrWhiteSpace(attr?.DataSource)) ? attr.DataSource : SharedDataSource.DefaultDB.ToString();
             int contextHash = dataSourceName.GetHashCode();
 
             context = (T)_contextCache.GetOrAdd(contextHash, (hash) =>

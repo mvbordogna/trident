@@ -1,9 +1,12 @@
-﻿namespace Trident.Common
+﻿using System.Collections;
+using System.Collections.Generic;
+
+namespace Trident.Common
 {
     /// <summary>
     /// Provides a unit testable interface for the injection of the ConfigurationManager ConnectionStrings interface
     /// </summary>
-    public interface IConnectionStringSettings
+    public interface IConnectionStringSettings: IEnumerable, IEnumerable<System.Configuration.ConnectionStringSettings>
     {
         /// <summary>
         /// Gets the <see cref="System.Configuration.ConnectionStringSettings" /> at the specified index.

@@ -3,7 +3,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs.Host.Bindings;
 using Trident.IoC;
-using Trident.Autofac;
 
 namespace Trident.Azure
 {

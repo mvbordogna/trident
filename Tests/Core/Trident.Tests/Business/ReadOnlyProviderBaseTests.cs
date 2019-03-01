@@ -1,5 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Trident.Business;
+using Trident.Data.Contracts;
 using Trident.Domain;
 using Trident.Search;
 using Trident.Testing.TestScopes;
@@ -40,14 +42,14 @@ namespace Trident.Tests.Business
         }
 
 
-        private class ReadOnlyTestDerivedProvider : Trident.Business.ProviderBase<int, TestEntity>, ITestDerivedReadOnlyProvider
+        private class ReadOnlyTestDerivedProvider : ProviderBase<int, TestEntity>, ITestDerivedReadOnlyProvider
         {
             public ReadOnlyTestDerivedProvider(ISearchRepository<TestEntity, TestEntity, SearchCriteria> repository)
                 : base(repository) { }
         }
 
         private class TestEntity : EntityBase<int> { }
-        private interface ITestDerivedReadOnlyProvider : Trident.Data.Contracts.IReadOnlyProvider<TestEntity> { }
+        private interface ITestDerivedReadOnlyProvider : IReadOnlyProvider<TestEntity> { }
     }
 
 }

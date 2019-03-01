@@ -30,9 +30,9 @@ namespace Trident.Rest
         /// </summary>
         /// <param name="dataSource">The data source.</param>
         /// <returns>IRestAuthenticationProvider.</returns>
-        public IRestAuthenticationProvider GetAuthenticationProvider(SharedDataSource dataSource)
+        public IRestAuthenticationProvider GetAuthenticationProvider(string dataSource)
         {
-            return _serviceLocator.GetNamed<IRestAuthenticationProvider>(dataSource.ToString());
+            return _serviceLocator.GetNamed<IRestAuthenticationProvider>(dataSource);
         }
     }
 }

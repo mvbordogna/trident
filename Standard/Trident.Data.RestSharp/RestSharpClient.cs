@@ -10,7 +10,7 @@ using RestResponse = Trident.Rest.RestResponse;
 using RestSharpRestClient = RestSharp.RestClient;
 using RestSharpRestRequest = RestSharp.RestRequest;
 
-namespace Trident.Business.RestSharp
+namespace Trident.Data.RestSharp
 {
     /// <summary>
     /// Class RestSharpClient.

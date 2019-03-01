@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Reflection;
+using Trident.Contracts.Enums;
 
 namespace Trident.EFCore
 {
@@ -96,11 +97,6 @@ namespace Trident.EFCore
             foreach (var mapType in mapTypes)
             {
                 modelBuilder.Entity(mapType);
-
-                //var genericType = typeof(EFCoreEntityTypeConfiguration<>).MakeGenericType(mapType);
-                //dynamic mapInstance = Activator.CreateInstance(genericType);
-              
-                //modelBuilder.ApplyConfiguration(mapInstance);
             }           
         }
         /// <summary>
@@ -113,7 +109,8 @@ namespace Trident.EFCore
             var dataSourceName = string.Empty;
             if (_dataSourceType == DataSourceType.Shared)
             {
-                dataSourceName = type.GetCustomAttribute<UseSharedDataSourceAttribute>()?.DataSource.ToString();            
+                dataSourceName = type.GetCustomAttribute<UseSharedDataSourceAttribute>()?.DataSource.ToString()
+                    ?? SharedDataSource.DefaultDB.ToString();
             }
             else if (_dataSourceType == DataSourceType.Tenant)
             {

@@ -4,7 +4,7 @@ using RestSharp.Authenticators;
 using Trident.Rest;
 using Trident.Rest.Contracts;
 
-namespace Trident.Business.RestSharp
+namespace Trident.Data.RestSharp
 {
     /// <summary>
     /// Class RestSharpAuthenticationProvider.

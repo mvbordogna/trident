@@ -7,11 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="IoC\**" />
     <Compile Remove="Security\**" />
-    <EmbeddedResource Remove="IoC\**" />
     <EmbeddedResource Remove="Security\**" />
-    <None Remove="IoC\**" />
     <None Remove="Security\**" />
   </ItemGroup>
 
@@ -38,7 +35,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Standard\Trident\Trident.csproj" />
-    <ProjectReference Include="..\..\..\Standard\Trident.AutoMapper\Trident.AutoMapper.csproj" />
     <ProjectReference Include="..\..\..\Core\Trident.Core\Trident.Core.csproj" />
     <ProjectReference Include="..\..\..\Standard\Trident.Testing\Trident.Testing.csproj" />
   </ItemGroup>

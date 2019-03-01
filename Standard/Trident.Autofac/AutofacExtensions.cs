@@ -16,6 +16,30 @@ namespace Trident.Autofac
     /// </summary>
     public static class AutofacExtension
     {
+
+        public static IRegistrationBuilder<Trident.Common.IAppSettings, ConcreteReflectionActivatorData, SingleRegistrationStyle> 
+            UsingTridentAppSettingsManager(this ContainerBuilder builder)
+
+        {
+            return builder
+                .RegisterType<Trident.Common.AppSettings>()
+                .As<Trident.Common.IAppSettings>()
+                .SingleInstance();
+        }
+
+
+        public static IRegistrationBuilder<T, ConcreteReflectionActivatorData, SingleRegistrationStyle>
+          UsingTridentConnectionStringManager<T>(this ContainerBuilder builder)
+            where T : Trident.Common.IConnectionStringSettings
+
+        {
+            return builder
+                .RegisterType<T>()
+                .As<Trident.Common.IConnectionStringSettings>()
+                .SingleInstance();             
+        }
+
+
         /// <summary>
         /// Ases the directly implemented interfaces.
         /// </summary>

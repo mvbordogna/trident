@@ -5,21 +5,21 @@ namespace Trident.Common
 {
     /// <summary>
     /// Class AppSettings.
-    /// Implements the <see cref="Trident.Common.IConnectionStringSettings" />
+    /// Implements the <see cref="Trident.Common.IAppSettings" />
     /// </summary>
-    /// <seealso cref="Trident.Common.IConnectionStringSettings" />
-    public class ConnectionStringSettings : IConnectionStringSettings
+    /// <seealso cref="Trident.Common.IAppSettings" />
+    public class XmlAppSettings : IAppSettings
     {
         /// <summary>
         /// Gets the <see cref="System.String" /> with the specified key.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns>System.String.</returns>
-        public System.Configuration.ConnectionStringSettings this[string key]  
+        public string this[string key]  
         {
             get
             {
-                return ConfigurationManager.ConnectionStrings[key];               
+                return ConfigurationManager.AppSettings[key];               
             }            
         }
         /// <summary>
@@ -27,19 +27,25 @@ namespace Trident.Common
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns>System.String.</returns>
-        public System.Configuration.ConnectionStringSettings this[int index]
+        public string this[int index]
         {
             get
             {
                 try
                 {
-                    return ConfigurationManager.ConnectionStrings[index];
+                    return ConfigurationManager.AppSettings[index];
                 }
-                catch (ConfigurationErrorsException)
+                catch (ArgumentOutOfRangeException)
                 {
                     return null;
                 }
             }
+        }
+
+        public T GetSection<T>(string sectionName = null)
+            where T : class
+        {
+            return ConfigurationManager.GetSection(sectionName ?? typeof(T).Name) as T;
         }
     }
 }

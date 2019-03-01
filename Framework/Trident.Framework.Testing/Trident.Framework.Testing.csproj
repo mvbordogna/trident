@@ -201,13 +201,13 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Standard\Trident.Autofac\Trident.Autofac.csproj">
-      <Project>{c31bb417-e079-4434-a24c-0bfcdc3c2601}</Project>
-      <Name>Trident.Autofac</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Standard\Trident.Contracts\Trident.Contracts.csproj">
       <Project>{f95afc22-8ea3-40ac-9d83-37be67989ee6}</Project>
       <Name>Trident.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Standard\Trident\Trident.csproj">
+      <Project>{af4eb9a2-0356-48d1-bb2a-1b95faf79b1e}</Project>
+      <Name>Trident</Name>
     </ProjectReference>
     <ProjectReference Include="..\Trident.Framework\Trident.Framework.csproj">
       <Project>{46486879-7b58-4731-8b0e-84d0b0fa37a4}</Project>

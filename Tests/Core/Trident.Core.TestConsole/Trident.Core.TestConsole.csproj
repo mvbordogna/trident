@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Core\Trident.Core.Web\Trident.Core.Web.csproj" />
+    <ProjectReference Include="..\..\..\Core\Trident.Core\Trident.Core.csproj" />
+    <ProjectReference Include="..\..\..\Core\Trident.EFCore\Trident.EFCore.csproj" />
+    <ProjectReference Include="..\..\..\Standard\Trident.Azure\Trident.Azure.csproj" />
+    <ProjectReference Include="..\..\..\Standard\Trident.Contracts\Trident.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\Standard\Trident.EF\Trident.EF.csproj" />
+    <ProjectReference Include="..\..\..\Standard\Trident.Serilog\Trident.Serilog.csproj" />
+    <ProjectReference Include="..\..\..\Standard\Trident.Web\Trident.Web.csproj" />
+    <ProjectReference Include="..\..\..\Standard\Trident\Trident.csproj" />
+    <ProjectReference Include="..\..\Trident.TestTargetProject\Trident.TestTargetProject.csproj" />
+    <ProjectReference Include="..\Trident.Core.TestRepositories\Trident.Core.TestRepositories.csproj" />
+  </ItemGroup>
+
+</Project>

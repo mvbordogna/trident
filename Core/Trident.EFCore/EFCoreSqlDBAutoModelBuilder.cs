@@ -1,9 +1,8 @@
 ﻿using Trident.Data;
 using Trident.Domain;
-using Trident.EFCore;
 using System.Reflection;
 
-namespace Trident.Business.ModelBuilders
+namespace Trident.EFCore
 {
     /// <summary>
     /// Class EFCoreSqlDBAutoModelBuilder.

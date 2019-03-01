@@ -79,13 +79,13 @@ namespace Trident.Tests.Data
                 ServiceLocatorMock.Setup(x=> x.GetNamed<ISharedContextFactory>(SharedDataSource.DefaultDB.ToString()))
                     .Returns(SharedContextFactoryMock.Object);
 
-                SharedContextFactoryMock.Setup(x => x.Get(typeof(SharedSourceTestEntity), SharedDataSource.DefaultDB)).
+                SharedContextFactoryMock.Setup(x => x.Get(typeof(SharedSourceTestEntity), SharedDataSource.DefaultDB.ToString())).
                     Returns(SharedContextMock.Object);
 
-                SharedContextFactoryMock.Setup(x => x.Get(typeof(UndefinedSharedSourceTestEntity), SharedDataSource.DefaultDB)).
+                SharedContextFactoryMock.Setup(x => x.Get(typeof(UndefinedSharedSourceTestEntity), SharedDataSource.DefaultDB.ToString())).
                  Returns(SharedContextMock.Object);
 
-                SharedContextFactoryMock.Setup(x => x.Get(typeof(DefaultedSharedSourceTestEntity), SharedDataSource.DefaultDB)).
+                SharedContextFactoryMock.Setup(x => x.Get(typeof(DefaultedSharedSourceTestEntity), SharedDataSource.DefaultDB.ToString())).
                  Returns(SharedContextMock.Object);
 
                 InstanceUnderTest = new AbstractContextFactory(ServiceLocatorMock.Object);
@@ -102,13 +102,13 @@ namespace Trident.Tests.Data
 
         public class UnResolvableDataSourceEntity { };
 
-       [UseSharedDataSource(SharedDataSource.DefaultDB)]
+       [UseSharedDataSource(nameof(SharedDataSource.DefaultDB))]
         public class SharedSourceTestEntity
         {
             public Guid Id { get; set; }
         }
 
-        [UseSharedDataSource(SharedDataSource.Undefined)]
+        [UseSharedDataSource()]
         public class UndefinedSharedSourceTestEntity
         {
             public Guid Id { get; set; }

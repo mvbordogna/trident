@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using Trident.Autofac;
 using Moq;
 using Trident.IoC;
 

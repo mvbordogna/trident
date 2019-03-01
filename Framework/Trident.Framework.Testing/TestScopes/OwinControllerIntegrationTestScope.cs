@@ -9,7 +9,7 @@ using System.Net.Http.Formatting;
 using System.Security.Claims;
 using System.Web.Http;
 using System.Web.Http.Dispatcher;
-using Trident.Autofac;
+using Trident.IoC;
 
 //[assembly: OwinStartup("TestingConfiguration", typeof(StartupDemo.TestStartup))]
 

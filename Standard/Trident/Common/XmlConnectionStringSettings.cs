@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 
 namespace Trident.Common
 {
@@ -8,7 +11,7 @@ namespace Trident.Common
     /// Implements the <see cref="Trident.Common.IConnectionStringSettings" />
     /// </summary>
     /// <seealso cref="Trident.Common.IConnectionStringSettings" />
-    public class ConnectionStringSettings : IConnectionStringSettings
+    public class XmlConnectionStringSettings : IConnectionStringSettings
     {
         /// <summary>
         /// Gets the <see cref="System.String" /> with the specified key.
@@ -40,6 +43,19 @@ namespace Trident.Common
                     return null;
                 }
             }
+        }
+
+        public IEnumerator<ConnectionStringSettings> GetEnumerator()
+        {
+            return ConfigurationManager.ConnectionStrings
+                .OfType<ConnectionStringSettings>()
+                .GetEnumerator();         
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return ConfigurationManager.ConnectionStrings
+                .GetEnumerator();
         }
     }
 }

@@ -32,7 +32,7 @@ namespace Trident.Framework.EF6.Tests
             Mock<ISharedConnectionStringResolver> ConnectionStringResolverMock { get; }
             Mock<IModelBuilderFactory> ModalBuilderFactoryMock { get; }
             public Mock<IEFDbContext> EFDbContextMock { get; }
-            public SharedDataSource TestDataSource { get; set; }
+            public string TestDataSource { get; set; }
             public Type TestEntityType { get; set; }
             public string TestCompanyCode { get; set; }
             public string TestConnectionString { get; }
@@ -43,7 +43,7 @@ namespace Trident.Framework.EF6.Tests
             public DefaultScope()
             {
                 TestEntityType = typeof(TestEntity);
-                TestDataSource = SharedDataSource.DefaultDB;
+                TestDataSource = SharedDataSource.DefaultDB.ToString();
                 TestConnectionString = "TestConnStr";
                 DbConnectionMock = new Mock<IDbConnection>();
 

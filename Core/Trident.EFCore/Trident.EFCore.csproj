@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Standard\Trident.EF\Trident.EF.csproj" />
+    <ProjectReference Include="..\Trident.Core\Trident.Core.csproj" />
   </ItemGroup>
 
 </Project>

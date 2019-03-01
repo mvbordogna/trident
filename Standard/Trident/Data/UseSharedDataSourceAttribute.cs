@@ -1,5 +1,4 @@
-﻿using Trident.Contracts.Enums;
-using System;
+﻿using System;
 
 namespace Trident.Data
 {
@@ -18,7 +17,7 @@ namespace Trident.Data
         /// Initializes a new instance of the <see cref="UseSharedDataSourceAttribute"/> class.
         /// </summary>
         /// <param name="dataSource">The data source.</param>
-        public UseSharedDataSourceAttribute(SharedDataSource dataSource)
+        public UseSharedDataSourceAttribute(string dataSource=null)
         {
             this.DataSource = dataSource;
         }
@@ -27,6 +26,6 @@ namespace Trident.Data
         /// Gets or sets the data source.
         /// </summary>
         /// <value>The data source.</value>
-        public SharedDataSource DataSource { get; set; }
+        public string DataSource { get; set; }
     }
 }

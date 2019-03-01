@@ -13,13 +13,13 @@ namespace Trident.Data.Contracts
         /// </summary>
         /// <param name="dataSource">The data source.</param>
         /// <returns>System.String.</returns>
-        string GetConnectionString(SharedDataSource dataSource);
+        string GetConnectionString(string dataSource);
 
         /// <summary>
         /// Gets the connection.
         /// </summary>
         /// <param name="dataSource">The data source.</param>
         /// <returns>IDbConnection.</returns>
-        IDbConnection GetConnection(SharedDataSource dataSource);
+        IDbConnection GetConnection(string dataSource);
     }
 }

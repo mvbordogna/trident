@@ -1,9 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Trident.Business;
 using Trident.Contracts;
 using Trident.Data.Contracts;
 using Trident.Domain;
-using Trident.Search;
 using Trident.Testing.TestScopes;
 
 namespace Trident.Tests.Business
@@ -29,7 +29,7 @@ namespace Trident.Tests.Business
             }
         }
 
-        private class TestDerivedReadOnlyManager : Trident.Business.ReadOnlyManagerBase<TestEntity>, ITestDeriviedReadOnlyManager
+        private class TestDerivedReadOnlyManager : ReadOnlyManagerBase<TestEntity>, ITestDeriviedReadOnlyManager
         {
             public TestDerivedReadOnlyManager(IReadOnlyProvider<TestEntity> provider)
                 : base(provider)

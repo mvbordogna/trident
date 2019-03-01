@@ -30,6 +30,7 @@ namespace Trident.IoC
         /// <param name="parameters">The parameters.</param>
         /// <returns>T.</returns>
         T Get<T>(params Parameter[] parameters);
+        IIoCProvider RegisterBehavior<T>(Func<T> p, string name, LifeSpan lifeSpan = LifeSpan.InstancePerLifetimeScope);
 
         /// <summary>
         /// Resolves all keyed.
@@ -85,7 +86,14 @@ namespace Trident.IoC
         /// <typeparam name="T"></typeparam>
         /// <typeparam name="InterfaceOfT">The type of the interface of t.</typeparam>
         /// <returns>IIoCProvider.</returns>
-        IIoCProvider Register<T, InterfaceOfT>();
+        IIoCProvider Register<T, InterfaceOfT>(LifeSpan lifeSpan = LifeSpan.InstancePerLifetimeScope);
+
+        IIoCProvider RegisterNamed<T, InterfaceOfT>(string serviceName, LifeSpan lifeSpan = LifeSpan.InstancePerLifetimeScope);
+
+        IIoCProvider Register(Type type, Type interfaceOfT, LifeSpan lifeSpan = LifeSpan.InstancePerLifetimeScope);
+
+        IIoCProvider RegisterNamed(string serviceName, Type type, Type interfaceOfT, LifeSpan lifeSpan = LifeSpan.InstancePerLifetimeScope);
+
 
         /// <summary>
         /// Registers the behavior.
@@ -93,7 +101,7 @@ namespace Trident.IoC
         /// <typeparam name="InterfaceOfT">The type of the interface of t.</typeparam>
         /// <param name="constructionFunc">The construction function.</param>
         /// <returns>IIoCProvider.</returns>
-        IIoCProvider RegisterBehavior<InterfaceOfT>(Func<InterfaceOfT> constructionFunc);
+        IIoCProvider RegisterBehavior<InterfaceOfT>(Func<InterfaceOfT> constructionFunc, LifeSpan lifeSpan = LifeSpan.InstancePerLifetimeScope);
 
         /// <summary>
         /// Registers the singleton.

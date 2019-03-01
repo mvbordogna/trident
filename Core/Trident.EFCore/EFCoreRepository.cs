@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Trident;
 using Trident.Data;
 using Trident.Data.Contracts;
 using Trident.Domain;
@@ -39,7 +38,7 @@ namespace Trident.EFCore
         /// <returns>Task&lt;TEntity&gt;.</returns>
         public override async Task<TEntity> GetById(object id, bool detach = false)
         {
-            var idExpression = TypeExtensions.CreateTypedCompareExpression<TEntity>(nameof(Entity.Id), id);           
+            var idExpression = TypeExtensions.CreateTypedCompareExpression<TEntity>(nameof(Entity.Id), id);
             return await base.Context.Query<TEntity>(detach)
                 .FirstOrDefaultAsync(idExpression);
         }

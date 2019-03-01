@@ -42,7 +42,7 @@ namespace Trident.EFCore
         /// <param name="entityType">Type of the entity.</param>
         /// <param name="dataSource">The data source.</param>
         /// <returns>IContext.</returns>
-        public IContext Get(Type entityType, SharedDataSource dataSource)
+        public IContext Get(Type entityType, string dataSource)
         {           
             var optionsBuilderfactory = _serviceLocater.Get<IOptionsFactory>();
             var options  = optionsBuilderfactory.GetOptions(dataSource.ToString());

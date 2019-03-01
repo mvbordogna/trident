@@ -1,5 +1,4 @@
 using Trident.IoC;
-using Trident.Autofac;
 using System;
 
 namespace Trident.Testing.TestScopes

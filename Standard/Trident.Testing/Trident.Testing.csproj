@@ -19,7 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Trident.Autofac\Trident.Autofac.csproj" />
     <ProjectReference Include="..\Trident\Trident.csproj" />
   </ItemGroup>
 

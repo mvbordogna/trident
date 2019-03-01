@@ -20,7 +20,7 @@ namespace Trident.Rest
         /// <summary>
         /// The rest data source mappings
         /// </summary>
-        private readonly Dictionary<SharedDataSource, string> _restDataSourceMappings;
+        private readonly Dictionary<string, string> _restDataSourceMappings;
         /// <summary>
         /// The authentication factory
         /// </summary>
@@ -35,7 +35,7 @@ namespace Trident.Rest
         {
             _appSettings = appSettings;
             _authFactory = authFactory;
-            _restDataSourceMappings = new Dictionary<SharedDataSource, string>();
+            _restDataSourceMappings = new Dictionary<string, string>();
 
             //this is ok for now but just like the other one we should move this registration to a config            
             //_restDataSourceMappings.Add(SharedDataSource.RestMicroServiceData, "MicroServiceDataSource");
@@ -46,7 +46,7 @@ namespace Trident.Rest
         /// </summary>
         /// <param name="dataSource">The data source.</param>
         /// <returns>System.String.</returns>
-        public string GetConnectionString(SharedDataSource dataSource)
+        public string GetConnectionString(string dataSource)
         {
             GuardDataBaseConnectionKeyConfigured(dataSource);
             return _appSettings[_restDataSourceMappings[dataSource]];
@@ -57,7 +57,7 @@ namespace Trident.Rest
         /// </summary>
         /// <param name="dataSource">The data source.</param>
         /// <exception cref="ConfigurationErrorsException"></exception>
-        private void GuardDataBaseConnectionKeyConfigured(SharedDataSource dataSource)
+        private void GuardDataBaseConnectionKeyConfigured(string dataSource)
         {
             if (!_restDataSourceMappings.ContainsKey(dataSource))
             {
@@ -70,7 +70,7 @@ namespace Trident.Rest
         /// </summary>
         /// <param name="dataSource">The data source.</param>
         /// <returns>IRestConnection.</returns>
-        public IRestConnection GetConnection(SharedDataSource dataSource)
+        public IRestConnection GetConnection(string dataSource)
         {
             var conn = GetConnectionString(dataSource);
             if (conn == null)

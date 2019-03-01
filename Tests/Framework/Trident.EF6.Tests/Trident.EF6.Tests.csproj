@@ -61,10 +61,6 @@
       <Project>{547199a9-3cc0-490f-bdf9-b35c1f35cf7a}</Project>
       <Name>Trident.EF6</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Standard\Trident.Autofac\Trident.Autofac.csproj">
-      <Project>{c31bb417-e079-4434-a24c-0bfcdc3c2601}</Project>
-      <Name>Trident.Autofac</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Standard\Trident.Contracts\Trident.Contracts.csproj">
       <Project>{f95afc22-8ea3-40ac-9d83-37be67989ee6}</Project>
       <Name>Trident.Contracts</Name>

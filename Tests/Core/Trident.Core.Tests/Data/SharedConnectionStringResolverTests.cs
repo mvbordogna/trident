@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Trident.Common;
-using Trident.Contracts.Enums;
+using Trident.Core.Data;
 using Trident.Data;
 using Trident.Data.Contracts;
 using Trident.Testing.TestScopes;
@@ -20,7 +20,7 @@ namespace Trident.Core.Tests.Data
             var scope = new DefaultTestScope();
 
             //act
-            scope.InstanceUnderTest.GetConnectionString(SharedDataSource.Undefined);
+            scope.InstanceUnderTest.GetConnectionString(scope.DBConnectionStringBadKey);
         }
 
         [TestMethod]
@@ -29,7 +29,7 @@ namespace Trident.Core.Tests.Data
             //setup
             var scope = new DefaultTestScope();
             //act
-            var actual = scope.InstanceUnderTest.GetConnectionString(SharedDataSource.DefaultDB);
+            var actual = scope.InstanceUnderTest.GetConnectionString(scope.DBConnectionStringKey);
 
             //asert
             Assert.AreEqual(scope.ExpectedConnString, actual);
@@ -44,7 +44,7 @@ namespace Trident.Core.Tests.Data
                   .Returns(null as System.Configuration.ConnectionStringSettings);
 
             //act
-            var actual = scope.InstanceUnderTest.GetConnectionString(SharedDataSource.DefaultDB);
+            var actual = scope.InstanceUnderTest.GetConnectionString(scope.DBConnectionStringKey);
 
             //asert
             Assert.IsNull(actual);
@@ -59,7 +59,7 @@ namespace Trident.Core.Tests.Data
             var scope = new DefaultTestScope();
 
             //act
-            using (scope.InstanceUnderTest.GetConnection(SharedDataSource.Undefined)) { }
+            using (scope.InstanceUnderTest.GetConnection(scope.DBConnectionStringBadKey)) { }
         }
 
         [TestMethod]
@@ -70,7 +70,7 @@ namespace Trident.Core.Tests.Data
             var scope = new DefaultTestScope();
             scope.TestConnStringSetting.ProviderName = "";
             //act
-            using (var actual = scope.InstanceUnderTest.GetConnection(SharedDataSource.DefaultDB))
+            using (var actual = scope.InstanceUnderTest.GetConnection(scope.DBConnectionStringKey))
             {
                 //asert
                 Assert.AreEqual(scope.ExpectedConnString, actual.ConnectionString);
@@ -85,7 +85,7 @@ namespace Trident.Core.Tests.Data
             //setup
             var scope = new DefaultTestScope();
             //act
-            using (var actual = scope.InstanceUnderTest.GetConnection(SharedDataSource.DefaultDB))
+            using (var actual = scope.InstanceUnderTest.GetConnection(scope.DBConnectionStringKey))
             {
                 //asert
                 Assert.AreEqual(scope.ExpectedConnString, actual.ConnectionString);
@@ -101,7 +101,7 @@ namespace Trident.Core.Tests.Data
                   .Returns(null as System.Configuration.ConnectionStringSettings);
 
             //act
-            using (var actual = scope.InstanceUnderTest.GetConnection(SharedDataSource.DefaultDB))
+            using (var actual = scope.InstanceUnderTest.GetConnection(scope.DBConnectionStringKey))
             {
                 //asert
                 Assert.IsNull(actual);
@@ -112,7 +112,8 @@ namespace Trident.Core.Tests.Data
         private class DefaultTestScope : TestScope<ISharedConnectionStringResolver>
         {
             public string ExpectedConnString = "Data Source=.; Initial Catalog=TestDB; Integrated Security=true; MultipleActiveResultSets=false;";
-            public string DBConnectionStringKey = nameof(SharedDataSource.DefaultDB);
+            public string DBConnectionStringKey = "DefaultDB";
+            public string DBConnectionStringBadKey = "BadDBName";
 
             public System.Configuration.ConnectionStringSettings TestConnStringSetting { get; }
 
@@ -128,7 +129,7 @@ namespace Trident.Core.Tests.Data
                 ConnectionStringSettingsMock.Setup(x => x[DBConnectionStringKey])
                     .Returns(TestConnStringSetting);
 
-                InstanceUnderTest = new SharedConnectionStringResolver(ConnectionStringSettingsMock.Object);
+                InstanceUnderTest = new SharedConnectionStringResolver(ConnectionStringSettingsMock.Object, new DBProviderAbstractFactory());
             }
         }
 

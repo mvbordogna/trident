@@ -3,7 +3,7 @@ using RestSharp;
 using RestSharp.Deserializers;
 using RestSharp.Serializers;
 
-namespace Trident.Business.RestSharp
+namespace Trident.Data.RestSharp
 {
     /// <summary>
     /// Class NewtonsoftJsonSerializer.

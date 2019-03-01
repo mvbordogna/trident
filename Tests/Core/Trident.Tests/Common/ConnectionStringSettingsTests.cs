@@ -73,7 +73,7 @@ namespace Trident.Tests.Common
 
             public DefaultTestScope()
             {
-                InstanceUnderTest = new ConnectionStringSettings();
+                InstanceUnderTest = new XmlConnectionStringSettings();
             }
         }
 

@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Trident.Contracts.Enums;
 using Trident.Data.Contracts;
 using Trident.EFCore.Contracts;
-using System;
 
 namespace Trident.EFCore
 {
@@ -23,7 +21,7 @@ namespace Trident.EFCore
         /// </summary>
         /// <param name="sharedConnectionStringResolver">The shared connection string resolver.</param>
         public SqlServerOptionsBuilder(ISharedConnectionStringResolver sharedConnectionStringResolver)
-        {       
+        {
             _sharedConnectionStringResolver = sharedConnectionStringResolver;
         }
         /// <summary>
@@ -32,22 +30,17 @@ namespace Trident.EFCore
         /// <param name="sharedDataSource">The shared data source.</param>
         /// <returns>DbContextOptions.</returns>
         /// <exception cref="System.Configuration.ConfigurationErrorsException">SharedDataSource Type not found</exception>
-        public DbContextOptions GetOptions(string sharedDataSource)
+        public DbContextOptions GetOptions(string dataSource)
         {
-            if (Enum.TryParse<SharedDataSource>(sharedDataSource, out var dataSource))
-            {
-                var connectionString = _sharedConnectionStringResolver.GetConnectionString(dataSource);              
+            var connectionString = _sharedConnectionStringResolver.GetConnectionString(dataSource);
 
-                var builder = new DbContextOptionsBuilder<EFCoreDataContext>()
-                        .UseSqlServer(connectionString, (t) =>
-                        {
-                            t.EnableRetryOnFailure();
-                        });
+            var builder = new DbContextOptionsBuilder<EFCoreDataContext>()
+                    .UseSqlServer(connectionString, (t) =>
+                    {
+                        t.EnableRetryOnFailure();
+                    });
 
-                return builder.Options;
-            }
-
-            throw new System.Configuration.ConfigurationErrorsException("SharedDataSource Type not found");
+            return builder.Options;
         }
     }
 }

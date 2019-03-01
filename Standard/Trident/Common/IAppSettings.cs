@@ -18,5 +18,7 @@
         /// <param name="key">The key.</param>
         /// <returns>System.String.</returns>
         string this[string key] { get; }
+
+        T GetSection<T>(string sectionName = null) where T : class;
     }
 }

@@ -49,7 +49,7 @@ namespace Trident.EF6
         /// <param name="entityType">Type of the entity.</param>
         /// <param name="dataSource">The data source.</param>
         /// <returns>IContext.</returns>
-        public IContext Get(Type entityType, SharedDataSource dataSource)
+        public IContext Get(Type entityType, string dataSource)
         {
             var connection = _sharedConnectionStringResolver.GetConnection(dataSource);
             var builder = _modelBuilderFactory.Get(dataSource.ToString());
