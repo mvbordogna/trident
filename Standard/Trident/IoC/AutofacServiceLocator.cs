@@ -173,6 +173,9 @@ namespace Trident.IoC
             }
         }
 
-       
+        public object GetService(Type serviceType)
+        {
+            return this.Get(serviceType);
+        }
     }
 }

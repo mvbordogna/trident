@@ -8,7 +8,7 @@ namespace Trident.IoC
     /// Implements the <see cref="System.IDisposable" />
     /// </summary>
     /// <seealso cref="System.IDisposable" />
-    public interface IIoCServiceLocator : IDisposable
+    public interface IIoCServiceLocator : IServiceProvider, IDisposable
     {
         /// <summary>
         /// Gets this instance.
