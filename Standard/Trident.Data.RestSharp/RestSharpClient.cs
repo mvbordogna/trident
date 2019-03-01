@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using RestSharp;
 using RestSharp.Authenticators;
 using Trident.Mapper;
@@ -61,18 +62,22 @@ namespace Trident.Data.RestSharp
         {
             var client = await BuildRestClient(restConnection);
             var restRequest = _mapper.Map<RestSharpRestRequest>(request);
-
-
-            //
-            // make the REST request and wait for the response
-            //
             var restResponse = await client.ExecuteTaskAsync(restRequest);
-
-
             var response = _mapper.Map<Rest.RestResponse>(restResponse);
             NormalizeErrorsToExceptions(restResponse, response);
             return response;
         }
+
+        public RestResponse ExecuteSync(RestRequest request, IRestConnection restConnection)
+        {
+            var client = BuildRestClientSync(restConnection);
+            var restRequest = _mapper.Map<RestSharpRestRequest>(request);
+            var restResponse = client.Execute(restRequest);
+            var response = _mapper.Map<Rest.RestResponse>(restResponse);
+            NormalizeErrorsToExceptions(restResponse, response);
+            return response;
+        }
+
 
         /// <summary>
         /// Executes the specified request.
@@ -106,6 +111,39 @@ namespace Trident.Data.RestSharp
         }
 
         /// <summary>
+        /// Executes the specified request.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="request">The request.</param>
+        /// <param name="restConnection">The rest connection.</param>
+        /// <returns>Task&lt;RestResponse&lt;T&gt;&gt;.</returns>
+        /// <summary>
+        /// Executes the specified request.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="request">The request.</param>
+        /// <param name="restConnection">The rest connection.</param>
+        /// <returns>Task&lt;RestResponse&lt;T&gt;&gt;.</returns>
+        public Rest.RestResponse<T> ExecuteSync<T>(RestRequest request, IRestConnection restConnection)
+            where T:class, new()
+        {
+            var client = BuildRestClientSync(restConnection);
+            var restRequest = _mapper.Map<RestSharpRestRequest>(request);
+
+
+            //
+            // make the REST request and wait for the response
+            //
+            var restResponse = client.Execute<T>(restRequest, (Method)Enum.Parse(typeof(Method), request.Method.ToString()));
+
+
+            var response = _mapper.Map<Rest.RestResponse<T>>(restResponse);
+            NormalizeErrorsToExceptions(restResponse, response);
+            return response;
+        }
+
+
+        /// <summary>
         /// Builds the rest client.
         /// </summary>
         /// <param name="restConnection">The rest connection.</param>
@@ -122,6 +160,26 @@ namespace Trident.Data.RestSharp
                 BaseUrl = restConnection.BaseUrl,
                 Timeout = restConnection.Timeout,
                 Authenticator = await restConnection.Authenticate<IAuthenticator>()
+            };
+
+            // use Newtonsoft's for a) proper handling of DateTimeOffset types, b) performance and c) extensability
+            client.AddHandler("application/json", NewtonsoftJsonSerializer.Default);
+            client.AddHandler("text/json", NewtonsoftJsonSerializer.Default);
+            client.AddHandler("text/x-json", NewtonsoftJsonSerializer.Default);
+            client.AddHandler("text/javascript", NewtonsoftJsonSerializer.Default);
+            client.AddHandler("*+json", NewtonsoftJsonSerializer.Default);
+
+            return client;
+        }
+
+
+        private static RestSharpRestClient BuildRestClientSync(IRestConnection restConnection)
+        {
+            var client = new RestSharpRestClient
+            {
+                BaseUrl = restConnection.BaseUrl,
+                Timeout = restConnection.Timeout,
+                Authenticator = restConnection.AuthenticateSync<IAuthenticator>()
             };
 
             // use Newtonsoft's for a) proper handling of DateTimeOffset types, b) performance and c) extensability

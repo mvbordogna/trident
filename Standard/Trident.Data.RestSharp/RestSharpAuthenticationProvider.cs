@@ -40,11 +40,16 @@ namespace Trident.Data.RestSharp
         /// <exception cref="System.NotSupportedException"></exception>
         public override Task<T> PerformAuthenticate<T>(RestConnectionString connection)
         {
+            return Task.FromResult(PerformAuthenticateSync<T>(connection));
+        }
+
+        public override T PerformAuthenticateSync<T>(RestConnectionString connection)
+        {
             // HACK: there has to be a better way to do this that allows callers (e.g. RestSharpClient) to be able to rely on T at compile time
             if (!string.IsNullOrWhiteSpace(connection.ClientSecret))
             {
                 var authenticator = new OAuth2AuthorizationRequestHeaderAuthenticator(connection.ClientSecret);
-                return Task.FromResult((T)(object)authenticator);
+                return (T)(object)authenticator;
             }
 
             if (!string.IsNullOrWhiteSpace(connection.CertificateThumbprint))
@@ -54,7 +59,7 @@ namespace Trident.Data.RestSharp
             }
 
             // anonymous authentication
-            return Task.FromResult((T)(object)null);
+            return (T)(object)null;
         }
     }
 }

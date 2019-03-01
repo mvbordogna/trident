@@ -26,5 +26,12 @@ namespace Trident.Rest.Contracts
         /// <typeparam name="T"></typeparam>
         /// <returns>Task&lt;T&gt;.</returns>
         Task<T> Authenticate<T>();
+
+        /// <summary>
+        /// Authenticates this instance.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns>Task&lt;T&gt;.</returns>
+        T AuthenticateSync<T>();
     }
 }

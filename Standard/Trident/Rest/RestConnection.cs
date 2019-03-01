@@ -53,5 +53,15 @@ namespace Trident.Rest
         {
             return await _authProvider.Authenticate<T>(_connectionString);
         }
+
+        /// <summary>
+        /// Authenticates this instance.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns>Task&lt;T&gt;.</returns>
+        public T AuthenticateSync<T>()
+        {
+            return _authProvider.AuthenticateSync<T>(_connectionString);
+        }
     }
 }

@@ -28,6 +28,10 @@ namespace Trident.Data.Contracts
         /// <typeparam name="T"></typeparam>
         /// <param name="entity">The entity.</param>
         void Update<T>(T entity) where T : class;
+
+
+        T Find<T>(object id, bool detach = false) where T : class;
+
         /// <summary>
         /// Finds the asynchronous.
         /// </summary>
@@ -35,7 +39,7 @@ namespace Trident.Data.Contracts
         /// <param name="id">The identifier.</param>
         /// <param name="detach">if set to <c>true</c> [detach].</param>
         /// <returns>Task&lt;T&gt;.</returns>
-        Task<T> FindAsync<T>(object id, bool detach=false) where T : class;
+        Task<T> FindAsync<T>(object id, bool detach=false) where T : class;               
         /// <summary>
         /// Queries the specified no tracking.
         /// </summary>
@@ -43,6 +47,9 @@ namespace Trident.Data.Contracts
         /// <param name="noTracking">if set to <c>true</c> [no tracking].</param>
         /// <returns>IQueryable&lt;T&gt;.</returns>
         IQueryable<T> Query<T>(bool noTracking=false) where T : class;
+
+        IQueryable<T> ExecuteProcedure<T>(string procedureName, bool noTracking = false, params IDbDataParameter[] parameters) where T : class;
+
         /// <summary>
         /// Executes the procedure asynchronous.
         /// </summary>
@@ -52,6 +59,8 @@ namespace Trident.Data.Contracts
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;IQueryable&lt;T&gt;&gt;.</returns>
         Task<IQueryable<T>> ExecuteProcedureAsync<T>(string procedureName, bool noTracking = false, params IDbDataParameter[] parameters) where T : class;
+
+        int ExecuteNonQuery(string command, params object[] parameters);
         /// <summary>
         /// Executes the non query asynchronous.
         /// </summary>

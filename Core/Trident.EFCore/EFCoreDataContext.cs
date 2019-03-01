@@ -39,9 +39,6 @@ namespace Trident.EFCore
         {
             _modelBuilderFactory = modelBuilderFactory;
             _dataSource = dataSource;
-
-            
-
         }
 
         /// <summary>
@@ -119,7 +116,19 @@ namespace Trident.EFCore
                 Set<T>().Update(entity);
                 //Entry(entity).State = EntityState.Modified;
             }
+        }
 
+        public T Find<T>(object id, bool detach = false) where T : class
+        {
+            Console.WriteLine($"Get: {typeof(T).Name}");
+            var entity = base.Find<T>(id);
+
+            if (entity != null && detach)
+            {
+                base.Entry(entity).State = EntityState.Detached;
+            }
+
+            return entity;
         }
 
         /// <summary>
@@ -132,7 +141,7 @@ namespace Trident.EFCore
         public virtual async Task<T> FindAsync<T>(object id, bool detach = false) where T : class
         {
             Console.WriteLine($"Get: {typeof(T).Name}");
-            var entity = base.Find<T>(id);
+            var entity = await base.FindAsync<T>(id);
 
             if (entity != null && detach)
             {
@@ -159,6 +168,26 @@ namespace Trident.EFCore
 
             return query;
         }
+
+        public IQueryable<T> ExecuteProcedure<T>(string procedureName, bool noTracking = false, params IDbDataParameter[] parameters)
+           where T : class
+        {
+            var paramsString = String.Join(",", parameters.Select(x => x.ParameterName));
+            IQueryable<T> queryable = new List<T>().AsQueryable();
+
+            var result = queryable.FromSql($"exec {procedureName} {paramsString}", parameters);
+
+            if (!noTracking)
+            {
+                foreach (var item in result)
+                {
+                    this.Set<T>().Attach(item);
+                }
+            }
+
+            return result;
+        }
+
 
         /// <summary>
         /// Executes the procedure asynchronous.
@@ -237,6 +266,10 @@ namespace Trident.EFCore
             return await this.Database.ExecuteSqlCommandAsync(command, parameters);
         }
 
+        public int ExecuteNonQuery(string command, params object[] parameters)
+        {
+            return this.Database.ExecuteSqlCommand(command, parameters);
+        }
     }
 
     

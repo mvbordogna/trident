@@ -90,6 +90,20 @@ namespace Trident.EF6
 
         }
 
+
+        public T Find<T>(object id, bool detach = false) where T : class
+        {
+            Console.WriteLine($"Get: {typeof(T).Name}");
+            var entity = Set<T>().Find(id);
+
+            if (entity != null && detach)
+            {
+                base.Entry(entity).State = EntityState.Detached;
+            }
+
+            return entity;
+        }
+
         /// <summary>
         /// find as an asynchronous operation.
         /// </summary>
@@ -126,6 +140,25 @@ namespace Trident.EF6
 
             return query;
         }
+
+        public IQueryable<T> ExecuteProcedure<T>(string procedureName, bool noTracking = false, params IDbDataParameter[] parameters) where T : class
+        {
+            var paramsString = String.Join(",", parameters.Select(x => x.ParameterName));
+
+            var result = this.Database
+                .SqlQuery<T>($"exec {procedureName} {paramsString}", parameters).AsQueryable();
+
+            if (!noTracking)
+            {
+                foreach (var item in result)
+                {
+                    this.Set<T>().Attach(item);
+                }
+            }
+
+            return result;
+        }
+
 
         /// <summary>
         /// Executes the procedure asynchronous.
@@ -203,6 +236,11 @@ namespace Trident.EF6
         public async Task<int> ExecuteNonQueryAsync(string command, params object[] parameters)
         {
             return await this.Database.ExecuteSqlCommandAsync(command, parameters);
+        }
+              
+        public int ExecuteNonQuery(string command, params object[] parameters)
+        {
+            return this.Database.ExecuteSqlCommand(command, parameters);
         }
     }
 }

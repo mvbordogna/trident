@@ -18,8 +18,8 @@ namespace Trident.EFCore
 
         private static class Providers
         {
-            public const string SQL = "System.Data.SqlClient";
-            internal const string CosmosDB = "CosmosDB";
+            public const string SQL = "system.data.sqlclient";
+            internal const string CosmosDB = "cosmosdb";
         }
 
         private Dictionary<string, Action<IIoCProvider, TridentConfigurationOptions, ConnectionStringSettings>> ProviderSetups
@@ -70,9 +70,11 @@ namespace Trident.EFCore
                        
             foreach (var conn in connStringManager)
             {
-                if (ProviderSetups.ContainsKey(conn.ProviderName))
+                var pn = conn.ProviderName.ToLower();
+
+                if (ProviderSetups.ContainsKey(pn))
                 {
-                    ProviderSetups[conn.ProviderName](provider, config, conn);
+                    ProviderSetups[pn](provider, config, conn);
                 }
             }
         }

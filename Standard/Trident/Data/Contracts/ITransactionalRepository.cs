@@ -15,5 +15,11 @@ namespace Trident.Data.Contracts
         /// </summary>
         /// <returns>Task.</returns>
         Task Commit();
+
+        /// <summary>
+        /// Commits this instance.
+        /// </summary>
+        /// <returns>Task.</returns>
+        void CommitSync();
     }
 }

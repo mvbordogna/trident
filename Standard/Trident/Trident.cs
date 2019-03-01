@@ -28,6 +28,7 @@ namespace Trident
             {
                 p.UsingTridentAppSettingsJsonManager();
                 p.UsingTridentConnectionStringJsonManager();
+                p.RegisterInstance<IConfigurationRoot>(config.AppConfiguration);
                 connStringManager = new Common.JsonConnectionStringSettings(config.AppConfiguration);
             }
             else if (config.UsingXmlConfig)
@@ -37,10 +38,12 @@ namespace Trident
                 connStringManager = new Common.XmlConnectionStringSettings();
             }
             else throw new System.Configuration.ConfigurationErrorsException("Primary configuration type can be only one json (new) or xml (legecy)");
-            
-        
-            p.UsingTridentSearch();
+
+            p.UsingTridentData();
             p.UsingTridentTransactions();
+            p.UsingTridentFileStorage();
+
+            p.UsingTridentSearch(targetAssemblies);           
             p.UsingTridentRepositories(targetAssemblies);
             p.UsingTridentProviders(targetAssemblies);
             p.UsingTridentManagers(targetAssemblies);
@@ -51,8 +54,7 @@ namespace Trident
             p.UsingTridentFactories(targetAssemblies);
             p.UsingTridentResolvers(targetAssemblies);
             p.UsingTridentMapperProfiles(targetAssemblies);
-            p.UsingTridentFileStorage();     
-            p.UsingTridentData();
+
             RegisterDataProviderPackages(p, config, connStringManager);
                       
             foreach (var t in config.ModuleTypes)

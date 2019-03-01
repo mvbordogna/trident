@@ -41,14 +41,14 @@ namespace Trident.Core.TestConsole
 
             Organisation temp = null;
 
-            testRepo.Insert(temp = new Organisation()
+            testRepo.InsertSync(temp = new Organisation()
             {
                 Id = Guid.NewGuid(),
                 Name = "MyOrg",
                 Created = DateTimeOffset.Now
-            }).Wait();
+            });
 
-            var result = testRepo.GetById(temp.Id).Result;
+            var result = testRepo.GetByIdSync(temp.Id);
 
             var myEntity = result;
         }

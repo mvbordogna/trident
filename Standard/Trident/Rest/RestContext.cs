@@ -43,12 +43,30 @@ namespace Trident.Rest
         /// <summary>
         /// Executes the message.
         /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>Task&lt;RestResponse&gt;.</returns>
+        public RestResponse ExecuteMessageSync(RestRequest request)
+        {
+            return _restClient.ExecuteSync(request, _restConnection);
+        }
+
+        /// <summary>
+        /// Executes the message.
+        /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="request">The request.</param>
         /// <returns>Task&lt;RestResponse&lt;T&gt;&gt;.</returns>
         public async Task<RestResponse<T>> ExecuteMessage<T>(RestRequest request)
         {
-            return await _restClient.Execute<T>(request, _restConnection);           
+            return await _restClient.Execute<T>(request, _restConnection);
         }
+
+        public RestResponse<T> ExecuteMessageSync<T>(RestRequest request)
+               where T : class, new()
+        {
+            return _restClient.ExecuteSync<T>(request, _restConnection);
+        }
+
+
     }
 }

@@ -43,6 +43,26 @@ namespace Trident.Rest
             return (T)AuthenticationContext;
         }
 
+
+
+        /// <summary>
+        /// Authenticates the specified connection.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="connection">The connection.</param>
+        /// <returns>Task&lt;T&gt;.</returns>
+        public T AuthenticateSync<T>(RestConnectionString connection)
+        {
+            if (!IsAuthenticated)
+            {
+                AuthenticationContext = PerformAuthenticateSync<T>(connection);
+                IsAuthenticated = true;
+            }
+
+            return (T)AuthenticationContext;
+        }
+
+
         /// <summary>
         /// Performs the authenticate.
         /// </summary>
@@ -50,6 +70,15 @@ namespace Trident.Rest
         /// <param name="connection">The connection.</param>
         /// <returns>Task&lt;T&gt;.</returns>
         public abstract Task<T> PerformAuthenticate<T>(RestConnectionString connection);
+
+        /// <summary>
+        /// Performs the authenticate.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="connection">The connection.</param>
+        /// <returns>Task&lt;T&gt;.</returns>
+
+        public abstract T PerformAuthenticateSync<T>(RestConnectionString connection);
 
         /// <summary>
         /// Gets a value indicating whether this instance is authenticated.

@@ -47,20 +47,10 @@ namespace Trident.Data
         /// <param name="connStr">The connection string.</param>
         private void parse(string connStr)
         {
-            var pairs = connStr.Split(';')
-                .Select(x =>
-                {
-                    var pair = x.Split(new char[]{ '=' }, 2);
-                    return new KeyValuePair<string, string>(pair.First()?.Trim(), pair.Last()?.Trim());
-                }).ToDictionary(x => x.Key, x => x.Value);
-
-            var dict = new Dictionary<string, string>(pairs, StringComparer.InvariantCultureIgnoreCase);
-    
+            var dict = connStr.ToDictionary(';', '=');    
             AccountKey = dict.GetValueOrDefault(nameof(AccountKey))?.ToSecureString(); 
             AccountEndpoint = dict.GetValueOrDefault(nameof(AccountEndpoint));
             DatabaseName = dict.GetValueOrDefault(nameof(DatabaseName));
-
-
         }
     }
 }

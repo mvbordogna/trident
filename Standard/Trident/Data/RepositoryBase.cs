@@ -50,6 +50,12 @@ namespace Trident.Data
             return await Context.FindAsync<TEntity>(id, detach);
         }
 
+        public TEntity GetByIdSync(object id, bool detach = false)
+        {
+            return Context.Find<TEntity>(id, detach);
+        }
+
+
         /// <summary>
         /// Inserts the specified entity.
         /// </summary>
@@ -64,6 +70,16 @@ namespace Trident.Data
                 await Context.SaveChangesAsync();
             }
         }
+     
+        public void InsertSync(TEntity entity, bool deferCommit = false)
+        {
+            Context.Add(entity);
+            if (!deferCommit)
+            {
+                Context.SaveChanges();
+            }
+        }
+
 
         /// <summary>
         /// Deletes the specified entity.
@@ -80,6 +96,18 @@ namespace Trident.Data
             }
         }
 
+
+        public void DeleteSync(TEntity entity, bool deferCommit = false)
+        {
+            Context.Delete(entity);
+            if (!deferCommit)
+            {
+                Context.SaveChanges();
+            }
+        }
+
+
+
         /// <summary>
         /// Updates the specified entity.
         /// </summary>
@@ -95,6 +123,15 @@ namespace Trident.Data
             }
         }
 
+        public void UpdateSync(TEntity entity, bool deferCommit = false)
+        {
+            Context.Update(entity);
+            if (!deferCommit)
+            {
+                Context.SaveChanges();
+            }
+        }
+
         /// <summary>
         /// Commits this instance.
         /// </summary>
@@ -102,6 +139,11 @@ namespace Trident.Data
         public async Task Commit()
         {
             await Context.SaveChangesAsync();
+        }
+
+        public void CommitSync()
+        {
+            Context.SaveChanges();
         }
     }
 }

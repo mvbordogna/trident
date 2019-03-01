@@ -287,6 +287,11 @@ namespace Trident.Rest
             var response = await Context.ExecuteMessage<List<TTargetEntity>>(request);
             return await MapTargetToLocal(response.Data, externalIdLookup);
         }
+        
+        public TEntity GetByIdSync(object id, bool detach = false)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Inserts the specified entity.
@@ -475,6 +480,22 @@ namespace Trident.Rest
             }
 
             return results;
+        }
+
+
+        public void InsertSync(TEntity entity, bool deferCommit = false)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteSync(TEntity entity, bool deferCommit = false)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateSync(TEntity entity, bool deferCommit = false)
+        {
+            throw new NotImplementedException();
         }
     }
 }

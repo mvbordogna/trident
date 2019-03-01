@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security;
@@ -24,6 +25,19 @@ namespace Trident.Extensions
                 str = str + match.ToString() + " ";
             return str.TrimEnd(' ');
         }
+
+        public static Dictionary<string, string> ToDictionary(this string target, char pairDelimiter, char keyValueDelimiter)
+        {
+            var pairs = target.Split(pairDelimiter)
+                .Select(x =>
+                {
+                    var pair = x.Split(new char[] { keyValueDelimiter }, 2);
+                    return new KeyValuePair<string, string>(pair.First()?.Trim(), pair.Last()?.Trim());
+                }).ToDictionary(x => x.Key, x => x.Value);
+
+            return new Dictionary<string, string>(pairs, StringComparer.InvariantCultureIgnoreCase);
+        }
+
 
         /// <summary>
         /// Formats the specified string to sentence case.

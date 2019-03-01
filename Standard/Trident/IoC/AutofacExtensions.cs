@@ -51,8 +51,9 @@ namespace Trident.IoC
             builder.UsingTridentSearchResultBuilder();
             builder.UsingTridentSearchQueryBuilder();
             builder.UsingTridentSearchResultBuilder();
-            builder.UsingTridentComplexFilters();
-            builder.UsingTridentComplexFilterAdapters();
+            builder.UsingTridentSearchComplexFilterFactory();
+            builder.UsingTridentComplexFilters(targetAssemblies);
+            builder.UsingTridentComplexFilterAdapters(targetAssemblies);
         }
 
         public static void UsingTridentMapperProfiles(this ContainerBuilder builder, params Assembly[] targetAssemblies)
@@ -150,20 +151,20 @@ namespace Trident.IoC
         }  
 
         public static IRegistrationBuilder<SearchResultsBuilder, ReflectionActivatorData, SingleRegistrationStyle> 
-            UsingTridentSearchResultBuilder(this ContainerBuilder builder, params Assembly[] targetAssemblies)
+            UsingTridentSearchResultBuilder(this ContainerBuilder builder)
         {
             return builder.RegisterType<SearchResultsBuilder>().As<ISearchResultsBuilder>().SingleInstance();        
         }
 
         public static IRegistrationBuilder<SearchQueryBuilder, ReflectionActivatorData, SingleRegistrationStyle> 
-            UsingTridentSearchQueryBuilder(this ContainerBuilder builder, params Assembly[] targetAssemblies)
+            UsingTridentSearchQueryBuilder(this ContainerBuilder builder)
         {     
             return builder.RegisterType<SearchQueryBuilder>().As<ISearchQueryBuilder>().SingleInstance();          
         }
 
 
         public static IRegistrationBuilder<ComplexFilterFactory, ReflectionActivatorData, SingleRegistrationStyle> 
-            UsingTridentSearchComplexFilterFactory(this ContainerBuilder builder, params Assembly[] targetAssemblies)
+            UsingTridentSearchComplexFilterFactory(this ContainerBuilder builder)
         {          
            return  builder.RegisterType<ComplexFilterFactory>().As<IComplexFilterFactory>().SingleInstance();          
         }

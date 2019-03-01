@@ -62,5 +62,38 @@ namespace Trident.Data.Contracts
         /// <param name="deferCommit">if set to <c>true</c> [defer commit].</param>
         /// <returns>Task.</returns>
         Task Update(TEntity entity, bool deferCommit = false);
+
+
+        /// <summary>
+        /// Gets the by identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <param name="detach">if set to <c>true</c> [detach].</param>
+        /// <returns>Task&lt;TEntity&gt;.</returns>
+        TEntity GetByIdSync(object id, bool detach = false);
+
+        /// <summary>
+        /// Inserts the specified entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="deferCommit">if set to <c>true</c> [defer commit].</param>
+        /// <returns>Task.</returns>
+        void InsertSync(TEntity entity, bool deferCommit = false);
+
+        /// <summary>
+        /// Deletes the specified entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="deferCommit">if set to <c>true</c> [defer commit].</param>
+        /// <returns>Task.</returns>
+        void DeleteSync(TEntity entity, bool deferCommit = false);
+
+        /// <summary>
+        /// Updates the specified entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="deferCommit">if set to <c>true</c> [defer commit].</param>
+        /// <returns>Task.</returns>
+        void UpdateSync(TEntity entity, bool deferCommit = false);
     }   
 }

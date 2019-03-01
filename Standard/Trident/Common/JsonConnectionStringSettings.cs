@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using Trident.Extensions;
 
 namespace Trident.Common
 {
@@ -26,6 +27,14 @@ namespace Trident.Common
                         : null)
                         .Where(x=> x != null)
                        .ToList();
+            connStrings.ForEach(x => SetProviderName(x));          
+
+        }
+
+        private void SetProviderName(ConnectionStringSettings x)
+        {
+            var dict = x.ConnectionString.ToLower().ToDictionary(';', '=');
+            x.ProviderName = dict.GetValueOrDefault("providername");          
         }
 
         /// <summary>
