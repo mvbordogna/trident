@@ -69,10 +69,11 @@ namespace Trident
 
         private static void RegisterDataProviderPackages(IIoCProvider ioc, TridentConfigurationOptions config, IConnectionStringSettings connStringManager)
         {
+            //need a fix that works for everything or multiple fixes.... dll are lazy JIT and somethimes there are on in the bin either, wtf msft
             var assList = new List<Assembly>();
             assList.AddRange(config.TargetAssemblies);
-            assList.AddRange(AppDomain.CurrentDomain.GetAssemblies().Where(x => x.GetName().Name.StartsWith("Trident.")));
-            var extenders = assList.SelectMany(x => x.GetTypes())
+            assList.AddRange(AppDomain.CurrentDomain.GetAssemblies().Where(x => x.GetName().Name.StartsWith("Trident.")));            
+            var extenders = assList.Distinct().SelectMany(x => x.GetTypes())
                    .Where(x => typeof(IDataExtender).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract)
                    .Select(x => Activator.CreateInstance(x) as IDataExtender)
                    .ToList();
