@@ -6,7 +6,19 @@ using System.Collections.Generic;
 using System.Linq;
 using Trident.Extensions;
 using Microsoft.Extensions.Configuration;
-using Trident.IoC;
+using Trident.Business;
+using Trident.Data.Contracts;
+using Trident.Contracts;
+using Trident.Data;
+using Trident.Rest;
+using Trident.Rest.Contracts;
+using Trident.Mapper;
+using System.Reflection;
+using Trident.Transactions;
+using Trident.Validation;
+using Trident.Workflow;
+using Trident.Search;
+using Trident.Common;
 
 namespace Trident.IoC
 {
@@ -147,7 +159,7 @@ namespace Trident.IoC
         /// <typeparam name="T"></typeparam>
         /// <returns>IIoCProvider.</returns>
         public IIoCProvider RegisterModule<T>()
-            where T : Module, new()
+            where T : Autofac.Module, new()
         {
             _builder.RegisterModule<T>();
             return this;
@@ -196,7 +208,7 @@ namespace Trident.IoC
                 return constructionFunc();
 
             }).As<InterfaceOfT>();
-           
+
             ApplyLifeTime(x, lifeSpan);
             return this;
         }
@@ -242,15 +254,6 @@ namespace Trident.IoC
         }
 
         /// <summary>
-        /// Initializes the specified new builder.
-        /// </summary>
-        /// <param name="newBuilder">The new builder.</param>
-        public void Initialize(ContainerBuilder newBuilder)
-        {
-            newBuilder.Update(_container);
-        }
-
-        /// <summary>
         /// Gets the primary lifetime scope.
         /// </summary>
         /// <returns>ILifetimeScope.</returns>
@@ -275,7 +278,7 @@ namespace Trident.IoC
         /// <returns>IIoCServiceLocator.</returns>
         public IIoCServiceLocator CreateChildLifetimeScope(string scopeName)
         {
-          
+
             return new AutofacServiceLocator(_container.BeginLifetimeScope(scopeName));
         }
 
@@ -354,14 +357,14 @@ namespace Trident.IoC
             return this;
         }
 
-        public IIoCProvider Register(Type  type, Type interfaceOfT, LifeSpan lifeSpan = LifeSpan.InstancePerLifetimeScope)
+        public IIoCProvider Register(Type type, Type interfaceOfT, LifeSpan lifeSpan = LifeSpan.InstancePerLifetimeScope)
         {
             var x = _builder.RegisterType(type).As(interfaceOfT);
             ApplyLifeTime(x, lifeSpan);
             return this;
         }
 
-        public IIoCProvider RegisterNamed(string serviceName, Type type, Type interfaceOfT,  LifeSpan lifeSpan =  LifeSpan.InstancePerLifetimeScope)
+        public IIoCProvider RegisterNamed(string serviceName, Type type, Type interfaceOfT, LifeSpan lifeSpan = LifeSpan.InstancePerLifetimeScope)
         {
             var x = _builder.RegisterType(type).Named(serviceName, interfaceOfT);
             ApplyLifeTime(x, lifeSpan);
@@ -422,6 +425,136 @@ namespace Trident.IoC
             _builder.RegisterInstance(instance).As<InterfaceOfT>().SingleInstance();
             return this;
         }
+        
+        #region Trident Using Feature
+        public IIoCProvider UsingTridentFileStorage()
+        {
+            _builder.UsingTridentFileStorage();
+            return this;
+        }
+
+        public IIoCProvider UsingTridentData()
+        {
+            _builder.UsingTridentData();
+            return this;
+        }
+
+        public IIoCProvider UsingTridentMapperProfiles(params Assembly[] targetAssemblies)
+        {
+            _builder.UsingTridentMapperProfiles(targetAssemblies);
+            return this;
+        }
+
+        public IIoCProvider UsingTridentTransactions()
+        {
+            _builder.UsingTridentTransactions();
+            return this;
+        }
+
+        public IIoCProvider UsingTridentValidationManagers(params Assembly[] targetAssemblies)
+        {
+            _builder.UsingTridentValidationManagers(targetAssemblies);
+            return this;
+        }
+
+        public IIoCProvider UsingTridentValidationRules(params Assembly[] targetAssemblies)
+        {
+            _builder.UsingTridentValidationRules(targetAssemblies);
+            return this;
+        }
+
+        public IIoCProvider UsingTridentWorkflowManagers(params Assembly[] targetAssemblies)
+        {
+            _builder.UsingTridentWorkflowManagers(targetAssemblies);
+            return this;
+        }
+
+        public IIoCProvider UsingTridentWorkflowTasks(params Assembly[] targetAssemblies)
+        {
+            _builder.UsingTridentWorkflowTasks(targetAssemblies);
+            return this;
+        }
+
+        public IIoCProvider UsingTridentProviders(params Assembly[] targetAssemblies)
+        {
+            _builder.UsingTridentProviders(targetAssemblies);
+            return this;
+        }
+
+
+        public IIoCProvider UsingTridentManagers(params Assembly[] targetAssemblies)
+        {
+            _builder.UsingTridentManagers(targetAssemblies);
+            return this;
+        }
+
+        public IIoCProvider UsingTridentRepositories(params Assembly[] targetAssemblies)
+        {
+            _builder.UsingTridentRepositories(targetAssemblies);
+            return this;
+        }
+
+        /// <summary>
+        /// Registers the data source dependencies.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="targetAssemblies">The target assemblies.</param>
+        public IIoCProvider UsingTridentSearch(params Assembly[] targetAssemblies)
+        {
+            _builder.UsingTridentSearch(targetAssemblies);
+            return this;
+        }
+
+        public IIoCProvider UsingTridentResolvers(params Assembly[] targetAssemblies)
+        {
+            _builder.UsingTridentResolvers(targetAssemblies);
+            return this;
+        }
+
+        public IIoCProvider UsingTridentFactories(params Assembly[] targetAssemblies)
+        {
+            _builder.UsingTridentFactories(targetAssemblies);
+            return this;
+        }
+
+        public IIoCProvider UsingTridentStrategy<T>(params Assembly[] targetAssemblies)
+        {
+            _builder.UsingTridentStrategy<T>(targetAssemblies);
+            return this;
+        }
+
+
+        public IIoCProvider UsingTridentAppSettingsXmlManager()
+
+        {
+            _builder.UsingTridentAppSettingsXmlManager();
+            return this;
+        }
+
+        public IIoCProvider UsingTridentAppSettingsJsonManager()
+
+        {
+            _builder.UsingTridentAppSettingsJsonManager();
+            return this;
+        }
+
+
+
+        public IIoCProvider UsingTridentConnectionStringXmlManager()
+        {
+            _builder.UsingTridentConnectionStringXmlManager();
+            return this;
+        }
+
+        public IIoCProvider UsingTridentConnectionStringJsonManager()
+        {
+            _builder.UsingTridentConnectionStringJsonManager();               
+            return this;
+        }
+
+        #endregion
+
+
 
         /// <summary>
         /// Builds this instance.
@@ -430,6 +563,9 @@ namespace Trident.IoC
         {
             _container = _builder.Build();
         }
+
+
+
 
 
         /// <summary>
@@ -576,6 +712,6 @@ namespace Trident.IoC
         public void Dispose()
         {
             using (_container) { }
-        }       
+        }
     }
 }

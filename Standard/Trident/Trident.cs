@@ -17,42 +17,42 @@ namespace Trident
         public static TridentApplicationContext Initialize(TridentConfigurationOptions config, Action<IConfigurationBuilder> configMethod = null)
         {
             var targetAssemblies = config.TargetAssemblies;
-            var p = new IoC.AutofacIoCProvider();
+            var p = Activator.CreateInstance(config.IoCProviderType = typeof(IoC.AutofacIoCProvider)) as IIoCProvider;
             p.RegisterSelf();
-            var builder = p.Builder;
+            
             SetupConfiguration(config, configMethod);
             Common.IConnectionStringSettings connStringManager = null;
 
 
             if (config.UsingJsonConfig)
             {
-                builder.UsingTridentAppSettingsJsonManager();
-                builder.UsingTridentConnectionStringJsonManager();
+                p.UsingTridentAppSettingsJsonManager();
+                p.UsingTridentConnectionStringJsonManager();
                 connStringManager = new Common.JsonConnectionStringSettings(config.AppConfiguration);
             }
             else if (config.UsingXmlConfig)
             {
-                builder.UsingTridentAppSettingsXmlManager();
-                builder.UsingTridentConnectionStringXmlManager();
+                p.UsingTridentAppSettingsXmlManager();
+                p.UsingTridentConnectionStringXmlManager();
                 connStringManager = new Common.XmlConnectionStringSettings();
             }
             else throw new System.Configuration.ConfigurationErrorsException("Primary configuration type can be only one json (new) or xml (legecy)");
             
         
-            builder.UsingTridentSearch();
-            builder.UsingTridentTransactions();
-            builder.UsingTridentRepositories(targetAssemblies);
-            builder.UsingTridentProviders(targetAssemblies);
-            builder.UsingTridentManagers(targetAssemblies);
-            builder.UsingTridentValidationManagers(targetAssemblies);
-            builder.UsingTridentValidationRules(targetAssemblies);
-            builder.UsingTridentWorkflowManagers(targetAssemblies);
-            builder.UsingTridentWorkflowTasks(targetAssemblies);
-            builder.UsingTridentFactories(targetAssemblies);
-            builder.UsingTridentResolvers(targetAssemblies);
-            builder.UsingTridentMapperProfiles(targetAssemblies);
-            builder.UsingTridentFileStorage();     
-            builder.UsingTridentData();
+            p.UsingTridentSearch();
+            p.UsingTridentTransactions();
+            p.UsingTridentRepositories(targetAssemblies);
+            p.UsingTridentProviders(targetAssemblies);
+            p.UsingTridentManagers(targetAssemblies);
+            p.UsingTridentValidationManagers(targetAssemblies);
+            p.UsingTridentValidationRules(targetAssemblies);
+            p.UsingTridentWorkflowManagers(targetAssemblies);
+            p.UsingTridentWorkflowTasks(targetAssemblies);
+            p.UsingTridentFactories(targetAssemblies);
+            p.UsingTridentResolvers(targetAssemblies);
+            p.UsingTridentMapperProfiles(targetAssemblies);
+            p.UsingTridentFileStorage();     
+            p.UsingTridentData();
             RegisterDataProviderPackages(p, config, connStringManager);
                       
             foreach (var t in config.ModuleTypes)
@@ -173,7 +173,7 @@ namespace Trident
         public bool AutoDetectConfigFiles { get; set; }
         public IConfigurationRoot AppConfiguration { get; set; }
         public string JsonConfigFileName { get; set; }
-
+        public Type IoCProviderType { get; internal set; }
     }
 
 

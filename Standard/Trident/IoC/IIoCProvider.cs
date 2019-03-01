@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Trident.IoC
 {
@@ -152,5 +153,31 @@ namespace Trident.IoC
         /// <typeparam name="T"></typeparam>
         /// <returns>IIoCProvider.</returns>
         IIoCProvider RegisterOwinMiddleware<T>();
+
+
+        #region Trident Using Feature Methods
+        IIoCProvider UsingTridentFileStorage();
+        IIoCProvider UsingTridentData();
+        IIoCProvider UsingTridentMapperProfiles(params Assembly[] targetAssemblies);
+        IIoCProvider UsingTridentTransactions();
+        IIoCProvider UsingTridentValidationManagers(params Assembly[] targetAssemblies);
+        IIoCProvider UsingTridentValidationRules(params Assembly[] targetAssemblies);
+        IIoCProvider UsingTridentWorkflowManagers(params Assembly[] targetAssemblies);
+        IIoCProvider UsingTridentWorkflowTasks(params Assembly[] targetAssemblies);
+        IIoCProvider UsingTridentProviders(params Assembly[] targetAssemblies);
+        IIoCProvider UsingTridentManagers(params Assembly[] targetAssemblies);
+        IIoCProvider UsingTridentRepositories(params Assembly[] targetAssemblies);
+        IIoCProvider UsingTridentSearch(params Assembly[] targetAssemblies);
+        IIoCProvider UsingTridentResolvers(params Assembly[] targetAssemblies);
+        IIoCProvider UsingTridentFactories(params Assembly[] targetAssemblies);
+        IIoCProvider UsingTridentStrategy<T>(params Assembly[] targetAssemblies);
+        IIoCProvider UsingTridentAppSettingsXmlManager();
+        IIoCProvider UsingTridentAppSettingsJsonManager();
+        IIoCProvider UsingTridentConnectionStringXmlManager();
+        IIoCProvider UsingTridentConnectionStringJsonManager();
+
+        #endregion
+
+
     }
 }

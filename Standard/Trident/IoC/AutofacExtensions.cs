@@ -25,20 +25,34 @@ namespace Trident.IoC
     /// Class AutofacExtension.
     /// </summary>
     public static class AutofacExtension
-    {       
+    {
         public static void UsingTridentFileStorage(this ContainerBuilder builder)
-        { 
+        {
             builder.RegisterType<DefaultFileStorageProvider>().As<IFileStorageProvider>().SingleInstance();
             builder.RegisterType<DefaultFileStorageManager>().As<IFileStorageManager>().SingleInstance();
         }
 
         public static void UsingTridentData(this ContainerBuilder builder)
-        {  
+        {
             builder.RegisterType<AbstractContextFactory>().As<IAbstractContextFactory>().InstancePerLifetimeScope();
             builder.RegisterType<SharedConnectionStringResolver>().As<ISharedConnectionStringResolver>().SingleInstance();
             builder.RegisterType<RestAuthenticationProviderFactory>().As<IRestAuthenticationFactory>().SingleInstance();
             builder.RegisterType<RestAuthenticationProviderFactory>().As<IRestAuthenticationFactory>().SingleInstance();
             builder.RegisterType<RestConnectionStringResolver>().As<IRestConnectionStringResolver>().SingleInstance();
+        }
+
+        /// <summary>
+        /// Registers the data source dependencies.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <param name="targetAssemblies">The target assemblies.</param>
+        public static void UsingTridentSearch(this ContainerBuilder builder, params Assembly[] targetAssemblies)
+        {
+            builder.UsingTridentSearchResultBuilder();
+            builder.UsingTridentSearchQueryBuilder();
+            builder.UsingTridentSearchResultBuilder();
+            builder.UsingTridentComplexFilters();
+            builder.UsingTridentComplexFilterAdapters();
         }
 
         public static void UsingTridentMapperProfiles(this ContainerBuilder builder, params Assembly[] targetAssemblies)
@@ -50,9 +64,10 @@ namespace Trident.IoC
                 .As<AutoMapper.Profile>();
         }
 
-        public static void UsingTridentTransactions(this ContainerBuilder builder)
-        { 
-            builder.RegisterType<TransactionScopeFactory>().As<ITransactionScopeFactory>().SingleInstance();
+        public static IRegistrationBuilder<TransactionScopeFactory, ReflectionActivatorData, SingleRegistrationStyle>
+            UsingTridentTransactions(this ContainerBuilder builder)
+        {
+            return builder.RegisterType<TransactionScopeFactory>().As<ITransactionScopeFactory>().SingleInstance();
         }
 
         public static IRegistrationBuilder<Object, AF.Features.Scanning.ScanningActivatorData, DynamicRegistrationStyle>
@@ -63,7 +78,7 @@ namespace Trident.IoC
                   .Where(x => !x.IsAbstract && typeof(IValidationManager).IsAssignableFrom(x))
                   .InstancePerLifetimeScope()
                   .AsImplementedInterfaces()
-                  .AsSelf(); 
+                  .AsSelf();
         }
 
         public static IRegistrationBuilder<Object, AF.Features.Scanning.ScanningActivatorData, DynamicRegistrationStyle>
@@ -73,7 +88,7 @@ namespace Trident.IoC
                 .Where(x => !x.IsAbstract && typeof(IValidationRule).IsAssignableFrom(x))
                 .InstancePerLifetimeScope()
                 .AsImplementedInterfaces()
-                .AsSelf(); 
+                .AsSelf();
         }
 
         public static IRegistrationBuilder<Object, AF.Features.Scanning.ScanningActivatorData, DynamicRegistrationStyle>
@@ -95,92 +110,118 @@ namespace Trident.IoC
                  .Where(x => !x.IsAbstract && typeof(IWorkflowTask).IsAssignableFrom(x))
                  .InstancePerLifetimeScope()
                  .AsImplementedInterfaces()
-                 .AsSelf(); 
+                 .AsSelf();
         }
 
-        public static void UsingTridentProviders(this ContainerBuilder builder, params Assembly[] targetAssemblies)
+        public static IRegistrationBuilder<object, AF.Features.Scanning.ScanningActivatorData, DynamicRegistrationStyle>
+            UsingTridentProviders(this ContainerBuilder builder, params Assembly[] targetAssemblies)
 
         {
-            builder.RegisterAssemblyTypes(targetAssemblies)
+            return builder.RegisterAssemblyTypes(targetAssemblies)
                 .Where(x => !x.IsAbstract && typeof(IProvider).IsAssignableFrom(x))
                 .InstancePerLifetimeScope()
                 .AsImplementedInterfaces()
-                .AsSelf(); 
+                .AsSelf();
         }
 
 
-        public static void UsingTridentManagers(this ContainerBuilder builder, params Assembly[] targetAssemblies)
+        public static IRegistrationBuilder<object, AF.Features.Scanning.ScanningActivatorData, DynamicRegistrationStyle>
+            UsingTridentManagers(this ContainerBuilder builder, params Assembly[] targetAssemblies)
 
         {
-            builder.RegisterAssemblyTypes(targetAssemblies)
-                .Where(x => !x.IsAbstract && typeof(IManager).IsAssignableFrom(x))
-                .InstancePerLifetimeScope()
-                .AsImplementedInterfaces()
-                .AsSelf(); 
+            return builder.RegisterAssemblyTypes(targetAssemblies)
+                 .Where(x => !x.IsAbstract && typeof(IManager).IsAssignableFrom(x))
+                 .InstancePerLifetimeScope()
+                 .AsImplementedInterfaces()
+                 .AsSelf();
         }
 
 
 
-        public static void UsingTridentRepositories(this ContainerBuilder builder, params Assembly[] targetAssemblies)
+        public static IRegistrationBuilder<object, AF.Features.Scanning.ScanningActivatorData, DynamicRegistrationStyle>
+            UsingTridentRepositories(this ContainerBuilder builder, params Assembly[] targetAssemblies)
 
         {
-            //repositories
-            builder.RegisterAssemblyTypes(targetAssemblies)
+            return builder.RegisterAssemblyTypes(targetAssemblies)
                 .Where(x => !x.IsAbstract && typeof(IRepositoryBase).IsAssignableFrom(x))
                 .InstancePerLifetimeScope()
                 .AsImplementedInterfaces()
-                .AsSelf();                
+                .AsSelf();
+        }  
+
+        public static IRegistrationBuilder<SearchResultsBuilder, ReflectionActivatorData, SingleRegistrationStyle> 
+            UsingTridentSearchResultBuilder(this ContainerBuilder builder, params Assembly[] targetAssemblies)
+        {
+            return builder.RegisterType<SearchResultsBuilder>().As<ISearchResultsBuilder>().SingleInstance();        
         }
 
-        /// <summary>
-        /// Registers the data source dependencies.
-        /// </summary>
-        /// <param name="builder">The builder.</param>
-        /// <param name="targetAssemblies">The target assemblies.</param>
-        public static void UsingTridentSearch(this ContainerBuilder builder, params Assembly[] targetAssemblies)
+        public static IRegistrationBuilder<SearchQueryBuilder, ReflectionActivatorData, SingleRegistrationStyle> 
+            UsingTridentSearchQueryBuilder(this ContainerBuilder builder, params Assembly[] targetAssemblies)
+        {     
+            return builder.RegisterType<SearchQueryBuilder>().As<ISearchQueryBuilder>().SingleInstance();          
+        }
+
+
+        public static IRegistrationBuilder<ComplexFilterFactory, ReflectionActivatorData, SingleRegistrationStyle> 
+            UsingTridentSearchComplexFilterFactory(this ContainerBuilder builder, params Assembly[] targetAssemblies)
+        {          
+           return  builder.RegisterType<ComplexFilterFactory>().As<IComplexFilterFactory>().SingleInstance();          
+        }
+
+
+        public static IRegistrationBuilder<object, AF.Features.Scanning.ScanningActivatorData, DynamicRegistrationStyle>
+            UsingTridentComplexFilters(this ContainerBuilder builder, params Assembly[] targetAssemblies)
         {
-            builder.RegisterType<SearchResultsBuilder>().As<ISearchResultsBuilder>().SingleInstance();
-            builder.RegisterType<SearchQueryBuilder>().As<ISearchQueryBuilder>().SingleInstance();
-            builder.RegisterType<ComplexFilterFactory>().As<IComplexFilterFactory>().SingleInstance();
+            return builder.RegisterAssemblyTypes(targetAssemblies)
+                .Where(x => !x.IsAbstract && typeof(IComplexFilter).IsAssignableFrom(x))
+                .As<IComplexFilter>()
+                .SingleInstance()
+                .AsSelf();
+        }
 
-            builder.RegisterAssemblyTypes(targetAssemblies)
-              .Where(x => !x.IsAbstract && typeof(IComplexFilter).IsAssignableFrom(x))
-              .As<IComplexFilter>()
-              .SingleInstance();
+        public static IRegistrationBuilder<object, AF.Features.Scanning.ScanningActivatorData, DynamicRegistrationStyle>
+            UsingTridentComplexFilterAdapters(this ContainerBuilder builder, params Assembly[] targetAssemblies)
+        {
 
-            builder.RegisterAssemblyTypes(targetAssemblies)
+            return builder.RegisterAssemblyTypes(targetAssemblies)
              .Where(x => !x.IsAbstract && typeof(IComplexFilterAdapter).IsAssignableFrom(x))
              .As<IComplexFilterAdapter>()
-             .SingleInstance();
+             .SingleInstance()
+             .AsSelf();
         }
 
-        public static void UsingTridentResolvers(this ContainerBuilder builder, params Assembly[] targetAssemblies)
+
+        public static IRegistrationBuilder<object, AF.Features.Scanning.ScanningActivatorData, DynamicRegistrationStyle>
+            UsingTridentResolvers(this ContainerBuilder builder, params Assembly[] targetAssemblies)
 
         {
-            //resolvers
-            builder.RegisterAssemblyTypes(targetAssemblies)
-                .Where(x => !x.IsAbstract && typeof(IResolver).IsAssignableFrom(x))
-                .InstancePerLifetimeScope()
-                .AsDirectlyImplementedInterfaces();
+            return builder.RegisterAssemblyTypes(targetAssemblies)
+                 .Where(x => !x.IsAbstract && typeof(IResolver).IsAssignableFrom(x))
+                 .InstancePerLifetimeScope()
+                 .AsImplementedInterfaces()
+                 .AsSelf();
         }
 
-        public static void UsingTridentFactories(this ContainerBuilder builder, params Assembly[] targetAssemblies)
+        public static IRegistrationBuilder<object, AF.Features.Scanning.ScanningActivatorData, DynamicRegistrationStyle>
+            UsingTridentFactories(this ContainerBuilder builder, params Assembly[] targetAssemblies)
 
         {
-            //factories
-            builder.RegisterAssemblyTypes(targetAssemblies)
-                .Where(x => !x.IsAbstract && typeof(IFactory).IsAssignableFrom(x))
-                .InstancePerLifetimeScope()
-                .AsDirectlyImplementedInterfaces();
+            return builder.RegisterAssemblyTypes(targetAssemblies)
+                   .Where(x => !x.IsAbstract && typeof(IFactory).IsAssignableFrom(x))
+                   .InstancePerLifetimeScope()
+                   .AsImplementedInterfaces()
+                   .AsSelf();
         }
 
-        public static void UsingTridentStrategy<T>(this ContainerBuilder builder, params Assembly[] targetAssemblies)
+        public static IRegistrationBuilder<object, AF.Features.Scanning.ScanningActivatorData, DynamicRegistrationStyle>
+            UsingTridentStrategy<T>(this ContainerBuilder builder, params Assembly[] targetAssemblies)
 
         {
-            builder.RegisterAssemblyTypes(targetAssemblies)
+            return builder.RegisterAssemblyTypes(targetAssemblies)
                .Where(x => !x.IsAbstract && typeof(T).IsAssignableFrom(x))
                .InstancePerLifetimeScope()
-               .As<T>();
+               .As<T>()
+               .AsSelf();
         }
 
 
@@ -191,7 +232,8 @@ namespace Trident.IoC
             return builder
                 .RegisterType<Common.XmlAppSettings>()
                 .As<Common.IAppSettings>()
-                .SingleInstance();
+                .SingleInstance()
+                .AsSelf();
         }
 
         public static IRegistrationBuilder<Common.IAppSettings, ConcreteReflectionActivatorData, SingleRegistrationStyle>
@@ -201,7 +243,8 @@ namespace Trident.IoC
             return builder
                 .RegisterType<Common.JsonAppSettings>()
                 .As<Common.IAppSettings>()
-                .SingleInstance();
+                .SingleInstance()
+                .AsSelf();
         }
 
 
@@ -212,7 +255,8 @@ namespace Trident.IoC
             return builder
                 .RegisterType<XmlConnectionStringSettings>()
                 .As<IConnectionStringSettings>()
-                .SingleInstance();
+                .SingleInstance()
+                .AsSelf();
         }
 
         public static IRegistrationBuilder<IConnectionStringSettings, ConcreteReflectionActivatorData, SingleRegistrationStyle>
@@ -221,7 +265,8 @@ namespace Trident.IoC
             return builder
                 .RegisterType<JsonConnectionStringSettings>()
                 .As<IConnectionStringSettings>()
-                .SingleInstance();
+                .SingleInstance()
+                .AsSelf();
         }
 
 
