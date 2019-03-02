@@ -166,7 +166,7 @@ namespace Trident.EFCore
     /// <seealso cref="Trident.EFCore.EFCoreSearchRepositoryBase{TEntity, TSummery, Trident.Search.SearchCriteria}" />
     /// <seealso cref="Trident.Data.EntityFramework.EFSearchRepositoryBase{TEntity, TSummery, Trident.Search.SearchCriteria}" />
     /// <seealso cref="Trident.Search.ISearchRepository{TEntity, TSummery, Trident.Search.SearchCriteria}" />
-    public abstract class EFCoreSearchRepositoryBase<TEntity, TSummery> : EFCoreSearchRepositoryBase<TEntity, TSummery, SearchCriteria>, ISearchRepository<TEntity, TSummery, SearchCriteria>
+    public abstract class EFCoreSearchRepositoryBase<TEntity, TSummery> : EFCoreSearchRepositoryBase<TEntity, TSummery, SearchCriteria>, ISearchRepository<TEntity, TSummery>
        where TEntity : Entity
        where TSummery : class
     {
@@ -193,7 +193,7 @@ namespace Trident.EFCore
     /// <typeparam name="TEntity">The type of the t entity.</typeparam>
     /// <seealso cref="Trident.EFCore.EFCoreSearchRepositoryBase{TEntity, TEntity}" />
     /// <seealso cref="Trident.Search.ISearchRepository{TEntity, TEntity}" />
-    public abstract class EFCoreSearchRepositoryBase<TEntity> : EFCoreSearchRepositoryBase<TEntity, TEntity>, ISearchRepository<TEntity, TEntity>
+    public abstract class EFCoreSearchRepositoryBase<TEntity> : EFCoreSearchRepositoryBase<TEntity, TEntity>, ISearchRepository<TEntity>
      where TEntity : Entity
     {
         /// <summary>
