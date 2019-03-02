@@ -22,8 +22,8 @@ namespace Trident.EFCore
             internal const string CosmosDB = "cosmosdb";
         }
 
-        private Dictionary<string, Action<IIoCProvider, TridentConfigurationOptions, ConnectionStringSettings>> ProviderSetups
-            = new Dictionary<string, Action<IIoCProvider, TridentConfigurationOptions, ConnectionStringSettings>>()
+        private Dictionary<string, Action<IIoCProvider, TridentOptions, ConnectionStringSettings>> ProviderSetups
+            = new Dictionary<string, Action<IIoCProvider, TridentOptions, ConnectionStringSettings>>()
             {
                 {    Providers.SQL , (p, config, connStr)=>{
 
@@ -58,7 +58,7 @@ namespace Trident.EFCore
             };
 
 
-        public void RegisterSupportedConnections(TridentConfigurationOptions config, IConnectionStringSettings connStringManager, IIoCProvider provider)
+        public void RegisterSupportedConnections(TridentOptions config, IConnectionStringSettings connStringManager, IIoCProvider provider)
         {
             provider.Register<OptionsFactory, IOptionsFactory>(LifeSpan.SingleInstance);
             provider.Register<EFCoreModelBuilderFactory, IEFCoreModelBuilderFactory>(LifeSpan.SingleInstance);

@@ -14,7 +14,7 @@ namespace Trident.Core.TestConsole
         {
             var a = 8;
 
-            var appContext = Trident.Initialize(new TridentConfigurationOptions()
+            var appContext = Trident.Initialize(new TridentOptions()
             {
                 TargetAssemblies = new Assembly[]
                   {

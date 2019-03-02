@@ -14,7 +14,7 @@ namespace Trident
     public static class Trident
     {
 
-        public static TridentApplicationContext Initialize(TridentConfigurationOptions options, Action<IConfigurationBuilder> configMethod = null)
+        public static TridentApplicationContext Initialize(TridentOptions options, Action<IConfigurationBuilder> configMethod = null)
         {
             var targetAssemblies = options.TargetAssemblies;
             var p = Activator.CreateInstance(options.IoCProviderType = typeof(IoC.AutofacIoCProvider)) as IIoCProvider;
@@ -41,7 +41,7 @@ namespace Trident
 
             p.UsingTridentData();
             p.UsingTridentTransactions();
-            p.UsingTridentFileStorage();
+            if (options.EnableFileStorage) p.UsingTridentFileStorage();
 
             p.UsingTridentSearch(targetAssemblies);           
             p.UsingTridentRepositories(targetAssemblies);
@@ -70,7 +70,7 @@ namespace Trident
             return new TridentApplicationContext(p.Get<IIoCServiceLocator>(), options);
         }
 
-        private static void RegisterDataProviderPackages(IIoCProvider ioc, TridentConfigurationOptions config, IConnectionStringSettings connStringManager)
+        private static void RegisterDataProviderPackages(IIoCProvider ioc, TridentOptions config, IConnectionStringSettings connStringManager)
         {
             //need a fix that works for everything or multiple fixes.... dll are lazy JIT and somethimes there are on in the bin either, wtf msft
             var assList = new List<Assembly>();
@@ -87,7 +87,7 @@ namespace Trident
             }
         }
 
-        private static void SetupConfiguration(TridentConfigurationOptions config, Action<IConfigurationBuilder> configMethod = null) {
+        private static void SetupConfiguration(TridentOptions config, Action<IConfigurationBuilder> configMethod = null) {
 
             var entryAssembly = Assembly.GetEntryAssembly();
             var tridentAssebmly = Assembly.GetExecutingAssembly();
@@ -141,7 +141,7 @@ namespace Trident
     public class TridentApplicationContext
     {
 
-        internal TridentApplicationContext(IIoCServiceLocator ioc, TridentConfigurationOptions config)
+        internal TridentApplicationContext(IIoCServiceLocator ioc, TridentOptions config)
         {
             this.ServiceLocator = ioc;
             Configuration = config;
@@ -149,12 +149,12 @@ namespace Trident
 
        public  IIoCServiceLocator ServiceLocator { get; }
 
-       public  TridentConfigurationOptions Configuration { get; }
+       public  TridentOptions Configuration { get; }
 
     }
 
 
-    public class TridentConfigurationOptions
+    public class TridentOptions
     {
 
         internal string BinDir { get; set; }
@@ -171,6 +171,7 @@ namespace Trident
 
         public bool UsingXmlConfig { get; internal set; }
 
+        public bool EnableFileStorage {get; set; }
 
         /// <summary>
         /// When True Trident will look for app.config or appsettings.config files to load for the configuration
@@ -184,6 +185,7 @@ namespace Trident
     }
 
 
+   
 
 
 

@@ -18,8 +18,8 @@ namespace Trident.Rest
             public const string REST = "Rest";
         }
 
-        private Dictionary<string, Action<IIoCProvider, TridentConfigurationOptions, ConnectionStringSettings>> ProviderSetups
-            = new Dictionary<string, Action<IIoCProvider, TridentConfigurationOptions, ConnectionStringSettings>>()
+        private Dictionary<string, Action<IIoCProvider, TridentOptions, ConnectionStringSettings>> ProviderSetups
+            = new Dictionary<string, Action<IIoCProvider, TridentOptions, ConnectionStringSettings>>()
             {
                 {    Providers.REST , (p, config, connStr)=>{
 
@@ -33,7 +33,7 @@ namespace Trident.Rest
             };
 
 
-        public void RegisterSupportedConnections(TridentConfigurationOptions config, IConnectionStringSettings connStringManager, IIoCProvider provider)
+        public void RegisterSupportedConnections(TridentOptions config, IConnectionStringSettings connStringManager, IIoCProvider provider)
         {
             provider.Register<RestConnectionStringResolver, IRestConnectionStringResolver>(LifeSpan.SingleInstance);
             provider.Register<RestSharpClient, IRestClient>( LifeSpan.SingleInstance);
