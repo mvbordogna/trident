@@ -6,19 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Trident.Extensions;
 using Microsoft.Extensions.Configuration;
-using Trident.Business;
-using Trident.Data.Contracts;
-using Trident.Contracts;
-using Trident.Data;
-using Trident.Rest;
-using Trident.Rest.Contracts;
-using Trident.Mapper;
 using System.Reflection;
-using Trident.Transactions;
-using Trident.Validation;
-using Trident.Workflow;
-using Trident.Search;
-using Trident.Common;
 
 namespace Trident.IoC
 {
@@ -315,9 +303,13 @@ namespace Trident.IoC
         /// <returns>IIoCProvider.</returns>
         public IIoCProvider RegisterSelf()
         {
-            _builder.RegisterInstance<IIoCProvider>(this);
+            _builder.RegisterInstance<IIoCProvider>(this)
+                .AsImplementedInterfaces();
+
             _builder.RegisterType<AutofacServiceLocator>()
-                .As<IIoCServiceLocator>().InstancePerLifetimeScope();
+                .As<IIoCServiceLocator>()
+                .InstancePerLifetimeScope()
+                .AsImplementedInterfaces();
             return this;
         }
 

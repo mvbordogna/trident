@@ -23,6 +23,7 @@ namespace Trident.Core.TestConsole
                      typeof(Program).Assembly
                     
                   },
+                ValidateInitialization = true,
                 EnableTransactions = true,
                 ModuleTypes = new Type[] {
                      typeof(AppModule),
@@ -35,9 +36,9 @@ namespace Trident.Core.TestConsole
                 builder.AddEnvironmentVariables();
             });
 
-           appContext.IocProvider.VerifyAndThrow();
+        
 
-            var testRepo = appContext.IocProvider.Get<IRepository<TestTargetProject.Domain.Organisation>>();
+            var testRepo = appContext.ServiceLocator.Get<IRepository<TestTargetProject.Domain.Organisation>>();
 
             Organisation temp = null;
 

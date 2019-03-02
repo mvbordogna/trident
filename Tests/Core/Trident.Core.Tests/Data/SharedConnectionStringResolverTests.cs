@@ -9,7 +9,9 @@ using Trident.Testing.TestScopes;
 
 namespace Trident.Core.Tests.Data
 {
+
     [TestClass]
+    [Ignore]
     public class SharedConnectionStringResolverTests
     {
         [TestMethod]

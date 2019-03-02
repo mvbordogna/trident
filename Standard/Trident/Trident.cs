@@ -14,24 +14,24 @@ namespace Trident
     public static class Trident
     {
 
-        public static TridentApplicationContext Initialize(TridentConfigurationOptions config, Action<IConfigurationBuilder> configMethod = null)
+        public static TridentApplicationContext Initialize(TridentConfigurationOptions options, Action<IConfigurationBuilder> configMethod = null)
         {
-            var targetAssemblies = config.TargetAssemblies;
-            var p = Activator.CreateInstance(config.IoCProviderType = typeof(IoC.AutofacIoCProvider)) as IIoCProvider;
+            var targetAssemblies = options.TargetAssemblies;
+            var p = Activator.CreateInstance(options.IoCProviderType = typeof(IoC.AutofacIoCProvider)) as IIoCProvider;
             p.RegisterSelf();
             
-            SetupConfiguration(config, configMethod);
+            SetupConfiguration(options, configMethod);
             Common.IConnectionStringSettings connStringManager = null;
 
 
-            if (config.UsingJsonConfig)
+            if (options.UsingJsonConfig)
             {
                 p.UsingTridentAppSettingsJsonManager();
                 p.UsingTridentConnectionStringJsonManager();
-                p.RegisterInstance<IConfigurationRoot>(config.AppConfiguration);
-                connStringManager = new Common.JsonConnectionStringSettings(config.AppConfiguration);
+                p.RegisterInstance<IConfigurationRoot>(options.AppConfiguration);
+                connStringManager = new Common.JsonConnectionStringSettings(options.AppConfiguration);
             }
-            else if (config.UsingXmlConfig)
+            else if (options.UsingXmlConfig)
             {
                 p.UsingTridentAppSettingsXmlManager();
                 p.UsingTridentConnectionStringXmlManager();
@@ -55,16 +55,19 @@ namespace Trident
             p.UsingTridentResolvers(targetAssemblies);
             p.UsingTridentMapperProfiles(targetAssemblies);
 
-            RegisterDataProviderPackages(p, config, connStringManager);
+            RegisterDataProviderPackages(p, options, connStringManager);
                       
-            foreach (var t in config.ModuleTypes)
+            foreach (var t in options.ModuleTypes)
             {
                 p.RegisterModule(t);
             }
 
             p.Build();
 
-            return new TridentApplicationContext(p, config);
+            if (options.ValidateInitialization)
+                p.VerifyAndThrow();
+
+            return new TridentApplicationContext(p.Get<IIoCServiceLocator>(), options);
         }
 
         private static void RegisterDataProviderPackages(IIoCProvider ioc, TridentConfigurationOptions config, IConnectionStringSettings connStringManager)
@@ -138,13 +141,13 @@ namespace Trident
     public class TridentApplicationContext
     {
 
-        internal TridentApplicationContext(IIoCProvider ioc, TridentConfigurationOptions config)
+        internal TridentApplicationContext(IIoCServiceLocator ioc, TridentConfigurationOptions config)
         {
-            this.IocProvider = ioc;
+            this.ServiceLocator = ioc;
             Configuration = config;
         }
 
-       public  IIoCProvider IocProvider { get; }
+       public  IIoCServiceLocator ServiceLocator { get; }
 
        public  TridentConfigurationOptions Configuration { get; }
 
@@ -177,6 +180,7 @@ namespace Trident
         public IConfigurationRoot AppConfiguration { get; set; }
         public string JsonConfigFileName { get; set; }
         public Type IoCProviderType { get; internal set; }
+        public bool ValidateInitialization { get; set; }
     }
 
 
