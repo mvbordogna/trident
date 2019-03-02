@@ -72,7 +72,9 @@ namespace Trident.Common
         public T GetSection<T>(string sectionName = null)
            where T : class
         {
-            return configurationRoot.GetValue(typeof(T), sectionName ?? typeof(T).Name) as T;
+            T section = configurationRoot.Get<T>();
+            configurationRoot.Bind(sectionName ?? typeof(T).Name, section);
+            return section;
         }
 
     }
