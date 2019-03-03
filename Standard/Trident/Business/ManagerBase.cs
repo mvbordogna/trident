@@ -89,9 +89,9 @@ namespace Trident.Business
 
             var context = await CreateWorkflowContext(isNew ? Operation.Insert : Operation.Update, entity, existing, contextBag);
             await _workflowManager?.Run(context, isNew ? OperationStage.BeforeInsert : OperationStage.BeforeUpdate);
-          
+
             await _validationManager?.Validate(context);
-             await _workflowManager?.Run(context, OperationStage.PostValidation);
+            await _workflowManager?.Run(context, OperationStage.PostValidation);
             await (isNew
                 ? Provider.Insert(entity, deferCommit)
                 : Provider.Update(entity, deferCommit));
@@ -114,7 +114,7 @@ namespace Trident.Business
 
                 var context = await CreateWorkflowContext(isNew ? Operation.Insert : Operation.Update, entity, existing);
                 await _workflowManager?.Run(context, isNew ? OperationStage.BeforeInsert : OperationStage.BeforeUpdate);
-               
+
                 await _validationManager?.Validate(context);
                 await _workflowManager?.Run(context, OperationStage.PostValidation);
 
@@ -403,7 +403,7 @@ namespace Trident.Business
         /// <param name="workflowManager">The workflow manager.</param>
         protected ManagerBase(
             IProvider<TId, TEntity, TSummary> provider,
-            IValidationManager<TEntity> validationManager,
+            IValidationManager<TEntity> validationManager = null,
             IWorkflowManager<TEntity> workflowManager = null) : base(provider, validationManager, workflowManager) { }
     }
 
@@ -427,7 +427,7 @@ namespace Trident.Business
         /// <param name="workflowManager">The workflow manager.</param>
         protected ManagerBase(
             IProvider<TId, TEntity> provider,
-            IValidationManager<TEntity> validationManager,
+            IValidationManager<TEntity> validationManager = null,
             IWorkflowManager<TEntity> workflowManager = null) : base(provider, validationManager, workflowManager) { }
     }
 

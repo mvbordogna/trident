@@ -3,7 +3,7 @@ using System;
 using System.Reflection;
 using Trident.Contracts;
 using Trident.Core.TestRepositories;
-using Trident.Data.Contracts;
+using Trident.Search;
 using Trident.TestTargetProject;
 using Trident.TestTargetProject.Domain;
 
@@ -22,7 +22,7 @@ namespace Trident.Core.TestConsole
                      typeof(OrganisationManager).Assembly,
                      typeof(TestRepository).Assembly,
                      typeof(Program).Assembly
-                    
+
                   },
                 ValidateInitialization = true,
                 EnableTransactions = true,
@@ -31,15 +31,16 @@ namespace Trident.Core.TestConsole
                      typeof(BizModule)
                },
 
-               AutoDetectConfigFiles = true,           
-            }, (builder)=> {
+                AutoDetectConfigFiles = true,
+            }, (builder) =>
+            {
                 //add additional configs here, must be using json config style
                 builder.AddEnvironmentVariables();
             });
 
-        
 
-            var testRepo = appContext.ServiceLocator.Get<IRepository<Organisation>>();
+
+            var testRepo = appContext.ServiceLocator.Get<ISearchRepository<Organisation>>();
 
             var testManager = appContext.ServiceLocator.Get<IManager<Guid, Organisation>>();
 
