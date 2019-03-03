@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Trident.Business;
 
 namespace Trident.Validation
 {
@@ -31,7 +32,7 @@ namespace Trident.Validation
     /// <typeparam name="T"></typeparam>
     /// <seealso cref="Trident.Validation.IValidationRule" />
     public interface IValidationRule<in T> : IValidationRule
-        where T : Validation.ValidationContext
+        where T : BusinessContext
     {
         /// <summary>
         /// Runs the specified context.

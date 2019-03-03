@@ -5,6 +5,7 @@ using Trident.Domain;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Trident.Business;
 
 namespace Trident.Tests.Validation
 {
@@ -226,7 +227,7 @@ namespace Trident.Tests.Validation
         }
 
 
-        public class TestContext : ValidationContext<TestEntity>
+        public class TestContext : BusinessContext<TestEntity>
         {
             /// <summary>
             /// Initializes a new instance of the <see cref="ValidationContext{T}"/> class.

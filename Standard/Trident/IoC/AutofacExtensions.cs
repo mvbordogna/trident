@@ -75,6 +75,12 @@ namespace Trident.IoC
             UsingTridentValidationManagers(this ContainerBuilder builder, params Assembly[] targetAssemblies)
 
         {
+            //this registers the default
+            builder.RegisterGeneric(typeof(DefaultValidationManager<>))
+                 .As(typeof(IValidationManager<>))                 
+                 .InstancePerLifetimeScope()
+                 .AsSelf();          
+
             return builder.RegisterAssemblyTypes(targetAssemblies)
                   .Where(x => !x.IsAbstract && typeof(IValidationManager).IsAssignableFrom(x))
                   .InstancePerLifetimeScope()
@@ -96,6 +102,12 @@ namespace Trident.IoC
             UsingTridentWorkflowManagers(this ContainerBuilder builder, params Assembly[] targetAssemblies)
 
         {
+            //this registers the default
+            builder.RegisterGeneric(typeof(DefaultWorkflowManager<>))
+                 .As(typeof(IWorkflowManager<>))
+                 .InstancePerLifetimeScope()
+                 .AsSelf();
+
             return builder.RegisterAssemblyTypes(targetAssemblies)
                  .Where(x => !x.IsAbstract && typeof(IWorkflowManager).IsAssignableFrom(x))
                  .InstancePerLifetimeScope()

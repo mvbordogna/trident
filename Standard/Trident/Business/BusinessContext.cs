@@ -1,15 +1,14 @@
-﻿using Trident.Business;
-using Trident.Domain;
-using Trident.Extensions;
+﻿using Trident.Extensions;
 using System;
 using System.Collections.Generic;
 
-namespace Trident.Validation
+namespace Trident.Business
 {
+
     /// <summary>
-    /// Class ValidationContext.
+    /// Class WorkflowContext.
     /// </summary>
-    public abstract class ValidationContext
+    public abstract class BusinessContext
     {
         /// <summary>
         /// Gets or sets the target.
@@ -29,32 +28,28 @@ namespace Trident.Validation
         /// <value>The operation.</value>
         public Operation Operation { get; set; }
 
-        /// <summary>
-        /// Gets or sets the context bag.
-        /// </summary>
-        /// <value>The context bag.</value>
-        public IDictionary<string, object> ContextBag { get; protected set; }
     }
 
     /// <summary>
-    /// Class ValidationContext.
-    /// Implements the <see cref="Trident.Validation.ValidationContext" />
+    /// Class WorkflowContext.
+    /// Implements the <see cref="Trident.Workflow.WorkflowContext" />
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    /// <seealso cref="Trident.Validation.ValidationContext" />
-    public class ValidationContext<T>: ValidationContext
-        where T : Entity
+    /// <seealso cref="Trident.Workflow.WorkflowContext" />
+    public class BusinessContext<T> : BusinessContext
+        where T : class
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ValidationContext{T}" /> class.
+        /// Initializes a new instance of the <see cref="BusinessContext{T}" /> class.
         /// </summary>
         /// <param name="target">The target.</param>
         /// <param name="original">The original.</param>
-        /// <param name="contextBag">A bag of custom values that can be check in in validation rules.</param>
-        public ValidationContext(T target, T original = null, IDictionary<string, object> contextBag = null) { 
+        /// <param name="contextBag">The context bag.</param>
+        public BusinessContext(T target, T original = null, IDictionary<string, Object> contextBag = null)
+        {
             this.Target = target;
             this.Original = original;
-            this.ContextBag = contextBag ?? new Dictionary<string, object>();
+            this.ContextBag = contextBag ?? new Dictionary<string, Object>();
         }
 
         /// <summary>
@@ -72,6 +67,12 @@ namespace Trident.Validation
                 base.Target = value;
             }
         }
+
+        /// <summary>
+        /// Gets the context bag.
+        /// </summary>
+        /// <value>The context bag.</value>
+        public IDictionary<string, object> ContextBag { get; }
 
 
         /// <summary>
@@ -109,7 +110,5 @@ namespace Trident.Validation
 
             return defaultValue;
         }
-
-
     }
 }

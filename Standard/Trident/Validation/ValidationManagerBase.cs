@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DA = System.ComponentModel.DataAnnotations;
+using Trident.Business;
 
 namespace Trident.Validation
 {
@@ -13,7 +13,7 @@ namespace Trident.Validation
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <seealso cref="Trident.Validation.IValidationManager" />
-    public abstract class ValidationManagerBase<T> : IValidationManager
+    public abstract class ValidationManagerBase<T> : IValidationManager<T>
         where T : Entity
     {
         /// <summary>
@@ -39,7 +39,7 @@ namespace Trident.Validation
         /// </summary>
         /// <param name="context">The context.</param>
         /// <returns>List&lt;ValidationResult&gt;.</returns>
-        public async Task<List<ValidationResult>> CheckValid(ValidationContext context)
+        public async Task<List<ValidationResult>> CheckValid(BusinessContext context)
         {
             var errors = new List<ValidationResult>();
             await ValidateRules(context, errors);
@@ -53,7 +53,7 @@ namespace Trident.Validation
         /// <returns>List&lt;ValidationResult&gt;.</returns>
         /// <exception cref="ValidationRollupException"></exception>
         /// <exception cref="Trident.Validation.ValidationRollupException"></exception>
-        public async Task Validate(ValidationContext context)
+        public async Task Validate(BusinessContext context)
         {
             var errors = new List<ValidationResult>();
             await ValidateRules(context, errors);
@@ -70,7 +70,7 @@ namespace Trident.Validation
         /// <param name="context">The context.</param>
         /// <returns>IEnumerable&lt;ValidationResult&gt;.</returns>
         /// <exception cref="System.ArgumentOutOfRangeException">TRule;Rule not found.</exception>
-        public async Task<IEnumerable<ValidationResult>> CheckValid<TRule>(ValidationContext context) where TRule : IValidationRule
+        public async Task<IEnumerable<ValidationResult>> CheckValid<TRule>(BusinessContext context) where TRule : IValidationRule
         {
             var errors = new List<ValidationResult>();
             var rule = Rules.FirstOrDefault(x => x.GetType() == typeof(TRule));
@@ -90,7 +90,7 @@ namespace Trident.Validation
         /// <exception cref="System.ArgumentOutOfRangeException">TRule;Rule not found.</exception>
         /// <exception cref="ValidationRollupException"></exception>
         /// <exception cref="Trident.Validation.ValidationRollupException">TRule;Rule not found.</exception>
-        public async Task Validate<TRule>(ValidationContext context) where TRule : IValidationRule
+        public async Task Validate<TRule>(BusinessContext context) where TRule : IValidationRule
         {
             var errors = new List<ValidationResult>();
             var rule = Rules.FirstOrDefault(x => x.GetType() == typeof(TRule));
@@ -111,14 +111,14 @@ namespace Trident.Validation
         /// <param name="context">The context.</param>
         /// <param name="errors">The errors.</param>
         /// <returns>Task.</returns>
-        protected virtual async Task ValidateRules(ValidationContext context, List<ValidationResult> errors)
+        protected virtual async Task ValidateRules(BusinessContext context, List<ValidationResult> errors)
         {
             if (this.Rules != null)
             {
-                foreach(var x in this.Rules)
+                foreach (var x in this.Rules)
                 {
-                   await x.Run(context, errors);
-                }              
+                    await x.Run(context, errors);
+                }
             }
         }
 

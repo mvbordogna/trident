@@ -3,6 +3,7 @@ using Trident.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Trident.Business;
 
 namespace Trident.Workflow
 {
@@ -33,7 +34,7 @@ namespace Trident.Workflow
         /// <param name="context">The context.</param>
         /// <param name="stage">The stage.</param>
         /// <returns>List&lt;WorkFlowResult&gt;.</returns>
-        public async Task Run(WorkflowContext context, OperationStage stage = OperationStage.All)
+        public async Task Run(BusinessContext context, OperationStage stage = OperationStage.All)
         {
             context.GuardIsNotNull(nameof(context));
             context.Target.GuardIsNotNull(nameof(context.Target));
@@ -47,7 +48,7 @@ namespace Trident.Workflow
         /// <param name="stage">The stage.</param>
         /// <returns>Task.</returns>
         /// <exception cref="Trident.Workflow.WorkFlowCancelledException">Task {task.GetType()} cancelled the workflow during {stage.ToString()} stage of the {context.Operation.ToString()}</exception>
-        protected virtual async Task RunTasks(WorkflowContext context, OperationStage stage)
+        protected virtual async Task RunTasks(BusinessContext context, OperationStage stage)
         {
 
             if (this.Tasks != null)

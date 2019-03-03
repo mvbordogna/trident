@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Trident.Business;
+using Trident.Domain;
 
 namespace Trident.Validation
 {
@@ -13,7 +15,7 @@ namespace Trident.Validation
         /// </summary>
         /// <param name="context">The context.</param>
         /// <returns>List&lt;ValidationResult&gt;.</returns>
-        Task<List<ValidationResult>> CheckValid(ValidationContext context);
+        Task<List<ValidationResult>> CheckValid(BusinessContext context);
 
         /// <summary>
         /// Validates the specified context.
@@ -22,7 +24,7 @@ namespace Trident.Validation
         /// <param name="context">The context.</param>
         /// <returns>Task.</returns>
         /// <exception cref="ValidationRollupException"></exception>
-        Task Validate(ValidationContext context);
+        Task Validate(BusinessContext context);
 
         /// <summary>
         /// Checks the valid.
@@ -31,7 +33,7 @@ namespace Trident.Validation
         /// <param name="context">The context.</param>
         /// <returns>IEnumerable&lt;ValidationResult&gt;.</returns>
         /// <exception cref="System.ArgumentOutOfRangeException">TRule;Rule not found.</exception>
-        Task<IEnumerable<ValidationResult>> CheckValid<TRule>(ValidationContext context) where TRule : IValidationRule;
+        Task<IEnumerable<ValidationResult>> CheckValid<TRule>(BusinessContext context) where TRule : IValidationRule;
 
         /// <summary>
         /// Validates the specified context.
@@ -41,7 +43,12 @@ namespace Trident.Validation
         /// <returns>Task.</returns>
         /// <exception cref="System.ArgumentOutOfRangeException">TRule;Rule not found.</exception>
         /// <exception cref="Trident.Validation.ValidationRollupException"></exception>
-        Task Validate<TRule>(ValidationContext context) where TRule : IValidationRule;
+        Task Validate<TRule>(BusinessContext context) where TRule : IValidationRule;
 
+    }
+
+    public interface IValidationManager<T> : IValidationManager
+        where T : Entity
+    {
     }
 }

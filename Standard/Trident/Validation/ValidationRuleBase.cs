@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Trident.Business;
+using Trident.Workflow;
 
 namespace Trident.Validation
 {
@@ -10,7 +12,7 @@ namespace Trident.Validation
     /// <typeparam name="T"></typeparam>
     /// <seealso cref="Trident.Validation.IValidationRule{T}" />
     public abstract class ValidationRuleBase<T> : IValidationRule<T>
-        where T : ValidationContext
+        where T : BusinessContext
     {
         /// <summary>
         /// Gets the ordinal.

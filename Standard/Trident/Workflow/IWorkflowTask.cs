@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Trident.Business;
 
 namespace Trident.Workflow
 {
@@ -43,7 +44,7 @@ namespace Trident.Workflow
     /// <typeparam name="T"></typeparam>
     /// <seealso cref="Trident.Workflow.IWorkflowTask" />
     public interface IWorkflowTask<in T> : IWorkflowTask
-        where T : Workflow.WorkflowContext
+        where T : BusinessContext
     {
         /// <summary>
         /// Runs the specified context.

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.Reflection;
+using Trident.Contracts;
 using Trident.Core.TestRepositories;
 using Trident.Data.Contracts;
 using Trident.TestTargetProject;
@@ -18,7 +19,7 @@ namespace Trident.Core.TestConsole
             {
                 TargetAssemblies = new Assembly[]
                   {
-                     typeof(TestManager).Assembly,
+                     typeof(OrganisationManager).Assembly,
                      typeof(TestRepository).Assembly,
                      typeof(Program).Assembly
                     
@@ -38,7 +39,9 @@ namespace Trident.Core.TestConsole
 
         
 
-            var testRepo = appContext.ServiceLocator.Get<IRepository<TestTargetProject.Domain.Organisation>>();
+            var testRepo = appContext.ServiceLocator.Get<IRepository<Organisation>>();
+
+            var testManager = appContext.ServiceLocator.Get<IManager<Guid, Organisation>>();
 
             Organisation temp = null;
 

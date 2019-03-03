@@ -154,7 +154,7 @@ namespace Trident.Business
     /// <seealso cref="Trident.Data.Contracts.IProvider{TId, TEntity, TSummary, Trident.Search.SearchCriteria}" />
     /// <seealso cref="SearchCriteria" />
     /// <seealso cref="SearchCriteria" />
-    public abstract class ProviderBase<TId, TEntity, TSummary> : ProviderBase<TId, TEntity, TSummary, SearchCriteria>, IProvider<TId, TEntity, TSummary, SearchCriteria>
+    public abstract class ProviderBase<TId, TEntity, TSummary> : ProviderBase<TId, TEntity, TSummary, SearchCriteria>, IProvider<TId, TEntity, TSummary>
         where TEntity : Domain.EntityBase<TId>
         where TSummary : Domain.Entity
     {
@@ -174,7 +174,7 @@ namespace Trident.Business
     /// <typeparam name="TEntity">The type of the t entity.</typeparam>
     /// <seealso cref="Trident.Business.ProviderBase{TId, TEntity, TEntity}" />
     /// <seealso cref="Trident.Data.Contracts.IProvider{TId, TEntity, TEntity}" />
-    public abstract class ProviderBase<TId, TEntity> : ProviderBase<TId, TEntity, TEntity>, IProvider<TId, TEntity, TEntity>
+    public abstract class ProviderBase<TId, TEntity> : ProviderBase<TId, TEntity, TEntity>, IProvider<TId, TEntity>
         where TEntity : Domain.EntityBase<TId>
     {
 

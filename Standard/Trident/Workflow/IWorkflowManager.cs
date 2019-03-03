@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Trident.Business;
+using Trident.Domain;
 
 namespace Trident.Workflow
 {
@@ -14,7 +15,14 @@ namespace Trident.Workflow
         /// <param name="context">The context.</param>
         /// <param name="operationStage">The operation stage.</param>
         /// <returns>List&lt;WorkflowResult&gt;.</returns>
-        Task Run(WorkflowContext context, OperationStage operationStage = OperationStage.All);
+        Task Run(BusinessContext context, OperationStage operationStage = OperationStage.All);
+
+    }
+
+
+    public interface IWorkflowManager<T> : IWorkflowManager
+        where T : Entity
+    {
 
     }
 }

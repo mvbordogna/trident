@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Trident.Business;
 
 namespace Trident.Workflow
 {
@@ -9,7 +10,7 @@ namespace Trident.Workflow
     /// <typeparam name="T"></typeparam>
     /// <seealso cref="Trident.Workflow.IWorkflowTask{T}" />
     public abstract class WorkflowTaskBase<T> : IWorkflowTask<T>
-        where T : WorkflowContext
+        where T : BusinessContext
     {
         /// <summary>
         /// Gets the ordinal.

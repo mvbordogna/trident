@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Trident.Business;
 
 namespace Trident.Validation
 {
@@ -15,7 +16,7 @@ namespace Trident.Validation
     /// <typeparam name="TEntity">The type of the t entity.</typeparam>
     /// <seealso cref="Trident.Validation.ValidationRuleBase{TContext}" />
     public abstract class PropertyExpressionValidationRule<TContext, TEntity> : ValidationRuleBase<TContext>
-         where TContext : ValidationContext<TEntity>
+         where TContext : BusinessContext<TEntity>
          where TEntity : Entity
     {
         /// <summary>
@@ -105,7 +106,7 @@ namespace Trident.Validation
             /// Gets or sets the rule expression.
             /// </summary>
             /// <value>The rule expression.</value>
-            public Expression<Func<T, bool>> RuleExpression {get; set;}
+            public Expression<Func<T, bool>> RuleExpression { get; set; }
 
             /// <summary>
             /// Gets or sets the error message.

@@ -5,6 +5,7 @@ using Trident.Domain;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Trident.Testing;
+using Trident.Business;
 
 namespace Trident.Tests.Workflow
 {
@@ -153,16 +154,16 @@ namespace Trident.Tests.Workflow
         }
 
 
-        public class TestContext : WorkflowContext<TestEntity>
+        public class TestContext : BusinessContext<TestEntity>
         {
             /// <summary>
-            /// Initializes a new instance of the <see cref="WorkflowContext{T}"/> class.
+            /// Initializes a new instance of the <see cref="BusinessContext{T}"/> class.
             /// </summary>
             /// <param name="target">The target.</param>
             public TestContext(TestEntity target) : base(target) { }
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="WorkflowContext{T}" /> class.
+            /// Initializes a new instance of the <see cref="BusinessContext{T}" /> class.
             /// </summary>
             /// <param name="target">The target.</param>
             /// <param name="original">The original.</param>
