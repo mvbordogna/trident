@@ -20,6 +20,11 @@
         /// <summary>
         /// The delete
         /// </summary>
-        Delete = 3
+        Delete = 3,
+        /// <summary>
+        /// defines that a custom operation
+        /// Context Specific Rules will need expecit checking
+        /// </summary>
+        Custom = 4
     }
 }

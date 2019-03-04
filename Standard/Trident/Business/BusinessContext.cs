@@ -111,4 +111,25 @@ namespace Trident.Business
             return defaultValue;
         }
     }
+
+
+
+    public class BusinessContext<T, TCustomOperation> : BusinessContext<T>
+       where T : class
+      // where TCustomOperation : Enum  - put back for .net 7.3+
+    {
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BusinessContext{T}" /> class.
+        /// </summary>
+        /// <param name="target">The target.</param>
+        /// <param name="original">The original.</param>
+        /// <param name="contextBag">The context bag.</param>
+        public BusinessContext(T target, T original = null, IDictionary<string, Object> contextBag = null)
+            : base(target, original, contextBag) { }
+
+
+        public TCustomOperation CusomOperations { get; protected set; }
+
+    }
 }
