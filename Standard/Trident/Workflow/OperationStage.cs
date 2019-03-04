@@ -39,6 +39,9 @@ namespace Trident.Workflow
         /// <summary>
         /// The after update
         /// </summary>
-        AfterUpdate = 64
+        AfterUpdate = 64,
+        //represents a custon stage, 
+        //enable if using workflow in a custom manager method
+        Custom = 128
     }
 }
