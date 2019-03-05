@@ -129,7 +129,7 @@ namespace Trident.Business
             : base(target, original, contextBag) { }
 
 
-        public TCustomOperation CusomOperations { get; protected set; }
+        public TCustomOperation CusomOperations { get; set; }
 
     }
 }

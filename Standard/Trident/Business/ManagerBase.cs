@@ -87,7 +87,7 @@ namespace Trident.Business
             var existing = await GetOriginal(entity);
             var isNew = existing == null;
 
-            var context = await CreateWorkflowContext(isNew ? Operation.Insert : Operation.Update, entity, existing, contextBag);
+            var context = await CreateBusinessContext(isNew ? Operation.Insert : Operation.Update, entity, existing, contextBag);
             await WorkflowManager?.Run(context, isNew ? OperationStage.BeforeInsert : OperationStage.BeforeUpdate);
 
             await ValidationManager?.Validate(context);
@@ -112,7 +112,7 @@ namespace Trident.Business
                 var existing = existingDict.ContainsKey(entity.Id) ? existingDict[entity.Id] : null;
                 var isNew = existing == null;
 
-                var context = await CreateWorkflowContext(isNew ? Operation.Insert : Operation.Update, entity, existing);
+                var context = await CreateBusinessContext(isNew ? Operation.Insert : Operation.Update, entity, existing);
                 await WorkflowManager?.Run(context, isNew ? OperationStage.BeforeInsert : OperationStage.BeforeUpdate);
 
                 await ValidationManager?.Validate(context);
@@ -147,7 +147,7 @@ namespace Trident.Business
             }
 
 
-            var context = await CreateWorkflowContext(Operation.Insert, entity, null);
+            var context = await CreateBusinessContext(Operation.Insert, entity, null);
             await WorkflowManager?.Run(context, OperationStage.BeforeInsert);
             await ValidationManager?.Validate(context);
             await WorkflowManager?.Run(context, OperationStage.PostValidation);
@@ -168,7 +168,7 @@ namespace Trident.Business
         public async Task<TEntity> Update(TEntity entity, bool deferCommit = false)
         {
             var existing = await GetOriginal(entity);
-            var context = await CreateWorkflowContext(Operation.Update, entity, existing);
+            var context = await CreateBusinessContext(Operation.Update, entity, existing);
             await WorkflowManager?.Run(context, OperationStage.BeforeUpdate);
             await ValidationManager?.Validate(context);
             await WorkflowManager?.Run(context, OperationStage.PostValidation);
@@ -187,7 +187,7 @@ namespace Trident.Business
         public async Task<bool> Delete(TEntity entity, bool deferCommit = false)
         {
             var existing = await GetOriginal(entity);
-            var context = await CreateWorkflowContext(Operation.Delete, entity, existing);
+            var context = await CreateBusinessContext(Operation.Delete, entity, existing);
             await WorkflowManager?.Run(context, OperationStage.BeforeDelete);
             await ValidationManager?.Validate(context);
             await WorkflowManager?.Run(context, OperationStage.PostValidation);
@@ -207,7 +207,7 @@ namespace Trident.Business
             foreach (var entity in entities)
             {
                 var existing = existingDict.ContainsKey(entity.Id) ? existingDict[entity.Id] : null;
-                var context = await CreateWorkflowContext(Operation.Delete, entity, existing);
+                var context = await CreateBusinessContext(Operation.Delete, entity, existing);
                 await WorkflowManager?.Run(context, OperationStage.BeforeDelete);
                 await ValidationManager?.Validate(context);
                 await WorkflowManager?.Run(context, OperationStage.PostValidation);
@@ -352,7 +352,7 @@ namespace Trident.Business
         /// <param name="entity">The entity.</param>
         /// <param name="original">The original.</param>
         /// <returns>TWorkflowContext.</returns>
-        protected virtual Task<BusinessContext<TEntity>> CreateWorkflowContext(Operation operation, TEntity entity, TEntity original, IDictionary<string, Object> contextBag = null)
+        protected virtual Task<BusinessContext<TEntity>> CreateBusinessContext(Operation operation, TEntity entity, TEntity original, IDictionary<string, object> contextBag = null)
         {
             return Task.FromResult(new BusinessContext<TEntity>(entity, original, contextBag)
             {
