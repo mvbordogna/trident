@@ -1,8 +1,8 @@
-﻿using Trident.Contracts.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using Trident.Domain;
 
 namespace Trident.Validation
 {
@@ -17,7 +17,7 @@ namespace Trident.Validation
         /// <summary>
         /// The _validation results
         /// </summary>
-        private List<ValidationResult> _validationResults;
+        protected List<ValidationResult> _validationResults = new List<ValidationResult>();
         /// <summary>
         /// The default error message
         /// </summary>
@@ -35,37 +35,7 @@ namespace Trident.Validation
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
         public ValidationRollupException(string message)
-            : base(string.IsNullOrWhiteSpace(message) ? DefaultErrorMessage : message)
-        {
-            _validationResults = new List<ValidationResult>();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ValidationRollupException" /> class.
-        /// </summary>
-        /// <param name="memberName">Name of the member.</param>
-        /// <param name="code">The code.</param>
-        public ValidationRollupException( string memberName, ErrorCodes code) : this()
-        {
-            _validationResults = new List<ValidationResult>()
-            {
-                new ValidationResult(code, memberName)
-            };
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ValidationRollupException" /> class.
-        /// </summary>
-        /// <param name="errorMessage">The error message.</param>
-        /// <param name="memberName">Name of the member.</param>
-        /// <param name="code">The code.</param>
-        public ValidationRollupException(string errorMessage, string memberName, ErrorCodes code) : this(errorMessage)
-        {
-            _validationResults = new List<ValidationResult>()
-            {
-                new ValidationResult(code, memberName)
-            };
-        }
+            : base(string.IsNullOrWhiteSpace(message) ? DefaultErrorMessage : message) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ValidationRollupException" /> class.
@@ -123,7 +93,61 @@ namespace Trident.Validation
         {
             _validationResults.Add(exception);
         }
-
-
     }
+
+    public class ValidationRollupException<TErrorCode> : ValidationRollupException
+        where TErrorCode : struct
+    {
+
+        protected ValidationRollupException() { }
+
+        protected ValidationRollupException(string message) : base(message) { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ValidationRollupException" /> class.
+        /// </summary>
+        /// <param name="memberName">Name of the member.</param>
+        /// <param name="code">The code.</param>
+        public ValidationRollupException(string message, TErrorCode code) : base()
+        {
+            _validationResults.Add(new ValidationResult<TErrorCode>(code, message));           
+        }
+
+        public new IEnumerable<ValidationResult<TErrorCode>> ValidationResults
+          => _validationResults.Cast<ValidationResult<TErrorCode>>();
+    }
+    
+    public class ValidationRollupException<TErrorCode, TEntity> : ValidationRollupException<TErrorCode>
+        where TErrorCode : struct
+         where TEntity : Entity
+    {
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ValidationRollupException" /> class.
+        /// </summary>
+        /// <param name="errorMessage">The error message.</param>
+        /// <param name="memberName">Name of the member.</param>
+        /// <param name="code">The code.</param>
+        public ValidationRollupException(string memberName, TErrorCode code) : base()
+        {
+            _validationResults.Add(new ValidationResult<TErrorCode, TEntity>(code, memberName));           
+        }
+
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ValidationRollupException" /> class.
+        /// </summary>
+        /// <param name="errorMessage">The error message.</param>
+        /// <param name="memberName">Name of the member.</param>
+        /// <param name="code">The code.</param>
+        public ValidationRollupException(string message, string memberName, TErrorCode code) : base(message)
+        {
+            _validationResults.Add(new ValidationResult<TErrorCode, TEntity>(code, memberName));
+        }
+
+        public new IEnumerable<ValidationResult<TErrorCode, TEntity>> ValidationResults 
+            => _validationResults.Cast<ValidationResult<TErrorCode, TEntity>>();
+    }
+
+
 }

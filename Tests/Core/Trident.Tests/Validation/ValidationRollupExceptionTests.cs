@@ -5,6 +5,7 @@ using Trident.Contracts.Enums;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System;
+using Trident.Domain;
 
 namespace Trident.Tests.Validation
 {
@@ -14,7 +15,7 @@ namespace Trident.Tests.Validation
         [TestMethod]
         public void ValidationRollupException_Adds_Errors()
         {
-            var expected = new ValidationResult(Contracts.Enums.ErrorCodes.TestCode);
+            var expected = new ValidationResult<TestErrorCodes>(TestErrorCodes.TestCode);
             var ex = new ValidationRollupException();
             ex.AddResult(expected);
 
@@ -24,7 +25,7 @@ namespace Trident.Tests.Validation
         [TestMethod]
         public void ValidationRollupException_Constructor_Adds_Error()
         {
-            var expected = new ValidationResult(Contracts.Enums.ErrorCodes.TestCode);
+            var expected = new ValidationResult<TestErrorCodes>(TestErrorCodes.TestCode);
             var ex = new ValidationRollupException(expected);
             Assert.AreEqual(expected, ex.ValidationResults.First());
         }
@@ -33,8 +34,8 @@ namespace Trident.Tests.Validation
         public void ValidationRollupException_Constructor_Adds_Error_from_Primitive_Arguments()
         {
             var expectedMember = "member";
-            var expectedCode = Contracts.Enums.ErrorCodes.TestCode;
-            var ex = new ValidationRollupException(expectedMember, expectedCode);            
+            var expectedCode = TestErrorCodes.TestCode;
+            var ex = new ValidationRollupException<TestErrorCodes, TestEntity>(expectedMember, expectedCode);            
 
             Assert.AreEqual(expectedMember, ex.ValidationResults.First().MemberNames.First());
             Assert.AreEqual("Test Code Message-needed for unit tests.", ex.ValidationResults.First().Message);
@@ -44,7 +45,7 @@ namespace Trident.Tests.Validation
         public void ValidationRollupException_Constructor_Adds_Message_with_Errors()
         {
             var expectedMessage = "member";
-            var expectedResult = new ValidationResult(Contracts.Enums.ErrorCodes.TestCode);
+            var expectedResult = new ValidationResult<TestErrorCodes>(TestErrorCodes.TestCode);
           
             var ex = new ValidationRollupException(expectedMessage, new ValidationResult[] { expectedResult });
 
@@ -79,14 +80,21 @@ namespace Trident.Tests.Validation
             var expectedMessage = "the message";
             var expectedMember = "member";
             var expectedResultMessage = "Test Code Message-needed for unit tests.";
-            var expectedCode = ErrorCodes.TestCode; 
-            var ex = new ValidationRollupException(expectedMessage, expectedMember, expectedCode);
+            var expectedCode = TestErrorCodes.TestCode; 
+            var ex = new ValidationRollupException<TestErrorCodes, TestEntity>(expectedMessage, expectedMember, expectedCode);
             var actual = ex.ValidationResults.First();
 
             Assert.AreEqual(expectedMessage, ex.Message);
             Assert.AreEqual(expectedMember, actual.MemberNames.First());
             Assert.AreEqual(expectedResultMessage, actual.Message);
             Assert.AreEqual(expectedCode, actual.ErrorCode);
+        }
+
+      
+
+        public class TestEntity : Entity
+        {
+
         }
 
 

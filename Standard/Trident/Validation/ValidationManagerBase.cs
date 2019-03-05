@@ -128,5 +128,4 @@ namespace Trident.Validation
         /// <value>The rules.</value>
         protected List<IValidationRule> Rules { get; private set; }
     }
-
 }

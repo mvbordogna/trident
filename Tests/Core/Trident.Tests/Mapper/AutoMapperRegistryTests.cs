@@ -2,9 +2,9 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Trident.Mapper;
 using Trident.Validation;
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using Trident.Domain;
 
 namespace Trident.Tests.Mapper
 {
@@ -17,11 +17,11 @@ namespace Trident.Tests.Mapper
             var expected = "simpleLambdaMapProperty";
 
             var instanceUnderTest = new TestMapperRegistry();
-            var testData = new List<ValidationResult>()
+            var testData = new List<ValidationResult<TestErrorCodes, TestEntity>>()
             {
-                new ValidationResult<TestEntity>(Contracts.Enums.ErrorCodes.TestCode, x=> x.SimpleLambdaMapProperty)
+                new ValidationResult<TestErrorCodes, TestEntity>(TestErrorCodes.TestCode, x=> x.SimpleLambdaMapProperty)
             };
-            instanceUnderTest.MapPropertyExpressions<TestEntity, TestDto>(testData);
+            instanceUnderTest.MapPropertyExpressions<TestErrorCodes, TestEntity, TestDto>(testData);
             Assert.AreEqual(expected, testData[0].MemberNames.First());
         }
 
@@ -32,11 +32,11 @@ namespace Trident.Tests.Mapper
             var instanceUnderTest = new TestMapperRegistry();
             var expected = "unMappedProperty";
 
-            var testData = new List<ValidationResult>()
+            var testData = new List<ValidationResult<TestErrorCodes, TestEntity>>()
             {
-                new ValidationResult<TestEntity>(Contracts.Enums.ErrorCodes.TestCode, x=> x.UnMappedProperty)
+                new ValidationResult<TestErrorCodes, TestEntity>(TestErrorCodes.TestCode, x=> x.UnMappedProperty)
             };
-            instanceUnderTest.MapPropertyExpressions<TestEntity, TestDto>(testData);
+            instanceUnderTest.MapPropertyExpressions<TestErrorCodes, TestEntity, TestDto>(testData);
             Assert.AreEqual(expected, testData[0].MemberNames.First());
         }
 
@@ -49,11 +49,11 @@ namespace Trident.Tests.Mapper
 
             var instanceUnderTest = new TestMapperRegistry();
 
-            var testData = new List<ValidationResult>()
+            var testData = new List<ValidationResult<TestErrorCodes, TestEntity>>()
             {
-                new ValidationResult<TestEntity>(Contracts.Enums.ErrorCodes.TestCode, x=> x.NestedProp1.NestedMapProperty)
+                new ValidationResult<TestErrorCodes, TestEntity>(TestErrorCodes.TestCode,  x=> x.NestedProp1.NestedMapProperty)
             };
-            instanceUnderTest.MapPropertyExpressions<TestEntity, TestDto>(testData);
+            instanceUnderTest.MapPropertyExpressions<TestErrorCodes, TestEntity, TestDto>(testData);
             Assert.AreEqual(expected, testData[0].MemberNames.First());
         }
 
@@ -63,11 +63,11 @@ namespace Trident.Tests.Mapper
             var expected = "propWithFunctionExpression";
 
             var instanceUnderTest = new TestMapperRegistry();
-            var testData = new List<ValidationResult>()
+            var testData = new List<ValidationResult<TestErrorCodes, TestEntity>>()
             {
-                new ValidationResult<TestEntity>(Contracts.Enums.ErrorCodes.TestCode, x=> x.PropWithFunctionExpression)
+                new ValidationResult<TestErrorCodes, TestEntity>(TestErrorCodes.TestCode, x=> x.PropWithFunctionExpression)
             };
-            instanceUnderTest.MapPropertyExpressions<TestEntity, TestDto>(testData);
+            instanceUnderTest.MapPropertyExpressions<TestErrorCodes, TestEntity, TestDto>(testData);
             Assert.AreEqual(expected, testData[0].MemberNames.First());
         }
 
@@ -76,11 +76,11 @@ namespace Trident.Tests.Mapper
         {
             var expected = "nestedProp1.simpleLambdaMapProperty";
             var instanceUnderTest = new TestMapperRegistry();
-            var testData = new List<ValidationResult>()
+            var testData = new List<ValidationResult<TestErrorCodes, TestEntity>>()
             {
-                new ValidationResult<TestEntity>(Contracts.Enums.ErrorCodes.TestCode, x=> x.NestedProp1.SimpleLambdaMapProperty)
+                new ValidationResult<TestErrorCodes, TestEntity>(TestErrorCodes.TestCode, x=> x.NestedProp1.SimpleLambdaMapProperty)
             };
-            instanceUnderTest.MapPropertyExpressions<TestEntity, TestDto>(testData);
+            instanceUnderTest.MapPropertyExpressions<TestErrorCodes, TestEntity, TestDto>(testData);
             Assert.AreEqual(expected, testData[0].MemberNames.First());
         }
 
@@ -90,11 +90,11 @@ namespace Trident.Tests.Mapper
         {
             var expected = "myExplicitPropertyName";
             var instanceUnderTest = new TestMapperRegistry();
-            var testData = new List<ValidationResult>()
+            var testData = new List<ValidationResult<TestErrorCodes, TestEntity>>()
             {
-                new ValidationResult(Contracts.Enums.ErrorCodes.TestCode, "MyExplicitPropertyName")
+                new ValidationResult<TestErrorCodes, TestEntity>(TestErrorCodes.TestCode, "MyExplicitPropertyName")
             };
-            instanceUnderTest.MapPropertyExpressions<TestEntity, TestDto>(testData);
+            instanceUnderTest.MapPropertyExpressions<TestErrorCodes,TestEntity, TestDto>(testData);
             Assert.AreEqual(expected, testData[0].MemberNames.First());
         }
 
@@ -152,7 +152,7 @@ namespace Trident.Tests.Mapper
         }
 
 
-        public class TestEntity
+        public class TestEntity : Entity
         {
 
             public string SimpleLambdaMapProperty { get; set; }
@@ -179,8 +179,12 @@ namespace Trident.Tests.Mapper
         }
 
 
-
-
+        public enum TestErrorCodes
+        {
+            Unspecified = 0,
+            TestCode = 1,
+            Error2 = 2
+        }
 
     }
 }

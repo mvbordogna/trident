@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http.ModelBinding;
+using Trident.Domain;
 
 namespace Trident.Web
 {
@@ -19,8 +20,12 @@ namespace Trident.Web
         /// <param name="request">The request.</param>
         /// <param name="modelState">State of the model.</param>
         /// <returns>HttpResponseMessage.</returns>
-        public static HttpResponseMessage CreateModelStateValidationErrorResponse(this ValidationRollupException exception,
-         HttpRequestMessage request, ModelStateDictionary modelState)
+        public static HttpResponseMessage CreateModelStateValidationErrorResponse<TErrorCodes, TEntity>(
+             this ValidationRollupException<TErrorCodes, TEntity> exception,
+             HttpRequestMessage request, ModelStateDictionary modelState)
+             where TErrorCodes : struct
+             where TEntity : Entity
+
         {
             exception.ValidationResults.ToList().ForEach(x =>
             {
@@ -47,6 +52,5 @@ namespace Trident.Web
             var response = request.CreateResponse(HttpStatusCode.BadRequest, exception.ValidationResults);
             return response;
         }
-
     }
 }

@@ -15,9 +15,10 @@ namespace Trident.Validation
     /// <typeparam name="TContext">The type of the t context.</typeparam>
     /// <typeparam name="TEntity">The type of the t entity.</typeparam>
     /// <seealso cref="Trident.Validation.ValidationRuleBase{TContext}" />
-    public abstract class PropertyExpressionValidationRule<TContext, TEntity> : ValidationRuleBase<TContext>
+    public abstract class PropertyExpressionValidationRule<TContext, TEntity, TErrorCodes> : ValidationRuleBase<TContext>
          where TContext : BusinessContext<TEntity>
          where TEntity : Entity
+         where TErrorCodes:struct
     {
         /// <summary>
         /// The property rules
@@ -49,7 +50,7 @@ namespace Trident.Validation
         /// <param name="rule">The rule.</param>
         /// <param name="errorMessage">The error message.</param>
         /// <param name="errorCode">The error code.</param>
-        protected void AddRule(string propertyName, Expression<Func<TEntity, bool>> rule, string errorMessage = null, ErrorCodes? errorCode = null)
+        protected void AddRule(string propertyName, Expression<Func<TEntity, bool>> rule, string errorMessage = null, TErrorCodes? errorCode = null)
         {
             PropertyRules.Add(propertyName, new PropertyRule<TEntity>()
             {
@@ -78,8 +79,8 @@ namespace Trident.Validation
                 {
                     var expressionString = property.RuleExpression.ToString();
                     var msg = property.ErrorMessage ?? string.Format(DefaultMessageFormat, property.PropertyName, typeof(TEntity).Name, property.RuleExpression);
-                    var code = property.ErrorCode ?? ErrorCodes.PropertyFailedVaildation;
-                    errors.Add(new ValidationResult(msg, code));
+                    var code = property.ErrorCode;
+                    errors.Add(new ValidationResult<TErrorCodes, TEntity>(msg, code));
                 }
             }
 
@@ -117,7 +118,7 @@ namespace Trident.Validation
             /// Gets or sets the error code.
             /// </summary>
             /// <value>The error code.</value>
-            public ErrorCodes? ErrorCode { get; set; }
+            public TErrorCodes? ErrorCode { get; set; }
         }
     }
 }

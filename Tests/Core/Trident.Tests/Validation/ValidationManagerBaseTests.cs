@@ -172,7 +172,7 @@ namespace Trident.Tests.Validation
 
             public override async Task Run(TestContext context, List<ValidationResult> errors)
             {
-                errors.Add(new ValidationResult(Contracts.Enums.ErrorCodes.TestCode, Rule1PropertyText));               
+                errors.Add(new ValidationResult<TestErrorCodes>(TestErrorCodes.TestCode, Rule1PropertyText));               
             }
         }
 
@@ -189,7 +189,7 @@ namespace Trident.Tests.Validation
 
             public override async Task Run(TestContext context, List<ValidationResult> errors)
             {
-                errors.Add(new ValidationResult(Contracts.Enums.ErrorCodes.TestCode, Rule2PropertyText));
+                errors.Add(new ValidationResult<TestErrorCodes>(TestErrorCodes.TestCode, Rule2PropertyText));
             }
         }
 
@@ -205,7 +205,7 @@ namespace Trident.Tests.Validation
 
             public override async Task Run(TestContext context, List<ValidationResult> errors)
             {
-                errors.Add(new ValidationResult(Contracts.Enums.ErrorCodes.TestCode, Rule2PropertyText));
+                errors.Add(new ValidationResult<TestErrorCodes>(TestErrorCodes.TestCode, Rule2PropertyText));
             }
         }
 
@@ -247,6 +247,7 @@ namespace Trident.Tests.Validation
         public class TestEntity : EntityGuidBase
         {
 
-        }
+        }      
+
     }
 }

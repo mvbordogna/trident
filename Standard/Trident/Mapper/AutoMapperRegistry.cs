@@ -6,6 +6,7 @@ using Trident.Extensions;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using Trident.Validation;
+using Trident.Domain;
 
 namespace Trident.Mapper
 {
@@ -200,7 +201,9 @@ namespace Trident.Mapper
 
 
 
-        public void MapPropertyExpressions<TEntity, TDto>(IEnumerable<Validation.ValidationResult> validationResults)
+        public void MapPropertyExpressions<TErrorCodes, TEntity, TDto>(IEnumerable<Validation.ValidationResult> validationResults)
+              where TErrorCodes : struct, IConvertible
+             where TEntity : Entity
         {
             var propertyMaps = this._mappingEngine.ConfigurationProvider.ResolveTypeMap(typeof(TEntity), typeof(TDto)).PropertyMaps;
             var propertyDict = propertyMaps.Select(x => new
@@ -217,7 +220,7 @@ namespace Trident.Mapper
 
             foreach (var result in validationResults)
             {
-                var genericResult = result as ValidationResult<TEntity>;
+                var genericResult = result as ValidationResult<TErrorCodes, TEntity>;
                 if (genericResult != null && genericResult.MemberExpressions.Any())
                 {
                     foreach (var expression in genericResult.MemberExpressions)
