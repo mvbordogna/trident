@@ -29,8 +29,8 @@ namespace Trident.Business
         where TSummary : Entity
         where TCriteria : SearchCriteria
     {
-        private readonly IValidationManager _validationManager;
-        private readonly IWorkflowManager _workflowManager;
+        protected IValidationManager ValidationManager { get; private set; }
+        protected IWorkflowManager WorkflowManager { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ManagerBase{TId,TEntity,TSummary,TCriteria}" /> class.
@@ -46,8 +46,8 @@ namespace Trident.Business
         {
             provider.GuardIsNotNull(nameof(provider));
             Provider = provider;
-            _validationManager = validationManager;
-            _workflowManager = workflowManager;
+            ValidationManager = validationManager;
+            WorkflowManager = workflowManager;
         }
 
         /// <summary>
@@ -88,15 +88,15 @@ namespace Trident.Business
             var isNew = existing == null;
 
             var context = await CreateWorkflowContext(isNew ? Operation.Insert : Operation.Update, entity, existing, contextBag);
-            await _workflowManager?.Run(context, isNew ? OperationStage.BeforeInsert : OperationStage.BeforeUpdate);
+            await WorkflowManager?.Run(context, isNew ? OperationStage.BeforeInsert : OperationStage.BeforeUpdate);
 
-            await _validationManager?.Validate(context);
-            await _workflowManager?.Run(context, OperationStage.PostValidation);
+            await ValidationManager?.Validate(context);
+            await WorkflowManager?.Run(context, OperationStage.PostValidation);
             await (isNew
                 ? Provider.Insert(entity, deferCommit)
                 : Provider.Update(entity, deferCommit));
             await SaveChildren(entity, existing, deferCommit);
-            await _workflowManager?.Run(context, isNew ? OperationStage.AfterInsert : OperationStage.AfterUpdate);
+            await WorkflowManager?.Run(context, isNew ? OperationStage.AfterInsert : OperationStage.AfterUpdate);
             return entity;
         }
 
@@ -113,17 +113,17 @@ namespace Trident.Business
                 var isNew = existing == null;
 
                 var context = await CreateWorkflowContext(isNew ? Operation.Insert : Operation.Update, entity, existing);
-                await _workflowManager?.Run(context, isNew ? OperationStage.BeforeInsert : OperationStage.BeforeUpdate);
+                await WorkflowManager?.Run(context, isNew ? OperationStage.BeforeInsert : OperationStage.BeforeUpdate);
 
-                await _validationManager?.Validate(context);
-                await _workflowManager?.Run(context, OperationStage.PostValidation);
+                await ValidationManager?.Validate(context);
+                await WorkflowManager?.Run(context, OperationStage.PostValidation);
 
                 await (isNew
                     ? Provider.Insert(entity, counter != lastEntityIndex)
                     : Provider.Update(entity, counter != lastEntityIndex));
                 //TODO: needed to think about this for bulk
                 //await this.BulkSaveChildren(entities, existing);
-                await _workflowManager?.Run(context, isNew ? OperationStage.AfterInsert : OperationStage.AfterUpdate);
+                await WorkflowManager?.Run(context, isNew ? OperationStage.AfterInsert : OperationStage.AfterUpdate);
 
                 counter++;
             }
@@ -148,12 +148,12 @@ namespace Trident.Business
 
 
             var context = await CreateWorkflowContext(Operation.Insert, entity, null);
-            await _workflowManager?.Run(context, OperationStage.BeforeInsert);
-            await _validationManager?.Validate(context);
-            await _workflowManager?.Run(context, OperationStage.PostValidation);
+            await WorkflowManager?.Run(context, OperationStage.BeforeInsert);
+            await ValidationManager?.Validate(context);
+            await WorkflowManager?.Run(context, OperationStage.PostValidation);
             await Provider.Insert(entity, deferCommit);
             await SaveChildren(entity, existing, deferCommit);
-            await _workflowManager?.Run(context, OperationStage.AfterInsert);
+            await WorkflowManager?.Run(context, OperationStage.AfterInsert);
             return entity;
         }
 
@@ -169,12 +169,12 @@ namespace Trident.Business
         {
             var existing = await GetOriginal(entity);
             var context = await CreateWorkflowContext(Operation.Update, entity, existing);
-            await _workflowManager?.Run(context, OperationStage.BeforeUpdate);
-            await _validationManager?.Validate(context);
-            await _workflowManager?.Run(context, OperationStage.PostValidation);
+            await WorkflowManager?.Run(context, OperationStage.BeforeUpdate);
+            await ValidationManager?.Validate(context);
+            await WorkflowManager?.Run(context, OperationStage.PostValidation);
             await Provider.Update(entity, deferCommit);
             await SaveChildren(entity, existing, deferCommit);
-            await _workflowManager?.Run(context, OperationStage.AfterUpdate);
+            await WorkflowManager?.Run(context, OperationStage.AfterUpdate);
             return entity;
         }
 
@@ -188,12 +188,12 @@ namespace Trident.Business
         {
             var existing = await GetOriginal(entity);
             var context = await CreateWorkflowContext(Operation.Delete, entity, existing);
-            await _workflowManager?.Run(context, OperationStage.BeforeDelete);
-            await _validationManager?.Validate(context);
-            await _workflowManager?.Run(context, OperationStage.PostValidation);
+            await WorkflowManager?.Run(context, OperationStage.BeforeDelete);
+            await ValidationManager?.Validate(context);
+            await WorkflowManager?.Run(context, OperationStage.PostValidation);
             await DeleteChildren(existing, deferCommit);
             await Provider.Delete(entity, deferCommit);
-            await _workflowManager?.Run(context, OperationStage.AfterDelete);
+            await WorkflowManager?.Run(context, OperationStage.AfterDelete);
             return true;
         }
 
@@ -208,12 +208,12 @@ namespace Trident.Business
             {
                 var existing = existingDict.ContainsKey(entity.Id) ? existingDict[entity.Id] : null;
                 var context = await CreateWorkflowContext(Operation.Delete, entity, existing);
-                await _workflowManager?.Run(context, OperationStage.BeforeDelete);
-                await _validationManager?.Validate(context);
-                await _workflowManager?.Run(context, OperationStage.PostValidation);
+                await WorkflowManager?.Run(context, OperationStage.BeforeDelete);
+                await ValidationManager?.Validate(context);
+                await WorkflowManager?.Run(context, OperationStage.PostValidation);
                 await DeleteChildren(existing, counter != lasEntityIndex);
                 await Provider.Delete(entity, counter != lasEntityIndex);
-                await _workflowManager?.Run(context, OperationStage.AfterDelete);
+                await WorkflowManager?.Run(context, OperationStage.AfterDelete);
                 counter++;
             }
             return true;
