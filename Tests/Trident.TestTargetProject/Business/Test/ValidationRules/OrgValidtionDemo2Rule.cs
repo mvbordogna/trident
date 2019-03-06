@@ -16,5 +16,6 @@ namespace Trident.TestTargetProject.Business.Test.ValidationRules
             Console.WriteLine("rule run: OrgValidtionDemo2Rule");
             return Task.CompletedTask;
         }
+
     }
 }

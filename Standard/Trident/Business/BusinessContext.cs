@@ -39,6 +39,9 @@ namespace Trident.Business
     public class BusinessContext<T> : BusinessContext
         where T : class
     {
+
+        private const string __customOperation = nameof(__customOperation);
+
         /// <summary>
         /// Initializes a new instance of the <see cref="BusinessContext{T}" /> class.
         /// </summary>
@@ -110,26 +113,16 @@ namespace Trident.Business
 
             return defaultValue;
         }
-    }
+        
+        public void SetCustomOperation(object operation)
+        {
+            this.ContextBag[__customOperation] = operation;
+        }
 
-
-
-    public class BusinessContext<T, TCustomOperation> : BusinessContext<T>
-       where T : class
-      // where TCustomOperation : Enum  - put back for .net 7.3+
-    {
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BusinessContext{T}" /> class.
-        /// </summary>
-        /// <param name="target">The target.</param>
-        /// <param name="original">The original.</param>
-        /// <param name="contextBag">The context bag.</param>
-        public BusinessContext(T target, T original = null, IDictionary<string, Object> contextBag = null)
-            : base(target, original, contextBag) { }
-
-
-        public TCustomOperation CusomOperations { get; set; }
+        public TOperation GetCustomOperation<TOperation>()
+        {
+            return GetContextBagItemOrDefault<TOperation>(__customOperation);
+        }
 
     }
 }

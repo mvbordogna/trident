@@ -64,7 +64,7 @@
       <Project>{736b7e76-dad7-4206-b464-34b33ecb17e6}</Project>
       <Name>Trident.Framework.Web</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Framework\Trident.TestHelpers\Trident.Framework.Testing.csproj">
+    <ProjectReference Include="..\..\..\Framework\Trident.Framework.Testing\Trident.Framework.Testing.csproj">
       <Project>{4c1b4817-d5e9-40f5-a388-c35a9eab7bab}</Project>
       <Name>Trident.Framework.Testing</Name>
     </ProjectReference>
