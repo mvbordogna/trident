@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using Trident.Contracts.Enums;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Trident.IoC;
 
 namespace Trident.EFCore
 {
@@ -25,10 +26,6 @@ namespace Trident.EFCore
         /// </summary>
         private static object _padLock = new object();
         /// <summary>
-        /// The compiled model
-        /// </summary>
-        private IModel _compiledModel;
-        /// <summary>
         /// The model assemblies
         /// </summary>
         private Assembly[] _modelAssemblies = null;
@@ -36,6 +33,8 @@ namespace Trident.EFCore
         /// The convention set
         /// </summary>
         private ConventionSet _conventionSet = null;
+        private readonly IIoCServiceLocator serviceLocator;
+
         /// <summary>
         /// The data source type
         /// </summary>
@@ -60,7 +59,7 @@ namespace Trident.EFCore
         /// <param name="scanSelfAssembly">Scans the Assmily in which the AnnotationDirectiveModelBuilder lives for models to register with EF</param>
         /// <param name="modelAssemblies">The model assemblies.</param>
         protected EFCoreAnnotationDirectiveModelBuilder(DataSourceType dataSourceType, string dataSource, bool scanSelfAssembly, params Assembly[] modelAssemblies)
-        {
+        {         
             this._dataSourceType = dataSourceType;
             this._dataSource = dataSource;
 
@@ -83,7 +82,7 @@ namespace Trident.EFCore
         /// Builds the model mappings.
         /// </summary>
         /// <param name="modelBuilder">The model builder.</param>
-        public void AppendModelMappings(ModelBuilder modelBuilder)
+        public void AppendModelMappings(ModelBuilder modelBuilder, IEntityMapFactory mapFactory)
         {
             var types = this._modelAssemblies.SelectMany(x => x.GetTypes());
             var mapTypes = from t in types
@@ -99,6 +98,13 @@ namespace Trident.EFCore
             {
                 var modelBinding = modelBuilder.Entity(mapType);
                 this.ApplyAttributeSpecs(mapType, modelBinding);
+
+                var maps = mapFactory.GetMapsFor(mapType);              
+
+                foreach(var map in maps)
+                {
+                    map.Configure(modelBinding);
+                }
             }
         }
 

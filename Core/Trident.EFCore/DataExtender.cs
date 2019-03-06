@@ -44,7 +44,7 @@ namespace Trident.EFCore
 
                      p.RegisterBehavior<IEFCoreModelBuilder>(() =>
                         {
-                            return new CosmosDBAutoModelBuilder(
+                            return new CosmosDBAutoModelBuilder(                                
                                 DataSourceType.Shared, connStr.Name,
                                assembliesToScan: config.TargetAssemblies);
                         }, connStr.Name, LifeSpan.SingleInstance);

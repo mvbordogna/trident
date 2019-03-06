@@ -11,7 +11,7 @@ namespace Trident.EFCore.Contracts
         /// Builds the model mappings.
         /// </summary>
         /// <param name="modelBuilder">The model builder.</param>
-        void AppendModelMappings(ModelBuilder modelBuilder);
+        void AppendModelMappings(ModelBuilder modelBuilder, IEntityMapFactory mapFactory);
 
     }
 }

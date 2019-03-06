@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Trident.IoC
@@ -45,6 +46,8 @@ namespace Trident.IoC
         /// <typeparam name="T"></typeparam>
         /// <returns>IEnumerable&lt;T&gt;.</returns>
         IEnumerable<T> ResolveAllTyped<T>();
+
+        IEnumerable ResolveAllTyped(Type ofType);
 
         /// <summary>
         /// Gets the named.

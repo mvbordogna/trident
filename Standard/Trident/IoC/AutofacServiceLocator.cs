@@ -4,6 +4,7 @@ using Trident.IoC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Collections;
 
 namespace Trident.IoC
 {
@@ -91,6 +92,13 @@ namespace Trident.IoC
         public IEnumerable<T> ResolveAllTyped<T>()
         {
             return _containerScope.Resolve<IEnumerable<T>>();
+        }
+
+
+        public IEnumerable ResolveAllTyped(Type ofType)
+        {
+            var genType = typeof(IEnumerable<>).MakeGenericType(ofType);
+            return _containerScope.Resolve(genType) as IEnumerable;
         }
 
         /// <summary>

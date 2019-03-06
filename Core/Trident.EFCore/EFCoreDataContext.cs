@@ -23,6 +23,8 @@ namespace Trident.EFCore
         /// The model builder factory
         /// </summary>
         private readonly IEFCoreModelBuilderFactory _modelBuilderFactory;
+        private readonly IEntityMapFactory mapFactory;
+
         /// <summary>
         /// The data source
         /// </summary>
@@ -34,10 +36,11 @@ namespace Trident.EFCore
         /// <param name="modelBuilderFactory">The model builder factory.</param>
         /// <param name="dataSource">The data source.</param>
         /// <param name="options">The options.</param>
-        public EFCoreDataContext(IEFCoreModelBuilderFactory modelBuilderFactory, string dataSource, DbContextOptions options)
+        public EFCoreDataContext(IEFCoreModelBuilderFactory modelBuilderFactory, IEntityMapFactory mapFactory, string dataSource, DbContextOptions options)
             : base(options)
         {
             _modelBuilderFactory = modelBuilderFactory;
+            this.mapFactory = mapFactory;
             _dataSource = dataSource;
         }
 
@@ -74,7 +77,7 @@ namespace Trident.EFCore
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             var modelAppender =  _modelBuilderFactory.GetBuilder(_dataSource);
-            modelAppender.AppendModelMappings(modelBuilder);           
+            modelAppender.AppendModelMappings(modelBuilder, mapFactory);           
             base.OnModelCreating(modelBuilder);
         }
         /// <summary>

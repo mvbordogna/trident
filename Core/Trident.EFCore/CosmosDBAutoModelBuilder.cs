@@ -4,6 +4,7 @@ using System.Reflection;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using Microsoft.EntityFrameworkCore;
+using Trident.IoC;
 
 namespace Trident.EFCore
 {
@@ -20,15 +21,13 @@ namespace Trident.EFCore
         /// <param name="dataSourceType">Type of the data source.</param>
         /// <param name="dataSource">The data source.</param>
         /// <param name="assembliesToScan">Converts to scan.</param>
-        public CosmosDBAutoModelBuilder(
+        public CosmosDBAutoModelBuilder(         
             DataSourceType dataSourceType,
             string dataSource,         
             params Assembly[] assembliesToScan)
             : base(dataSourceType, dataSource, false, assembliesToScan)
         {
         }
-
-
 
         protected override void ApplyAttributeSpecs(Type entityType, EntityTypeBuilder modelBinding)
         {
@@ -38,8 +37,6 @@ namespace Trident.EFCore
                 : nameValue;
 
             modelBinding.ToContainer(nameValue);
-
         }
-
     }
 }
