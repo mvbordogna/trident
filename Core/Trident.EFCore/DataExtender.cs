@@ -52,7 +52,6 @@ namespace Trident.EFCore
                        p.RegisterNamed<CosmosDbOptionsBuilder, IOptionsBuilder>(connStr.Name, LifeSpan.SingleInstance);
                        p.RegisterNamed<EFCoreDataContext, IEFDbContext>(connStr.Name);
                        p.RegisterNamed<EFCoreSharedContextFactory, ISharedContextFactory>(connStr.Name);
-
                     }
                 }
             };
@@ -63,6 +62,8 @@ namespace Trident.EFCore
             provider.Register<OptionsFactory, IOptionsFactory>(LifeSpan.SingleInstance);
             provider.Register<EFCoreModelBuilderFactory, IEFCoreModelBuilderFactory>(LifeSpan.SingleInstance);
             provider.Register<DBProviderAbstractFactory, IDBProviderAbstractFactory>(LifeSpan.SingleInstance);
+            provider.Register<EntityMapFactory, IEntityMapFactory>(LifeSpan.SingleInstance);
+            provider.RegisterAll<IEntityMapper>(config.TargetAssemblies, LifeSpan.SingleInstance);
 
             //this is so context objects dataSourceName does blowup if verify is used
             provider.RegisterBehavior<string>(() => "Test container Verify String", LifeSpan.SingleInstance);

@@ -7,6 +7,8 @@ using System.Linq;
 using Trident.Extensions;
 using Microsoft.Extensions.Configuration;
 using System.Reflection;
+using Autofac.Builder;
+using Autofac.Features.Scanning;
 
 namespace Trident.IoC
 {
@@ -183,6 +185,17 @@ namespace Trident.IoC
             return _container.Resolve<IEnumerable<T>>();
         }
 
+        public IIoCProvider RegisterAll<T>(Assembly[] targetAssemblies, LifeSpan lifeSpan = LifeSpan.InstancePerLifetimeScope)
+        {
+            var temp = _builder.RegisterAssemblyTypes(targetAssemblies)
+                 .Where(x => !x.IsAbstract && typeof(T).IsAssignableFrom(x))
+                 .AsImplementedInterfaces();
+            
+            ApplyLifeTime(temp, lifeSpan);
+            return this;
+        }
+
+       
         /// <summary>
         /// Registers the behavior.
         /// </summary>
@@ -379,6 +392,24 @@ namespace Trident.IoC
             }
         }
 
+        private void ApplyLifeTime(IRegistrationBuilder<object, ScanningActivatorData, DynamicRegistrationStyle> x, LifeSpan lifeSpan)
+        {
+            switch (lifeSpan)
+            {
+                case LifeSpan.InstancePerLifetimeScope:
+                    x.InstancePerLifetimeScope();
+                    break;
+                case LifeSpan.NewInstancePerRequest:
+                    x.InstancePerRequest();
+                    break;
+                case LifeSpan.SingleInstance:
+                    x.SingleInstance();
+                    break;
+            }
+        }
+
+
+
         /// <summary>
         /// Registers the singleton.
         /// </summary>
@@ -417,7 +448,7 @@ namespace Trident.IoC
             _builder.RegisterInstance(instance).As<InterfaceOfT>().SingleInstance();
             return this;
         }
-        
+
         #region Trident Using Feature
         public IIoCProvider UsingTridentFileStorage()
         {
@@ -540,7 +571,7 @@ namespace Trident.IoC
 
         public IIoCProvider UsingTridentConnectionStringJsonManager()
         {
-            _builder.UsingTridentConnectionStringJsonManager();               
+            _builder.UsingTridentConnectionStringJsonManager();
             return this;
         }
 
@@ -705,5 +736,7 @@ namespace Trident.IoC
         {
             using (_container) { }
         }
+
+
     }
 }

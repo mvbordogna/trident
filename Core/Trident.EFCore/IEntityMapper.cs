@@ -13,16 +13,4 @@ namespace Trident.EFCore
     {
         void Configure(EntityTypeBuilder<T> modelBinding);
     }
-
-
-    public abstract class EntityMapperBase<T> : IEntityMapper<T>
-      where T : class
-    {
-        public abstract void Configure(EntityTypeBuilder<T> modelBinding);
-
-        public void Configure(EntityTypeBuilder modelBinding)
-        {
-            this.Configure(modelBinding as EntityTypeBuilder<T>);
-        }
-    }
 }
