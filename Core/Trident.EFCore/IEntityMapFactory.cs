@@ -4,13 +4,13 @@ using Trident.IoC;
 
 namespace Trident.EFCore
 {
-    public interface IEntityMapFactory
+    public interface IEntityMapFactory: IFactory
     {
         IEnumerable<IEntityMapper> GetMapsFor(Type mapType);
     }
 
 
-    public class EntityMapFactory : IFactory
+    public class EntityMapFactory : IEntityMapFactory 
     {
         private readonly IIoCServiceLocator serviceLocator;
 
