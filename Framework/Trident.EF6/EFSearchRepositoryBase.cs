@@ -58,30 +58,8 @@ namespace Trident.EF6
         /// <exception cref="System.Exception"></exception>
         public virtual async Task<SearchResults<TSummery, TCriteria>> Search(TCriteria searchCriteria, IEnumerable<String> includedProperties = null)
         {
-            var query = base.Context.Query<TSummery>();
 
-            //apply keyword search
-            query = this.ApplyKeywordSearch(query, searchCriteria.Keywords);
-
-            //apply filters           
-            query = ApplyFilter(query, searchCriteria);
-
-            if(includedProperties != null)
-            query = includedProperties
-                .Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
-
-            //apply sorting
-            if (searchCriteria.MultiOrderBy.Any())
-            {
-                query = ApplyOrderBy(query, searchCriteria.MultiOrderBy);
-            }
-            else if (!string.IsNullOrWhiteSpace(searchCriteria.OrderBy))
-            {
-                query = ApplyOrderBy(query, new Dictionary<string, SortOrder>()
-                {
-                    { searchCriteria.OrderBy, searchCriteria.SortOrder }
-                });
-            }
+            var query = BuildQuery(searchCriteria, includedProperties);
 
             // Get total Records before returning results
             var totalRecords = await query.CountAsync();
@@ -99,6 +77,58 @@ namespace Trident.EF6
             {
                 throw new Exception(e.Message);
             }
+        }
+
+        public SearchResults<TSummery, TCriteria> SearchSync(TCriteria searchCriteria, IEnumerable<string> includedProperties = null)
+        {
+            var query = BuildQuery(searchCriteria, includedProperties);
+
+            // Get total Records before returning results
+            var totalRecords = query.Count();
+
+            //apply paging
+            query = ApplyPaging(query, searchCriteria);
+
+            try
+            {
+                var results = query.ToList();
+
+                return SearchResultContent(results, searchCriteria, totalRecords);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        public IQueryable<TSummery> BuildQuery(TCriteria searchCriteria, IEnumerable<string> includedProperties = null)
+        {
+            var query = base.Context.Query<TSummery>();
+
+            //apply keyword search
+            query = this.ApplyKeywordSearch(query, searchCriteria.Keywords);
+
+            //apply filters           
+            query = ApplyFilter(query, searchCriteria);
+
+            if (includedProperties != null)
+                query = includedProperties
+                    .Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
+
+            //apply sorting
+            if (searchCriteria.MultiOrderBy.Any())
+            {
+                query = ApplyOrderBy(query, searchCriteria.MultiOrderBy);
+            }
+            else if (!string.IsNullOrWhiteSpace(searchCriteria.OrderBy))
+            {
+                query = ApplyOrderBy(query, new Dictionary<string, SortOrder>()
+                {
+                    { searchCriteria.OrderBy, searchCriteria.SortOrder }
+                });
+            }
+
+            return query;
         }
 
         /// <summary>
@@ -160,6 +190,8 @@ namespace Trident.EF6
         {
             return _resultsBuilder.Build(results, criteria, totalRecords);
         }
+
+    
     }
 
 

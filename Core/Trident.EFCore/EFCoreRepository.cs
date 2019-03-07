@@ -36,11 +36,16 @@ namespace Trident.EFCore
         /// <param name="id">The identifier.</param>
         /// <param name="detach">if set to <c>true</c> [detach].</param>
         /// <returns>Task&lt;TEntity&gt;.</returns>
-        public override async Task<TEntity> GetById(object id, bool detach = false)
+        public override Task<TEntity> GetById(object id, bool detach = false)
         {
             var idExpression = TypeExtensions.CreateTypedCompareExpression<TEntity>(nameof(Entity.Id), id);
-            return await base.Context.Query<TEntity>(detach)
-                .FirstOrDefaultAsync(idExpression);
+            var q = base.Context.Query<TEntity>(detach);
+
+            //TODO: cosmos async provider work arround
+            var r = q.FirstOrDefault(idExpression);
+            return Task.FromResult(r);
+            //once async works again
+            //return await q.FirstOrDefaultAsync(idExpression);
         }
 
         /// <summary>
@@ -50,11 +55,15 @@ namespace Trident.EFCore
         /// <param name="ids">The ids.</param>
         /// <param name="detach">if set to <c>true</c> [detach].</param>
         /// <returns>Task&lt;IEnumerable&lt;TEntity&gt;&gt;.</returns>
-        public override async Task<IEnumerable<TEntity>> GetByIds<TEntityId>(IEnumerable<TEntityId> ids, bool detach = false)
+        public override Task<IEnumerable<TEntity>> GetByIds<TEntityId>(IEnumerable<TEntityId> ids, bool detach = false)
         {
-            return await base.Context.Query<TEntity>(detach)
-                 .Where(x => ids.Contains((TEntityId)x.Id))
-                 .ToListAsync();
+            var q = base.Context.Query<TEntity>(detach)
+                 .Where(x => ids.Contains((TEntityId)x.Id));
+
+            return Task.FromResult(q.ToList().AsEnumerable());
+
+            //TODO: cosmos async provider work arround
+            //     .ToListAsync();
         }
 
         /// <summary>
@@ -65,7 +74,7 @@ namespace Trident.EFCore
         /// <param name="includeProperties">The include properties.</param>
         /// <param name="noTracking">if set to <c>true</c> [no tracking].</param>
         /// <returns>Task&lt;IEnumerable&lt;TEntity&gt;&gt;.</returns>
-        public override async Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity, bool>> filter = null,
+        public override  Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             IEnumerable<string> includeProperties = null, bool noTracking = false)
         {
@@ -86,8 +95,11 @@ namespace Trident.EFCore
             {
                 query = orderBy(query);
             }
-
-            return await query.ToListAsync();
+            
+            //TODO: cosmos async provider work arround
+            return Task.FromResult(query.ToList().AsEnumerable());
+          
+            //return await query.ToListAsync();
         }
 
         /// <summary>

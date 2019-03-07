@@ -26,6 +26,13 @@ namespace Trident.Search
         /// <param name="searchCriteria">The search criteria.</param>
         /// <returns>Task&lt;SearchResults&lt;TSummary, TCriteria&gt;&gt;.</returns>
         Task<SearchResults<TSummary, TCriteria>> Search(TCriteria searchCriteria, IEnumerable<string> includedProperties = null);
+
+        /// <summary>
+        /// Searches the specified search criteria.
+        /// </summary>
+        /// <param name="searchCriteria">The search criteria.</param>
+        /// <returns>Task&lt;SearchResults&lt;TSummary, TCriteria&gt;&gt;.</returns>
+        SearchResults<TSummary, TCriteria> SearchSync(TCriteria searchCriteria, IEnumerable<string> includedProperties = null);
     }
     
     /// <summary>

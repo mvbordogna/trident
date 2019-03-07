@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using Trident.Data;
 using Trident.Domain;
 
@@ -11,9 +13,12 @@ namespace Trident.TestTargetProject.Domain
         public string Name { get; set; }
         public DateTimeOffset Created { get; set; }
 
+        [NotMapped]
         public OrganisationTypes OrgType { get; set; }
 
         public OrgStatus Status { get; set; }
+
+        public List<Department> Departments { get; set; }
     }
 
 
@@ -22,7 +27,7 @@ namespace Trident.TestTargetProject.Domain
     public class OrgStatus : EntityGuidBase
     {
 
-        public OrganisationTypes OrgType { get; set; }
+        public string OrgType { get; set; }
 
     }
 

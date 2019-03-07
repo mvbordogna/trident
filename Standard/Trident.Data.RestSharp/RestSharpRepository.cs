@@ -9,7 +9,7 @@ namespace Trident.Data.RestSharp
     public abstract class RestSharpRepository<TEntity, TTargetEntity, TEntityId, TTargetEntityId>
         : Rest.RestRepositoryBase<TEntity, TTargetEntity, TEntityId, TTargetEntityId>
           where TEntity : class, IHaveId<TEntityId>
-          where TTargetEntity : class, IHaveId<TTargetEntityId>
+          where TTargetEntity : class, IHaveId<TTargetEntityId>, new()
     {
         protected RestSharpRepository(ISearchResultsBuilder resultsBuilder,
             IAbstractContextFactory contextFactory,

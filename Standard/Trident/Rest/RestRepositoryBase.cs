@@ -25,7 +25,7 @@ namespace Trident.Rest
     /// <seealso cref="Trident.Search.ISearchRepository{TEntity}" />
     public abstract class RestRepositoryBase<TEntity, TTargetEntity, TEntityId, TTargetEntityId> : IRepositoryBase<TEntity>, ISearchRepository<TEntity>
         where TEntity : class, IHaveId<TEntityId>
-        where TTargetEntity : class, IHaveId<TTargetEntityId>
+        where TTargetEntity : class, IHaveId<TTargetEntityId>, new()
     {
         /// <summary>
         /// The results builder
@@ -75,12 +75,28 @@ namespace Trident.Rest
         /// <returns>Task&lt;IExternalReference&lt;TEntityId, TTargetEntityId&gt;&gt;.</returns>
         public abstract Task<IExternalReference<TEntityId, TTargetEntityId>> GetMapByLocalId(TEntityId id);
 
+
+        /// <summary>
+        /// Gets the map by local identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>Task&lt;IExternalReference&lt;TEntityId, TTargetEntityId&gt;&gt;.</returns>
+        public abstract IExternalReference<TEntityId, TTargetEntityId> GetMapByLocalIdSync(TEntityId id);
+
         /// <summary>
         /// Deletes the map by local identifier.
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns>Task.</returns>
         public abstract Task DeleteMapByLocalId(TEntityId id);
+
+
+        /// <summary>
+        /// Deletes the map by local identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>Task.</returns>
+        public abstract Task DeleteMapByLocalIdSync(TEntityId id);
 
         /// <summary>
         /// Gets the map by local ids.
@@ -116,8 +132,24 @@ namespace Trident.Rest
             var targetEntity = MapperRegistry.Map<TTargetEntity>(entity);
             MapperRegistry.Map(idMap, targetEntity);
 
-            var response = await ExecuteDelete(targetEntity.GetId());
-            //return MapperRegistry.Map<TEntity>(response.Data);
+            var response = await ExecuteDelete(targetEntity.GetId());          
+        }
+
+
+        public void DeleteSync(TEntity entity, bool deferCommit = false)
+        {
+            var idMap = GetMapByLocalIdSync(entity.GetId());
+            if (idMap == null)
+            {
+                // nothign to delete
+                //TODO: or do we want to just continue (skipping the idMap) and try REST delete?
+                return;
+            }
+
+            var targetEntity = MapperRegistry.Map<TTargetEntity>(entity);
+            MapperRegistry.Map(idMap, targetEntity);
+
+            var response = ExecuteDeleteSync(targetEntity.GetId()); 
         }
 
         /// <summary>
@@ -135,6 +167,42 @@ namespace Trident.Rest
             try
             {
                 response = await Context.ExecuteMessage<dynamic>(request);
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    throw new ApplicationException("Delete was not successfull");
+                }
+            }
+            catch (RestException<dynamic> restEx)
+            {
+                // absorb not found errors...that is what delete is trying to accomplish
+                // re-throw all other errors
+                if (restEx.Response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return restEx.Response;
+                }
+                throw;
+            }
+
+            return response;
+        }
+
+
+        /// <summary>
+        /// Executes the delete.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>Task&lt;RestResponse&lt;dynamic&gt;&gt;.</returns>
+        /// <exception cref="System.ApplicationException">Delete was not successfull</exception>
+        protected RestResponse<dynamic> ExecuteDeleteSync(TTargetEntityId id)
+        {
+            var request = RestRequestBuilder.BuildDelete(id);
+
+            //TODO: deputy returns string, but this code should be Deputy-agnostic
+            RestResponse<dynamic> response = null;
+            try
+            {
+                response = Context.ExecuteMessageSync<dynamic>(request);
 
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
@@ -265,6 +333,17 @@ namespace Trident.Rest
         }
 
         /// <summary>
+        /// Executes the get by identifier.
+        /// </summary>
+        /// <param name="idMap">The identifier map.</param>
+        /// <returns>Task&lt;RestResponse&lt;TTargetEntity&gt;&gt;.</returns>
+        protected virtual RestResponse<TTargetEntity> ExecuteGetByIdSync(IExternalReference<TEntityId, TTargetEntityId> idMap)
+        {
+            var request = RestRequestBuilder.BuildGetById(idMap.ExternalId);
+            return Context.ExecuteMessageSync<TTargetEntity>(request);
+        }
+
+        /// <summary>
         /// Gets the by ids.
         /// </summary>
         /// <typeparam name="TId">The type of the t identifier.</typeparam>
@@ -290,7 +369,35 @@ namespace Trident.Rest
         
         public TEntity GetByIdSync(object id, bool detach = false)
         {
-            throw new NotImplementedException();
+            if (id?.GetType() != typeof(TEntityId))
+            {
+                throw new NotImplementedException($"Only {typeof(TEntityId).Name} IDs are supported at this time.");
+            }
+
+            var idMap = GetMapByLocalIdSync((TEntityId)id);
+            if (idMap == null)
+            {
+                return null;
+            }
+
+            try
+            {
+                var response = ExecuteGetByIdSync(idMap);
+
+                var entity = MapTargetToLocalSync(response.Data, idMap);
+
+                return entity;
+            }
+            catch (RestException<TTargetEntity> ex)
+            {
+                // turn 404 errors into nulls
+                if (ex.Response.StatusCode == HttpStatusCode.NotFound)
+                {  
+                    DeleteMapByLocalIdSync(idMap.Id);
+                    return null;
+                }
+                throw;
+            }
         }
 
         /// <summary>
@@ -302,12 +409,17 @@ namespace Trident.Rest
         public virtual async Task Insert(TEntity entity, bool deferCommit = false)
         {
             var targetentity = MapperRegistry.Map<TTargetEntity>(entity);
-
             var response = await ExecuteInsert(entity, targetentity);
-
-            // map over original so the original IDs will remain
             MapperRegistry.Map(response.Data, entity);
         }
+
+        public void InsertSync(TEntity entity, bool deferCommit = false)
+        {
+            var targetentity = MapperRegistry.Map<TTargetEntity>(entity);
+            var response = ExecuteInsertSync(entity, targetentity);
+            MapperRegistry.Map(response.Data, entity);
+        }
+
 
         /// <summary>
         /// Executes the insert.
@@ -321,6 +433,20 @@ namespace Trident.Rest
 
             return await Context.ExecuteMessage<TTargetEntity>(request);
         }
+
+        /// <summary>
+        /// Executes the insert.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="target">The target.</param>
+        /// <returns>Task&lt;RestResponse&lt;TTargetEntity&gt;&gt;.</returns>
+        protected virtual RestResponse<TTargetEntity> ExecuteInsertSync(TEntity entity, TTargetEntity target)
+        {
+            var request = RestRequestBuilder.BuildInsert(target);
+
+            return Context.ExecuteMessageSync<TTargetEntity>(request);
+        }
+
 
         /// <summary>
         /// Updates the specified entity.
@@ -339,6 +465,20 @@ namespace Trident.Rest
             MapperRegistry.Map(response.Data, entity);//TODO: or start clean with a new object?
             MapperRegistry.Map(idMap, entity);
         }
+               
+        public void UpdateSync(TEntity entity, bool deferCommit = false)
+        {
+            var idMap = GetMapByLocalIdSync(entity.GetId());
+            var targetentity = MapperRegistry.Map<TTargetEntity>(entity);
+            MapperRegistry.Map(idMap, targetentity);
+
+            var response = ExecuteUpdateSync(entity, targetentity);
+
+            MapperRegistry.Map(response.Data, entity);//TODO: or start clean with a new object?
+            MapperRegistry.Map(idMap, entity);
+        }
+
+
 
         /// <summary>
         /// Executes the update.
@@ -349,8 +489,19 @@ namespace Trident.Rest
         protected virtual async Task<RestResponse<TTargetEntity>> ExecuteUpdate(TEntity entity, TTargetEntity target)
         {
             var request = RestRequestBuilder.BuildUpdate(target, target.GetId());
-
             return await Context.ExecuteMessage<TTargetEntity>(request);
+        }
+
+        /// <summary>
+        /// Executes the update.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="target">The target.</param>
+        /// <returns>Task&lt;RestResponse&lt;TTargetEntity&gt;&gt;.</returns>
+        protected virtual RestResponse<TTargetEntity> ExecuteUpdateSync(TEntity entity, TTargetEntity target)
+        {
+            var request = RestRequestBuilder.BuildUpdate(target, target.GetId());
+            return Context.ExecuteMessageSync<TTargetEntity>(request);
         }
 
         /// <summary>
@@ -373,6 +524,11 @@ namespace Trident.Rest
                 : results.Count + 1;
 
             return SearchResultContent(results, searchCriteria, totalRecords);
+        }
+    
+        public SearchResults<TEntity, SearchCriteria> SearchSync(SearchCriteria searchCriteria, IEnumerable<string> includedProperties = null)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -434,6 +590,19 @@ namespace Trident.Rest
         /// <returns>Task&lt;TEntity&gt;.</returns>
         protected virtual Task<TEntity> MapTargetToLocal(TTargetEntity target, IExternalReference<TEntityId, TTargetEntityId> idMap)
         {
+            return Task.FromResult(MapTargetToLocalSync(target, idMap));
+        }
+
+
+
+        /// <summary>
+        /// Converts to local.
+        /// </summary>
+        /// <param name="target">The target.</param>
+        /// <param name="idMap">The identifier map.</param>
+        /// <returns>Task&lt;TEntity&gt;.</returns>
+        protected virtual TEntity MapTargetToLocalSync(TTargetEntity target, IExternalReference<TEntityId, TTargetEntityId> idMap)
+        {
             var entity = MapperRegistry.Map<TEntity>(target);
 
             // if data gets out of sync & we dont have the id, just dont map (instead of error)
@@ -442,7 +611,7 @@ namespace Trident.Rest
                 MapperRegistry.Map(idMap, entity);
             }
 
-            return Task.FromResult(entity);
+            return entity;
         }
 
         /// <summary>
@@ -483,19 +652,5 @@ namespace Trident.Rest
         }
 
 
-        public void InsertSync(TEntity entity, bool deferCommit = false)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteSync(TEntity entity, bool deferCommit = false)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateSync(TEntity entity, bool deferCommit = false)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -57,7 +57,41 @@ namespace Trident.EFCore
         /// <param name="searchCriteria">The search criteria.</param>
         /// <param name="includedProperties">The included properties.</param>
         /// <returns>Task&lt;SearchResults&lt;TSummary, TCriteria&gt;&gt;.</returns>
-        public virtual async Task<SearchResults<TSummery, TCriteria>> Search(TCriteria searchCriteria, IEnumerable<String> includedProperties = null)
+        public virtual Task<SearchResults<TSummery, TCriteria>> Search(TCriteria searchCriteria, IEnumerable<String> includedProperties = null)
+        {
+            var query = BuildQuery(searchCriteria, includedProperties);
+
+            // Get total Records before returning results
+            var totalRecords = query.Count();
+
+            //apply paging
+            query = ApplyPaging(query, searchCriteria);
+
+
+            //TODO: cosmos ef async workaround
+            var results = query.ToList();
+            //var results = await query.ToListAsync();
+
+            return Task.FromResult(SearchResultContent(results, searchCriteria, totalRecords));
+        }
+
+        public SearchResults<TSummery, TCriteria> SearchSync(TCriteria searchCriteria, IEnumerable<string> includedProperties = null)
+        {
+            var query = BuildQuery(searchCriteria, includedProperties);
+
+            // Get total Records before returning results
+            var totalRecords = query.Count();
+
+            //apply paging
+            query = ApplyPaging(query, searchCriteria);
+
+            var results = query.ToList();
+
+            return SearchResultContent(results, searchCriteria, totalRecords);
+        }
+
+
+        private IQueryable<TSummery> BuildQuery(TCriteria searchCriteria, IEnumerable<string> includedProperties = null)
         {
             var query = base.Context.Query<TSummery>();
 
@@ -67,9 +101,9 @@ namespace Trident.EFCore
             //apply filters           
             query = ApplyFilter(query, searchCriteria);
 
-            if(includedProperties != null)
-            query = includedProperties
-                .Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
+            if (includedProperties != null)
+                query = includedProperties
+                    .Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
 
             //apply sorting
             if (searchCriteria.MultiOrderBy.Any())
@@ -84,16 +118,10 @@ namespace Trident.EFCore
                 });
             }
 
-            // Get total Records before returning results
-            var totalRecords = await query.CountAsync();
-
-            //apply paging
-            query = ApplyPaging(query, searchCriteria);
-
-            var results = await query.ToListAsync();
-
-            return SearchResultContent(results, searchCriteria, totalRecords);
+            return query;
         }
+
+
 
         /// <summary>
         /// Then implemented in a derivied class, applies filters given the specified keywords string.
@@ -153,7 +181,7 @@ namespace Trident.EFCore
         protected virtual SearchResults<TSummery, TCriteria> SearchResultContent(List<TSummery> results, TCriteria criteria, int totalRecords)
         {
             return _resultsBuilder.Build(results, criteria, totalRecords);
-        }
+        }             
     }
 
 

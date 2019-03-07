@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
+using System.Linq;
 using System.Reflection;
 using Trident.Contracts;
 using Trident.Core.TestRepositories;
@@ -67,7 +68,23 @@ namespace Trident.Core.TestConsole
            // var converter = new GenericEnumValueConverter<OrganisationTypes>(nameof(Organisation.Status)) as Microsoft.EntityFrameworkCore.Storage.ValueConversion.ValueConverter;
 
             criteria.Filters[nameof(Organisation.Id)] = Guid.Parse("bf682b2a-3e50-4165-b432-c64ed57851ec");
-            var result = testRepo.Search(criteria, new string[] { nameof(Organisation.Status) }).Result;
+            var result = testRepo.SearchSync(criteria, new string[] { nameof(Organisation.Status), nameof(Organisation.Departments) });
+
+
+            var org = result.Results.First();
+
+            org.Departments.Add(new Department()
+            {
+                Id = Guid.NewGuid(),
+                Name = "dept1"
+            });
+
+            testRepo.UpdateSync(org);
+
+
+  
+             result = testRepo.SearchSync(criteria, new string[] { nameof(Organisation.Status), nameof(Organisation.Departments) });
+            org = result.Results.First();
 
             //criteria.Filters[nameof(Organisation.Id)] = temp.Id;
             //result = testRepo.Search(criteria, new string[] { nameof(Organisation.Status) }).Result;

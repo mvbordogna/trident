@@ -330,7 +330,7 @@ namespace Trident
         {
             var bindingFlags = BindingFlags.Public | BindingFlags.Instance;
 
-            var paramExpression = Expression.Parameter(typeof(T), key);
+            var paramExpression = Expression.Parameter(typeof(T), "entity");
             var propertyInfo = typeof(T).GetProperties(bindingFlags).FirstOrDefault(x => x.Name == key && x.PropertyType == value.GetType());
             var keyPropertyExpression = Expression.Property(paramExpression, propertyInfo);
             var constantExpression = Expression.Constant(value);
