@@ -2,7 +2,7 @@
 
 namespace Trident.EFCore
 {
-    public abstract class EntityMapperBase<T> : IEntityMapper<T>
+    public abstract class EntityMapper<T> : IEntityMapper<T>
       where T : class
     {
         public abstract void Configure(EntityTypeBuilder<T> modelBinding);

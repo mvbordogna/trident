@@ -96,14 +96,18 @@ namespace Trident.EFCore
 
             foreach (var mapType in mapTypes)
             {
-                var modelBinding = modelBuilder.Entity(mapType);
-                this.ApplyAttributeSpecs(mapType, modelBinding);
+                var binderMethod = modelBuilder.GetType()
+                    .GetMethod("Entity", 1, new Type[] { })
+                    .MakeGenericMethod(mapType);
+
+                var genericEntityTypeBuilder = binderMethod.Invoke(modelBuilder, new object[] { }) as EntityTypeBuilder;            
+                this.ApplyAttributeSpecs(mapType, genericEntityTypeBuilder);
 
                 var maps = mapFactory.GetMapsFor(mapType);              
 
                 foreach(var map in maps)
                 {
-                    map.Configure(modelBinding);
+                    map.Configure(genericEntityTypeBuilder);
                 }
             }
         }
