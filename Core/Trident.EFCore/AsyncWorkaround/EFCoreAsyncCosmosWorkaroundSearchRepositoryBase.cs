@@ -8,21 +8,21 @@ using Trident.Domain;
 using System;
 using Microsoft.EntityFrameworkCore;
 
-namespace Trident.EFCore
+namespace Trident.EFCore.AsyncWorkaround
 {
     /// <summary>
     /// Abstract Class SearchRepositoryBase.
-    /// Implements the <see cref="Trident.EFCore.EFCoreRepository{TEntity}" />
-    /// Implements the <see cref="Trident.Search.ISearchRepository{TEntity, TSummery, TCriteria}" />
+    /// Implements the <see cref="Trident.Data.EntityFramework.EFCore.AsyncWorkaround.EFCoreAsyncCosmosWorkaroundRepository{TEntity}" />
+    /// Implements the <see cref="Trident.Core.Search.ISearchRepository{TEntity, TSummery, TCriteria}" />
     /// </summary>
     /// <typeparam name="TEntity">The type of the t entity.</typeparam>
     /// <typeparam name="TSummery">The type of the t summery.</typeparam>
     /// <typeparam name="TCriteria">The type of the t criteria.</typeparam>
-    /// <seealso cref="Trident.EFCore.EFCoreRepository{TEntity}" />
-    /// <seealso cref="Trident.Search.ISearchRepository{TEntity, TSummery, TCriteria}" />
+    /// <seealso cref="Trident.Data.EntityFramework.EFCore.AsyncWorkaround.EFCoreAsyncCosmosWorkaroundRepository{TEntity}" />
+    /// <seealso cref="Trident.Core.Search.ISearchRepository{TEntity, TSummery, TCriteria}" />
     /// <seealso cref="Trident.Data.EntityFramework.EFRepository{TEntity}" />
     /// <seealso cref="Trident.TimeSummit.Repositories.Contracts.ISearchRepositoryBase{TEntity, TSummery, TCriteria}" />
-    public abstract class EFCoreSearchRepositoryBase<TEntity, TSummery, TCriteria> : EFCoreRepository<TEntity>, ISearchRepository<TEntity, TSummery, TCriteria>
+    public abstract class EFCoreAsyncCosmosWorkaroundSearchRepositoryBase<TEntity, TSummery, TCriteria> : EFCoreAsyncCosmosWorkaroundRepository<TEntity>, ISearchRepository<TEntity, TSummery, TCriteria>
         where TEntity : Entity
         where TSummery : class
         where TCriteria : SearchCriteria
@@ -42,10 +42,11 @@ namespace Trident.EFCore
         /// <param name="resultsBuilder">The results builder.</param>
         /// <param name="queryBuilder">The query builder.</param>
         /// <param name="abstractContextFactory">The abstract context factory.</param>
-        public EFCoreSearchRepositoryBase(
+        public EFCoreAsyncCosmosWorkaroundSearchRepositoryBase(
             ISearchResultsBuilder resultsBuilder,
             ISearchQueryBuilder queryBuilder,
-            IAbstractContextFactory abstractContextFactory) : base(abstractContextFactory)
+            IAbstractContextFactory abstractContextFactory) 
+            : base(abstractContextFactory)
         {
             _resultsBuilder = resultsBuilder;
             _queryBuilder = queryBuilder;
@@ -59,36 +60,10 @@ namespace Trident.EFCore
         /// <returns>Task&lt;SearchResults&lt;TSummary, TCriteria&gt;&gt;.</returns>
         public virtual async Task<SearchResults<TSummery, TCriteria>> Search(TCriteria searchCriteria, IEnumerable<String> includedProperties = null)
         {
-            var query = BuildQuery(searchCriteria, includedProperties);
-
-            // Get total Records before returning results
-            var totalRecords = await query.CountAsync();
-
-            //apply paging
-            query = ApplyPaging(query, searchCriteria);
-
-            var results = await query.ToListAsync();
-
-            return SearchResultContent(results, searchCriteria, totalRecords);
+            return await Task.FromResult(SearchSync(searchCriteria, includedProperties));
         }
 
         public SearchResults<TSummery, TCriteria> SearchSync(TCriteria searchCriteria, IEnumerable<string> includedProperties = null)
-        {
-            var query = BuildQuery(searchCriteria, includedProperties);
-
-            // Get total Records before returning results
-            var totalRecords = query.Count();
-
-            //apply paging
-            query = ApplyPaging(query, searchCriteria);
-
-            var results = query.ToList();
-
-            return SearchResultContent(results, searchCriteria, totalRecords);
-        }
-
-
-        private IQueryable<TSummery> BuildQuery(TCriteria searchCriteria, IEnumerable<string> includedProperties = null)
         {
             var query = base.Context.Query<TSummery>();
 
@@ -115,10 +90,16 @@ namespace Trident.EFCore
                 });
             }
 
-            return query;
+            // Get total Records before returning results
+            var totalRecords = query.Count();
+
+            //apply paging
+            query = ApplyPaging(query, searchCriteria);
+
+            var results = query.ToList();
+
+            return SearchResultContent(results, searchCriteria, totalRecords);
         }
-
-
 
         /// <summary>
         /// Then implemented in a derivied class, applies filters given the specified keywords string.
@@ -178,30 +159,32 @@ namespace Trident.EFCore
         protected virtual SearchResults<TSummery, TCriteria> SearchResultContent(List<TSummery> results, TCriteria criteria, int totalRecords)
         {
             return _resultsBuilder.Build(results, criteria, totalRecords);
-        }             
+        }
+
+      
     }
 
 
     /// <summary>
     /// Class EFSearchRepositoryBase.
-    /// Implements the <see cref="Trident.EFCore.EFCoreSearchRepositoryBase{TEntity, TSummery, Trident.Search.SearchCriteria}" />
+    /// Implements the <see cref="Trident.Data.EntityFramework.EFCore.AsyncWorkaround.EFCoreAsyncCosmosWorkaroundSearchRepositoryBase{TEntity, TSummery, Trident.Core.Search.SearchCriteria}" />
     /// </summary>
     /// <typeparam name="TEntity">The type of the t entity.</typeparam>
     /// <typeparam name="TSummery">The type of the t summery.</typeparam>
-    /// <seealso cref="Trident.EFCore.EFCoreSearchRepositoryBase{TEntity, TSummery, Trident.Search.SearchCriteria}" />
-    /// <seealso cref="Trident.Data.EntityFramework.EFSearchRepositoryBase{TEntity, TSummery, Trident.Search.SearchCriteria}" />
-    /// <seealso cref="Trident.Search.ISearchRepository{TEntity, TSummery, Trident.Search.SearchCriteria}" />
-    public abstract class EFCoreSearchRepositoryBase<TEntity, TSummery> : EFCoreSearchRepositoryBase<TEntity, TSummery, SearchCriteria>, ISearchRepository<TEntity, TSummery>
+    /// <seealso cref="Trident.Data.EntityFramework.EFCore.AsyncWorkaround.EFCoreAsyncCosmosWorkaroundSearchRepositoryBase{TEntity, TSummery, Trident.Core.Search.SearchCriteria}" />
+    /// <seealso cref="Trident.Data.EntityFramework.EFSearchRepositoryBase{TEntity, TSummery, Trident.Core.Search.SearchCriteria}" />
+    /// <seealso cref="Trident.Core.Search.ISearchRepository{TEntity, TSummery, Trident.Core.Search.SearchCriteria}" />
+    public abstract class EFCoreAsyncCosmosWorkaroundSearchRepositoryBase<TEntity, TSummery> : EFCoreAsyncCosmosWorkaroundSearchRepositoryBase<TEntity, TSummery, SearchCriteria>, ISearchRepository<TEntity, TSummery, SearchCriteria>
        where TEntity : Entity
        where TSummery : class
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="EFCoreSearchRepositoryBase{TEntity, TSummery}" /> class.
+        /// Initializes a new instance of the <see cref="EFCoreAsyncCosmosWorkaroundSearchRepositoryBase{TEntity, TSummery}"/> class.
         /// </summary>
         /// <param name="resultsBuilder">The results builder.</param>
         /// <param name="queryBuilder">The query builder.</param>
         /// <param name="abstractContextFactory">The abstract context factory.</param>
-        public EFCoreSearchRepositoryBase(
+        public EFCoreAsyncCosmosWorkaroundSearchRepositoryBase(
             ISearchResultsBuilder resultsBuilder,
             ISearchQueryBuilder queryBuilder,
             IAbstractContextFactory abstractContextFactory)
@@ -211,23 +194,23 @@ namespace Trident.EFCore
     }
 
     /// <summary>
-    /// Class EFCoreSearchRepositoryBase.
-    /// Implements the <see cref="Trident.EFCore.EFCoreSearchRepositoryBase{TEntity, TEntity}" />
-    /// Implements the <see cref="Trident.Search.ISearchRepository{TEntity, TEntity}" />
+    /// Class EFCoreAsyncCosmosWorkaroundSearchRepositoryBase.
+    /// Implements the <see cref="Trident.Data.EntityFramework.EFCore.AsyncWorkaround.EFCoreAsyncCosmosWorkaroundSearchRepositoryBase{TEntity, TEntity}" />
+    /// Implements the <see cref="Trident.Core.Search.ISearchRepository{TEntity, TEntity}" />
     /// </summary>
     /// <typeparam name="TEntity">The type of the t entity.</typeparam>
-    /// <seealso cref="Trident.EFCore.EFCoreSearchRepositoryBase{TEntity, TEntity}" />
-    /// <seealso cref="Trident.Search.ISearchRepository{TEntity, TEntity}" />
-    public abstract class EFCoreSearchRepositoryBase<TEntity> : EFCoreSearchRepositoryBase<TEntity, TEntity>, ISearchRepository<TEntity>
+    /// <seealso cref="Trident.Data.EntityFramework.EFCore.AsyncWorkaround.EFCoreAsyncCosmosWorkaroundSearchRepositoryBase{TEntity, TEntity}" />
+    /// <seealso cref="Trident.Core.Search.ISearchRepository{TEntity, TEntity}" />
+    public abstract class EFCoreAsyncCosmosWorkaroundSearchRepositoryBase<TEntity> : EFCoreAsyncCosmosWorkaroundSearchRepositoryBase<TEntity, TEntity>, ISearchRepository<TEntity, TEntity>
      where TEntity : Entity
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="EFCoreSearchRepositoryBase{TEntity}" /> class.
+        /// Initializes a new instance of the <see cref="EFCoreAsyncCosmosWorkaroundSearchRepositoryBase{TEntity}"/> class.
         /// </summary>
         /// <param name="resultsBuilder">The results builder.</param>
         /// <param name="queryBuilder">The query builder.</param>
         /// <param name="abstractContextFactory">The abstract context factory.</param>
-        public EFCoreSearchRepositoryBase(
+        public EFCoreAsyncCosmosWorkaroundSearchRepositoryBase(
             ISearchResultsBuilder resultsBuilder,
             ISearchQueryBuilder queryBuilder,
             IAbstractContextFactory abstractContextFactory)

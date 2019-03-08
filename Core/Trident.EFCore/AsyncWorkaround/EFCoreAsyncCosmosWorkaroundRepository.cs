@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Trident.Data;
+using Trident;
 using Trident.Data.Contracts;
 using Trident.Domain;
 using System;
@@ -9,23 +9,23 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Trident.EFCore
+namespace Trident.EFCore.AsyncWorkaround
 {
     /// <summary>
-    /// Class EFCoreRepository.
-    /// Implements the <see cref="Trident.Data.RepositoryBase{TEntity}" />
+    /// Class EFCoreAsyncCosmosWorkaroundRepository.
+    /// Implements the <see cref="Trident.Data.EntityFramework.EFCore.EFCoreRepository{TEntity}" />
     /// </summary>
     /// <typeparam name="TEntity">The type of the t entity.</typeparam>
-    /// <seealso cref="Trident.Data.RepositoryBase{TEntity}" />
-    public abstract class EFCoreRepository<TEntity> : RepositoryBase<TEntity>
+    /// <seealso cref="Trident.Data.EntityFramework.EFCore.EFCoreRepository{TEntity}" />
+    public abstract class EFCoreAsyncCosmosWorkaroundRepository<TEntity> : EFCoreRepository<TEntity>
         where TEntity : Entity
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="EFCoreRepository{TEntity}" /> class.
+        /// Initializes a new instance of the <see cref="EFCoreAsyncCosmosWorkaroundRepository{TEntity}"/> class.
         /// </summary>
         /// <param name="abstractContextFactory">The abstract context factory.</param>
-        protected EFCoreRepository(IAbstractContextFactory abstractContextFactory) :
-            base(new Lazy<IContext>(() => abstractContextFactory.Create<IContext>(typeof(TEntity))))
+        protected EFCoreAsyncCosmosWorkaroundRepository(IAbstractContextFactory abstractContextFactory) :
+            base(abstractContextFactory)
         {
 
         }
@@ -38,9 +38,10 @@ namespace Trident.EFCore
         /// <returns>Task&lt;TEntity&gt;.</returns>
         public override async Task<TEntity> GetById(object id, bool detach = false)
         {
-            var idExpression = TypeExtensions.CreateTypedCompareExpression<TEntity>(nameof(Entity.Id), id);
-            var q = base.Context.Query<TEntity>(detach);
-            return await q.FirstOrDefaultAsync(idExpression);
+            var idExpression = TypeExtensions.CreateTypedCompareExpression<TEntity>(nameof(Entity.Id), id);           
+            var result = base.Context.Query<TEntity>(detach)
+                .FirstOrDefault(idExpression);
+            return await Task.FromResult(result);
         }
 
         /// <summary>
@@ -52,8 +53,11 @@ namespace Trident.EFCore
         /// <returns>Task&lt;IEnumerable&lt;TEntity&gt;&gt;.</returns>
         public override async Task<IEnumerable<TEntity>> GetByIds<TEntityId>(IEnumerable<TEntityId> ids, bool detach = false)
         {
-            return await base.Context.Query<TEntity>(detach)
-                 .Where(x => ids.Contains((TEntityId)x.Id)).ToListAsync();          
+            var result = base.Context.Query<TEntity>(detach)
+                 .Where(x => ids.Contains((TEntityId)x.Id))
+                 .ToList();
+
+            return await Task.FromResult(result);
         }
 
         /// <summary>
@@ -86,7 +90,8 @@ namespace Trident.EFCore
                 query = orderBy(query);
             }
 
-            return await query.ToListAsync();
+            var result = query.ToList();
+            return await Task.FromResult(result);
         }
 
         /// <summary>
@@ -97,35 +102,8 @@ namespace Trident.EFCore
         public override async Task<bool> Exists(Expression<Func<TEntity, bool>> filter)
         {
             IQueryable<TEntity> query = base.Context.Query<TEntity>();
-            return await query.AnyAsync(filter);
+            var result = query.Any(filter);
+            return await Task.FromResult(result);
         }
-
-        /// <summary>
-        /// Executes the procedure.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="procedureName">Name of the procedure.</param>
-        /// <param name="parameters">The parameters.</param>
-        /// <returns>Task&lt;IEnumerable&lt;T&gt;&gt;.</returns>
-        protected async Task<IEnumerable<T>> ExecuteProcedure<T>(string procedureName, params IDbDataParameter[] parameters)
-            where T : class
-        {
-            return await base.Context.ExecuteProcedureAsync<T>(procedureName, false, parameters);
-        }
-
-        /// <summary>
-        /// Executes the non query.
-        /// </summary>
-        /// <param name="command">The command.</param>
-        /// <param name="parameters">The parameters.</param>
-        /// <returns>Task&lt;System.Int32&gt;.</returns>
-        protected async Task<int> ExecuteNonQuery(string command, params object[] parameters)
-        {
-            return await base.Context.ExecuteNonQueryAsync(command, parameters);
-        }
-
-
     }
-
-
 }
