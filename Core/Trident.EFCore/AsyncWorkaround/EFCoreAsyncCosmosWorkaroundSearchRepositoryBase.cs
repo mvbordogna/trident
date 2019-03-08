@@ -174,7 +174,8 @@ namespace Trident.EFCore.AsyncWorkaround
     /// <seealso cref="Trident.Data.EntityFramework.EFCore.AsyncWorkaround.EFCoreAsyncCosmosWorkaroundSearchRepositoryBase{TEntity, TSummery, Trident.Core.Search.SearchCriteria}" />
     /// <seealso cref="Trident.Data.EntityFramework.EFSearchRepositoryBase{TEntity, TSummery, Trident.Core.Search.SearchCriteria}" />
     /// <seealso cref="Trident.Core.Search.ISearchRepository{TEntity, TSummery, Trident.Core.Search.SearchCriteria}" />
-    public abstract class EFCoreAsyncCosmosWorkaroundSearchRepositoryBase<TEntity, TSummery> : EFCoreAsyncCosmosWorkaroundSearchRepositoryBase<TEntity, TSummery, SearchCriteria>, ISearchRepository<TEntity, TSummery, SearchCriteria>
+    public abstract class EFCoreAsyncCosmosWorkaroundSearchRepositoryBase<TEntity, TSummery> : EFCoreAsyncCosmosWorkaroundSearchRepositoryBase<TEntity, TSummery, SearchCriteria>, 
+        ISearchRepository<TEntity, TSummery>
        where TEntity : Entity
        where TSummery : class
     {
@@ -201,7 +202,7 @@ namespace Trident.EFCore.AsyncWorkaround
     /// <typeparam name="TEntity">The type of the t entity.</typeparam>
     /// <seealso cref="Trident.Data.EntityFramework.EFCore.AsyncWorkaround.EFCoreAsyncCosmosWorkaroundSearchRepositoryBase{TEntity, TEntity}" />
     /// <seealso cref="Trident.Core.Search.ISearchRepository{TEntity, TEntity}" />
-    public abstract class EFCoreAsyncCosmosWorkaroundSearchRepositoryBase<TEntity> : EFCoreAsyncCosmosWorkaroundSearchRepositoryBase<TEntity, TEntity>, ISearchRepository<TEntity, TEntity>
+    public abstract class EFCoreAsyncCosmosWorkaroundSearchRepositoryBase<TEntity> : EFCoreAsyncCosmosWorkaroundSearchRepositoryBase<TEntity, TEntity>, ISearchRepository<TEntity>
      where TEntity : Entity
     {
         /// <summary>

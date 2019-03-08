@@ -50,7 +50,9 @@ namespace Trident.EFCore
                         }, connStr.Name, LifeSpan.SingleInstance);
 
                        p.RegisterNamed<CosmosDbOptionsBuilder, IOptionsBuilder>(connStr.Name, LifeSpan.SingleInstance);
-                       p.RegisterNamed<EFCoreDataContext, IEFDbContext>(connStr.Name);
+                        //TODO: put back to normal - workaround context for efcore issues when runing async still ocurring
+                        //p.RegisterNamed<EFCoreDataContext, IEFDbContext>(connStr.Name);
+                       p.RegisterNamed<AsyncWorkaround.EFCoreAsyncWorkAroundDbContext, IEFDbContext>(connStr.Name);
                        p.RegisterNamed<EFCoreSharedContextFactory, ISharedContextFactory>(connStr.Name);
                     }
                 }
