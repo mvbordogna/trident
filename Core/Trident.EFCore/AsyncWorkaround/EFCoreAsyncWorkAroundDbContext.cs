@@ -14,7 +14,7 @@ namespace Trident.EFCore.AsyncWorkaround
     /// Implements the <see cref="Trident.Data.EntityFramework.EFCore.EFCoreDataContext" />
     /// </summary>
     /// <seealso cref="Trident.Data.EntityFramework.EFCore.EFCoreDataContext" />
-    public abstract class EFCoreAsyncWorkAroundDbContext : EFCoreDataContext
+    public class EFCoreAsyncWorkAroundDbContext : EFCoreDataContext
     {
         /// <summary>
         /// The model builder factory
