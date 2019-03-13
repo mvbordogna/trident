@@ -17,8 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\Trident.Core.Web\Trident.Core.Web.csproj" />
-    <ProjectReference Include="..\..\..\Core\Trident.Core\Trident.Core.csproj" />
-    <ProjectReference Include="..\..\..\Core\Trident.EFCore\Trident.EFCore.csproj" />
+    <ProjectReference Include="..\..\..\Standard\Trident.EFCore\Trident.EFCore.csproj" />
     <ProjectReference Include="..\..\..\Standard\Trident.Azure\Trident.Azure.csproj" />
     <ProjectReference Include="..\..\..\Standard\Trident.Contracts\Trident.Contracts.csproj" />
     <ProjectReference Include="..\..\..\Standard\Trident.Serilog\Trident.Serilog.csproj" />

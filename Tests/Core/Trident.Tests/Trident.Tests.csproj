@@ -34,9 +34,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Core\Trident.EFCore\Trident.EFCore.csproj" />
+    <ProjectReference Include="..\..\..\Standard\Trident.EFCore\Trident.EFCore.csproj" />
     <ProjectReference Include="..\..\..\Standard\Trident\Trident.csproj" />
-    <ProjectReference Include="..\..\..\Core\Trident.Core\Trident.Core.csproj" />
     <ProjectReference Include="..\..\..\Standard\Trident.Testing\Trident.Testing.csproj" />
   </ItemGroup>
 

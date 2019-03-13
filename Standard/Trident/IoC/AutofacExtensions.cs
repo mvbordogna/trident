@@ -26,6 +26,12 @@ namespace Trident.IoC
     /// </summary>
     public static class AutofacExtension
     {
+
+        public static void UsingTridentEntityComparer(this ContainerBuilder builder)
+        {
+            builder.RegisterType<EntityComparer>().As<IEntityComparer>().SingleInstance();
+        }
+
         public static void UsingTridentFileStorage(this ContainerBuilder builder)
         {
             builder.RegisterType<DefaultFileStorageProvider>().As<IFileStorageProvider>().SingleInstance();

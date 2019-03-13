@@ -15,6 +15,7 @@
     <PackageReference Include="Autofac.Configuration" Version="4.1.0" />
     <PackageReference Include="AutoMapper" Version="8.0.0" />
     <PackageReference Include="AutoMapper.Collection" Version="5.0.0" />
+    <PackageReference Include="CompareNETObjects" Version="4.58.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.0.0-preview.19074.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.0.0-preview.19074.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Xml" Version="3.0.0-preview.19074.2" />
