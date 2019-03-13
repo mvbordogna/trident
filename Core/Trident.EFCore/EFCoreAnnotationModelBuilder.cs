@@ -97,7 +97,8 @@ namespace Trident.EFCore
             foreach (var mapType in mapTypes)
             {
                 var binderMethod = modelBuilder.GetType()
-                    .GetMethod("Entity", 1, new Type[] { })
+                    .GetMethods(BindingFlags.Instance | BindingFlags.Public)
+                    .First(x=> x.Name == nameof( modelBuilder.Entity) && x.IsGenericMethod)                    
                     .MakeGenericMethod(mapType);
 
                 var genericEntityTypeBuilder = binderMethod.Invoke(modelBuilder, new object[] { }) as EntityTypeBuilder;            

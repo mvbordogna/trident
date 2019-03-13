@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using Trident.Common;
 using Trident.Contracts;
-using Trident.Core.Data;
 using Trident.Data;
 using Trident.Data.Contracts;
 using Trident.EFCore.Contracts;
