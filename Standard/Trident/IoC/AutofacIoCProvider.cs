@@ -585,11 +585,10 @@ namespace Trident.IoC
         public void Build()
         {
             _container = _builder.Build();
+            var locator = _container.Resolve<IIoCServiceLocator>();
+            Dependency.SetServiceLocator(locator);
         }
-
-
-
-
+        
 
         /// <summary>
         /// Verifies this instance.
