@@ -96,11 +96,17 @@ namespace Trident
             var xmlConfigName = (entryAssembly != null)
                 ? $"{Path.GetFileName(entryAssembly.Location) }.config"
                 : "web.config";
-
+           
             config.JsonConfigFileName = config.JsonConfigFileName ?? "appsettings.json";
+
+           
             var jsonConfg = Path.Combine(binDir, config.JsonConfigFileName);
             var xmlConfig = Path.Combine(binDir, xmlConfigName);
-       
+            System.Diagnostics.Debug.WriteLine($"App base Directory: {binDir}");
+            System.Diagnostics.Debug.WriteLine($"json app settings Path: {jsonConfg}");
+            System.Diagnostics.Debug.WriteLine($"xml config Path: {xmlConfig}");
+
+
             var hasXml = File.Exists(xmlConfig);
             var hasJson = File.Exists(jsonConfg);
 
