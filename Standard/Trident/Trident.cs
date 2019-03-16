@@ -102,44 +102,45 @@ namespace Trident
            
             var jsonConfg = Path.Combine(binDir, config.JsonConfigFileName);
             var xmlConfig = Path.Combine(binDir, xmlConfigName);
-            System.Diagnostics.Debug.WriteLine($"App base Directory: {binDir}");
-            System.Diagnostics.Debug.WriteLine($"json app settings Path: {jsonConfg}");
-            System.Diagnostics.Debug.WriteLine($"xml config Path: {xmlConfig}");
-
 
             var hasXml = File.Exists(xmlConfig);
             var hasJson = File.Exists(jsonConfg);
 
-            if (config.AutoDetectConfigFiles)
-            {
-                if (!hasXml && hasJson && config.AppConfiguration == null)
-                {                    
-                    var builder = new ConfigurationBuilder()
-                            .SetBasePath(binDir)
-                            .AddJsonFile(config.JsonConfigFileName, optional: true, reloadOnChange: true);
 
-                    configMethod?.Invoke(builder);
-                    config.AppConfiguration = builder.Build();
+            System.Diagnostics.Debug.WriteLine($"App base Directory: {binDir}");
+            System.Diagnostics.Debug.WriteLine($"json app settings Path: {jsonConfg}");
+            System.Diagnostics.Debug.WriteLine($"xml config Path: {xmlConfig}");
+
+            System.Diagnostics.Debug.WriteLine($"JSON EXISTS: {hasJson}");
+            System.Diagnostics.Debug.WriteLine($"XML EXISTS: {hasXml}");
+            System.Diagnostics.Debug.WriteLine($"AutoDetectConfigFiles Enabled: {config.AutoDetectConfigFiles}");
+
+            if(config.AppConfiguration == null)
+            {
+                var builder = new ConfigurationBuilder();
+
+                if (config.AutoDetectConfigFiles && hasJson)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Setting up Configuration JSON File USING {jsonConfg}");
+                    builder.SetBasePath(binDir)
+                           .AddJsonFile(config.JsonConfigFileName, optional: true, reloadOnChange: true);
                     config.UsingJsonConfig = true;
                     config.UsingXmlConfig = false;
+
                 }
-                else
+                else if(config.AutoDetectConfigFiles && hasXml)
                 {
                     config.UsingJsonConfig = false;
                     config.UsingXmlConfig = true;
                 }
+                else if(!(hasXml || hasJson))
+                {
+                    System.Diagnostics.Debug.WriteLine($"No Configuration Files Found or registered. if its is unexpected try using the configuration builder method overload parameter Action<IConfigurationBuilder> configMethod ");
+                }
+               
+                configMethod?.Invoke(builder);
+                config.AppConfiguration = builder.Build();
             }
-            else if( config.AppConfiguration != null && hasJson)
-            {
-                config.UsingJsonConfig = true;
-                config.UsingXmlConfig = false;
-            }
-            else
-            {
-                config.UsingJsonConfig = false;
-                config.UsingXmlConfig = true;
-            }
-          
         }
     }
 
