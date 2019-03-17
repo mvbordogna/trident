@@ -37,7 +37,7 @@ namespace Trident
                 p.UsingTridentConnectionStringXmlManager();
                 connStringManager = new Common.XmlConnectionStringSettings();
             }
-            else throw new System.Configuration.ConfigurationErrorsException("Primary configuration type can be only one json (new) or xml (legecy)");
+           
 
             p.UsingTridentData();
             p.UsingTridentTransactions();
