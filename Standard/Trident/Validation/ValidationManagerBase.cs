@@ -62,6 +62,14 @@ namespace Trident.Validation
                 throw new ValidationRollupException(errors);
         }
 
+        public void ValidateSync(BusinessContext context)
+        {
+            var errors = new List<ValidationResult>();
+            ValidateRulesSync(context, errors);
+
+            if (errors.Any())
+                throw new ValidationRollupException(errors);
+        }
 
         /// <summary>
         /// Checks the valid.
@@ -80,7 +88,7 @@ namespace Trident.Validation
             await rule.Run(context, errors);
             return errors;
         }
-
+               
         /// <summary>
         /// Validates the specified context.
         /// </summary>
@@ -104,6 +112,20 @@ namespace Trident.Validation
                 throw new ValidationRollupException(errors);
         }
 
+        public void ValidateSync<TRule>(BusinessContext context) where TRule : IValidationRule
+        {
+            var errors = new List<ValidationResult>();
+            var rule = Rules.FirstOrDefault(x => x.GetType() == typeof(TRule));
+
+            if (rule == null)
+                throw new ArgumentOutOfRangeException("TRule", "Rule not found.");
+
+            //TODO: Add Sync method to IValidationRule Interface
+            //rule.RunSync(context, errors);
+
+            if (errors.Any())
+                throw new ValidationRollupException(errors);
+        }
 
         /// <summary>
         /// Validates the rules.
@@ -121,6 +143,20 @@ namespace Trident.Validation
                 }
             }
         }
+
+        protected virtual void ValidateRulesSync(BusinessContext context, List<ValidationResult> errors)
+        {
+            if (this.Rules != null)
+            {
+                foreach (var x in this.Rules)
+                {
+                    //TODO: uncomment when Sync method is implemented
+                    //await x.RunSync(context, errors);
+                }
+            }
+        }
+
+
 
         /// <summary>
         /// Gets the rules.

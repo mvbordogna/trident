@@ -21,18 +21,18 @@ namespace Trident.Tests.Business
 
         private class DefaultTestScope : TestScope<ITestDerivedProvider>
         {
-            private Mock<ISearchRepository<TestEntity, TestEntity, SearchCriteria>> RepositoryMock;
+            private Mock<ISearchRepository<TestEntity>> RepositoryMock;
 
             public DefaultTestScope()
             {
-                RepositoryMock = new Mock<ISearchRepository<TestEntity, TestEntity, SearchCriteria>>();
+                RepositoryMock = new Mock<ISearchRepository<TestEntity>>();
                 InstanceUnderTest = new TestDerivedProvider(RepositoryMock.Object);
             }
         }
 
         private class TestDerivedProvider : ProviderBase<int, TestEntity>, ITestDerivedProvider
         {
-            public TestDerivedProvider(ISearchRepository<TestEntity, TestEntity, SearchCriteria> repository) 
+            public TestDerivedProvider(ISearchRepository<TestEntity> repository) 
                 : base(repository) { }
         }
 

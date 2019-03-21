@@ -54,6 +54,7 @@ namespace Trident.IoC
         /// <param name="serviceName">Name of the service.</param>
         /// <returns>T.</returns>
         T GetNamed<T>(string serviceName);
+      
 
         /// <summary>
         /// Registers the modules.
@@ -162,6 +163,7 @@ namespace Trident.IoC
         IIoCProvider UsingTridentData();
         IIoCProvider UsingTridentMapperProfiles(params Assembly[] targetAssemblies);
         IIoCProvider UsingTridentTransactions();
+        IIoCProvider UsingTridentInMemberCachingManager();
         IIoCProvider UsingTridentValidationManagers(params Assembly[] targetAssemblies);
         IIoCProvider UsingTridentValidationRules(params Assembly[] targetAssemblies);
         IIoCProvider UsingTridentWorkflowManagers(params Assembly[] targetAssemblies);

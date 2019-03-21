@@ -16,7 +16,7 @@ namespace Trident.Workflow
         /// <param name="operationStage">The operation stage.</param>
         /// <returns>List&lt;WorkflowResult&gt;.</returns>
         Task Run(BusinessContext context, OperationStage operationStage = OperationStage.All);
-
+        void RunSync(BusinessContext context, OperationStage operationStage = OperationStage.All);
     }
 
 

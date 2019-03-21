@@ -26,6 +26,8 @@ namespace Trident.Validation
         /// <exception cref="ValidationRollupException"></exception>
         Task Validate(BusinessContext context);
 
+        void ValidateSync(BusinessContext context);
+
         /// <summary>
         /// Checks the valid.
         /// </summary>
@@ -44,6 +46,8 @@ namespace Trident.Validation
         /// <exception cref="System.ArgumentOutOfRangeException">TRule;Rule not found.</exception>
         /// <exception cref="Trident.Validation.ValidationRollupException"></exception>
         Task Validate<TRule>(BusinessContext context) where TRule : IValidationRule;
+
+        void ValidateSync<TRule>(BusinessContext context) where TRule : IValidationRule;
 
     }
 

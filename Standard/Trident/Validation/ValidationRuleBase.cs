@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Trident.Business;
-using Trident.Workflow;
 
 namespace Trident.Validation
 {
@@ -30,7 +29,7 @@ namespace Trident.Validation
         /// <returns>Task.</returns>
         public async Task Run(object context, List<ValidationResult> errors)
         {
-           await this.Run((T)context, errors);
+            await this.Run((T)context, errors);
         }
 
         /// <summary>
@@ -40,6 +39,6 @@ namespace Trident.Validation
         /// <param name="errors">The errors.</param>
         /// <returns>ValidationError.</returns>
         public abstract Task Run(T context, List<ValidationResult> errors);
-      
+
     }
 }

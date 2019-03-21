@@ -32,11 +32,11 @@ namespace Trident.Tests.Business
 
         private class DefaultTestScope : TestScope<ITestDerivedReadOnlyProvider>
         {
-            private Mock<ISearchRepository<TestEntity, TestEntity, SearchCriteria>> RepositoryMock;
+            private Mock<ISearchRepository<TestEntity>> RepositoryMock;
 
             public DefaultTestScope()
             {
-                RepositoryMock = new Mock<ISearchRepository<TestEntity, TestEntity, SearchCriteria>>();
+                RepositoryMock = new Mock<ISearchRepository<TestEntity>>();
                 InstanceUnderTest = new ReadOnlyTestDerivedProvider(RepositoryMock.Object);
             }
         }
@@ -44,7 +44,7 @@ namespace Trident.Tests.Business
 
         private class ReadOnlyTestDerivedProvider : ProviderBase<int, TestEntity>, ITestDerivedReadOnlyProvider
         {
-            public ReadOnlyTestDerivedProvider(ISearchRepository<TestEntity, TestEntity, SearchCriteria> repository)
+            public ReadOnlyTestDerivedProvider(ISearchRepository<TestEntity> repository)
                 : base(repository) { }
         }
 

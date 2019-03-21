@@ -1,7 +1,7 @@
-﻿using System.Configuration;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Trident.Common;
+using Trident.Configuration;
 using Trident.Data;
 using Trident.Data.Contracts;
 using Trident.EFCore;
@@ -43,7 +43,7 @@ namespace Trident.Core.Tests.Data
             //setup
             var scope = new DefaultTestScope();
             scope.ConnectionStringSettingsMock.Setup(x => x[scope.DBConnectionStringKey])
-                  .Returns(null as System.Configuration.ConnectionStringSettings);
+                  .Returns(null as ConnectionStringSettings);
 
             //act
             var actual = scope.InstanceUnderTest.GetConnectionString(scope.DBConnectionStringKey);
@@ -100,7 +100,7 @@ namespace Trident.Core.Tests.Data
             //setup
             var scope = new DefaultTestScope();
             scope.ConnectionStringSettingsMock.Setup(x => x[scope.DBConnectionStringKey])
-                  .Returns(null as System.Configuration.ConnectionStringSettings);
+                  .Returns(null as ConnectionStringSettings);
 
             //act
             using (var actual = scope.InstanceUnderTest.GetConnection(scope.DBConnectionStringKey))
@@ -117,14 +117,14 @@ namespace Trident.Core.Tests.Data
             public string DBConnectionStringKey = "DefaultDB";
             public string DBConnectionStringBadKey = "BadDBName";
 
-            public System.Configuration.ConnectionStringSettings TestConnStringSetting { get; }
+            public ConnectionStringSettings TestConnStringSetting { get; }
 
 
             public Mock<IConnectionStringSettings> ConnectionStringSettingsMock { get; }
 
             public DefaultTestScope()
             {
-                TestConnStringSetting = new System.Configuration.ConnectionStringSettings(this.DBConnectionStringKey, this.ExpectedConnString);
+                TestConnStringSetting = new ConnectionStringSettings(this.DBConnectionStringKey, this.ExpectedConnString);
                 TestConnStringSetting.ProviderName = "System.Data.SqlClient";
                 ConnectionStringSettingsMock = new Mock<IConnectionStringSettings>();
 

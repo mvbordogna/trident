@@ -8,6 +8,7 @@ using Trident.IoC;
 using System.Linq;
 using Trident.Contracts;
 using System.Collections.Generic;
+using Trident.Configuration;
 
 namespace Trident
 {
@@ -37,12 +38,16 @@ namespace Trident
                 p.UsingTridentConnectionStringXmlManager();
                 connStringManager = new Common.XmlConnectionStringSettings();
             }
+            else if(!options.AutoDetectConfigFiles)
+            {
+                System.Diagnostics.Debug.WriteLine("Configuration type undetermeined, please set  either UsingJsonConfig or  UsingXmlConfig to true.");
+            }
            
 
             p.UsingTridentData();
             p.UsingTridentTransactions();
-            if (options.EnableFileStorage) p.UsingTridentFileStorage();
-
+            if (options.EnableInMemoryCachingManager) p.UsingTridentInMemberCachingManager();
+            if (options.EnableFileStorageProvider) p.UsingTridentFileStorage();
             p.UsingTridentSearch(targetAssemblies);           
             p.UsingTridentRepositories(targetAssemblies);
             p.UsingTridentProviders(targetAssemblies);
@@ -54,7 +59,7 @@ namespace Trident
             p.UsingTridentFactories(targetAssemblies);
             p.UsingTridentResolvers(targetAssemblies);
             p.UsingTridentMapperProfiles(targetAssemblies);
-
+          
             RegisterDataProviderPackages(p, options, connStringManager);
                       
             foreach (var t in options.ModuleTypes)
@@ -89,6 +94,7 @@ namespace Trident
 
         private static void SetupConfiguration(TridentOptions config, Action<IConfigurationBuilder> configMethod = null)
         {
+            var t = Environment.OSVersion;
             if(config.AppConfiguration == null)
             {
                 var builder = new ConfigurationBuilder();
@@ -140,6 +146,11 @@ namespace Trident
                         System.Diagnostics.Debug.WriteLine($"No Configuration Files Found or registered. if its is unexpected try using the configuration builder method overload parameter Action<IConfigurationBuilder> configMethod ");
                     }
                 }
+                else if(config.ConfigStreamProvider != null)
+                {
+                    config.JsonConfigFileName = config.JsonConfigFileName ?? "appsettings.json";
+                    builder.AddInMemoryJson(config.JsonConfigFileName, config.ConfigStreamProvider);
+                }
                 else
                 {
                     System.Diagnostics.Debug.WriteLine($"AutoDetectConfigFiles Enabled {config.AutoDetectConfigFiles}");
@@ -183,11 +194,11 @@ namespace Trident
 
         public bool ScanForModules { get; set; } = true;
     
-        public bool UsingJsonConfig { get; internal set; }
+        public bool UsingJsonConfig { get; set; }
 
-        public bool UsingXmlConfig { get; internal set; }
+        public bool UsingXmlConfig { get; set; }
 
-        public bool EnableFileStorage {get; set; }
+        public bool EnableInMemoryCachingManager { get; set; } = true;
 
         /// <summary>
         /// When True Trident will look for app.config or appsettings.config files to load for the configuration
@@ -198,6 +209,8 @@ namespace Trident
         public string JsonConfigFileName { get; set; }
         public Type IoCProviderType { get; internal set; }
         public bool ValidateInitialization { get; set; }
+        public IConfigStreamProvider ConfigStreamProvider { get; set; }
+        public bool EnableFileStorageProvider { get; set; }
     }
 
 

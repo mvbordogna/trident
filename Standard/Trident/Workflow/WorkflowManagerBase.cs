@@ -41,6 +41,13 @@ namespace Trident.Workflow
             await RunTasks(context, stage);
         }
 
+        public void RunSync(BusinessContext context, OperationStage stage = OperationStage.All)
+        {
+            context.GuardIsNotNull(nameof(context));
+            context.Target.GuardIsNotNull(nameof(context.Target));
+            RunTasksSync(context, stage);
+        }
+
         /// <summary>
         /// Runs all registered tasks.
         /// </summary>
@@ -68,6 +75,33 @@ namespace Trident.Workflow
         }
 
         /// <summary>
+        /// Runs all registered tasks.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="stage">The stage.</param>
+        /// <returns>Task.</returns>
+        /// <exception cref="Trident.Workflow.WorkFlowCancelledException">Task {task.GetType()} cancelled the workflow during {stage.ToString()} stage of the {context.Operation.ToString()}</exception>
+        protected virtual void RunTasksSync(BusinessContext context, OperationStage stage)
+        {
+
+            if (this.Tasks != null)
+            {
+                GuardOnlyOneStageBitSet(stage);
+
+                var tasksToRun = (stage == OperationStage.All)
+                    ? this.Tasks
+                    : this.Tasks.Where(x => x.Stage.HasFlag(stage)).ToList();
+
+                //TODO add sync methods IWorkflowTask interface
+                foreach (var task in tasksToRun)
+                {
+                    //if (task.ShouldRun(context) && !task.Run(context))
+                    //    throw new WorkFlowCancelledException($"Task {task.GetType()} cancelled the workflow during {stage.ToString()} stage of the {context.Operation.ToString()} operation", task.GetType());
+                }
+            }
+        }
+
+        /// <summary>
         /// Guards the only one stage bit set.
         /// </summary>
         /// <param name="stage">The stage.</param>
@@ -81,6 +115,8 @@ namespace Trident.Workflow
             if (!singleBitIsSet)
                 throw new System.InvalidOperationException(err);
         }
+
+      
 
         /// <summary>
         /// Gets the tasks.

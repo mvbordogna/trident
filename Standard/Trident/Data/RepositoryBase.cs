@@ -29,6 +29,13 @@ namespace Trident.Data
         public abstract Task<bool> Exists(Expression<Func<TEntity, bool>> filter);
 
         /// <summary>
+        /// Returns a value indicating if any entity exists matching the specified filter.
+        /// </summary>
+        /// <param name="filter">The filter.</param>
+        /// <returns>System.Boolean.</returns>
+        public abstract bool ExistSync(Expression<Func<TEntity, bool>> filter);
+
+        /// <summary>
         /// Gets the entities matching the specified filter.
         /// </summary>
         /// <param name="filter">The filter.</param>
@@ -38,7 +45,12 @@ namespace Trident.Data
         public abstract Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, IEnumerable<string> includeProperties = null, bool noTracking = false);
 
+        public abstract IEnumerable<TEntity> GetSync(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, 
+            IOrderedQueryable<TEntity>> orderBy = null, IEnumerable<string> includeProperties = null, bool noTracking = false);
+
         public abstract Task<IEnumerable<TEntity>> GetByIds<TEntityId>(IEnumerable<TEntityId> ids, bool detach = false);
+
+        public abstract IEnumerable<TEntity> GetByIdsSync<TEntityId>(IEnumerable<TEntityId> ids, bool detach = false);
 
         /// <summary>
         /// Gets the by identifier.
@@ -50,7 +62,7 @@ namespace Trident.Data
             return await Context.FindAsync<TEntity>(id, detach);
         }
 
-        public TEntity GetByIdSync(object id, bool detach = false)
+        public virtual TEntity GetByIdSync(object id, bool detach = false)
         {
             return Context.Find<TEntity>(id, detach);
         }
@@ -145,5 +157,7 @@ namespace Trident.Data
         {
             Context.SaveChanges();
         }
+
+     
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System.Collections;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using Trident.Extensions;
 
@@ -23,7 +22,7 @@ namespace Trident.Common
             connStrings = configurationRoot.GetSection("ConnectionStrings")
                        .GetChildren()
                        .Select(x=> (!string.IsNullOrWhiteSpace(x.Value)  && !string.IsNullOrWhiteSpace(x.Key))
-                        ? new System.Configuration.ConnectionStringSettings(x.Key, x.Value)
+                        ? new ConnectionStringSettings(x.Key, x.Value)
                         : null)
                         .Where(x=> x != null)
                        .ToList();
@@ -42,14 +41,14 @@ namespace Trident.Common
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns>System.String.</returns>
-        public System.Configuration.ConnectionStringSettings this[string key]
+        public ConnectionStringSettings this[string key]
         {
             get
             {
                 var val = configurationRoot.GetConnectionString(key);
                 if (!string.IsNullOrWhiteSpace(val))
                 {
-                    return new System.Configuration.ConnectionStringSettings(key, val);
+                    return new ConnectionStringSettings(key, val);
                 }
 
                 return null;
@@ -60,7 +59,7 @@ namespace Trident.Common
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns>System.String.</returns>
-        public System.Configuration.ConnectionStringSettings this[int index]
+        public ConnectionStringSettings this[int index]
         {
             get
             {

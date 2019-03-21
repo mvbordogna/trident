@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
+using System.Linq;
 using Trident.Common;
 using Trident.Contracts;
 using Trident.Data;
@@ -69,15 +69,22 @@ namespace Trident.EFCore
             //this is so context objects dataSourceName does blowup if verify is used
             provider.RegisterBehavior<string>(() => "Test container Verify String", LifeSpan.SingleInstance);
             provider.RegisterBehavior<DbContextOptions>(() => new InjectionVerifyDbContextOptions());
-                       
-            foreach (var conn in connStringManager)
-            {
-                var pn = conn.ProviderName.ToLower();
 
-                if (ProviderSetups.ContainsKey(pn))
+            if (connStringManager.Count() > 0)
+            {
+                foreach (var conn in connStringManager)
                 {
-                    ProviderSetups[pn](provider, config, conn);
+                    var pn = conn.ProviderName.ToLower();
+
+                    if (ProviderSetups.ContainsKey(pn))
+                    {
+                        ProviderSetups[pn](provider, config, conn);
+                    }
                 }
+            }
+            else
+            {
+                //add warning
             }
         }
 

@@ -19,8 +19,10 @@ namespace Trident.Business
     /// <seealso cref="Trident.Business.ReadOnlyProviderBase{TEntity, TSummary, TCriteria}" />
     /// <seealso cref="Trident.Data.Contracts.IProvider{TId, TEntity, TSummary, TCriteria}" />
     /// <seealso cref="Trident.Data.Contracts.IProvider{TEntity, TSummary, TCriteria}" />
-    public abstract class ProviderBase<TId, TEntity, TSummary, TCriteria> : ReadOnlyProviderBase<TEntity, TSummary, TCriteria>, IProvider<TId, TEntity, TSummary, TCriteria>
+    public abstract class ProviderBase<TId, TEntity, TLookup, TSummary, TCriteria> : ReadOnlyProviderBase<TEntity, TLookup, TSummary, TCriteria>, 
+        IProvider<TId, TEntity, TLookup, TSummary, TCriteria>
         where TEntity : Domain.EntityBase<TId>
+        where TLookup : Domain.Lookup,new()
         where TSummary : Domain.Entity
         where TCriteria : SearchCriteria
     {
@@ -29,7 +31,7 @@ namespace Trident.Business
         /// Initializes a new instance of the <see cref="ProviderBase{TEntity, TSummary, TCriteria}" /> class.
         /// </summary>
         /// <param name="repository">The repository.</param>
-        protected ProviderBase(ISearchRepository<TEntity, TSummary, TCriteria> repository) : base(repository) { }
+        protected ProviderBase(ISearchRepository<TEntity, TLookup, TSummary, TCriteria> repository) : base(repository) { }
 
 
         /// <summary>
@@ -106,6 +108,28 @@ namespace Trident.Business
             return entities;
         }
 
+        public IEnumerable<TEntity> GetByIdsSync(IEnumerable<TId> ids, bool detach = false, bool loadChildren = false, bool applyDefaultFilters = true)
+        {
+            var filters = (applyDefaultFilters)
+              ? ApplyDefaultFilters(x => ids.Contains(x.Id))
+              : x => ids.Contains(x.Id);
+
+            var entities = (base.GetSync(filter: filters,
+                includeProperties: DefaultIncludedProperties,
+                noTracking: detach, loadChildren: loadChildren));
+
+            if (loadChildren)
+            {
+                foreach (var entity in entities)
+                {
+                    LoadChildrenSync(entity, detach);
+                }
+            }
+
+            return entities;
+        }
+
+
         /// <summary>
         /// Inserts the specified entity.
         /// </summary>
@@ -115,6 +139,11 @@ namespace Trident.Business
         public virtual async Task Insert(TEntity entity, bool deferCommit = false)
         {
             await Repository.Insert(entity, deferCommit);
+        }
+
+        public void InsertSync(TEntity entity, bool deferCommit = false)
+        {
+            Repository.InsertSync(entity, deferCommit);
         }
 
         /// <summary>
@@ -128,6 +157,13 @@ namespace Trident.Business
             await Repository.Update(entity, deferCommit);
         }
 
+
+        public void UpdateSync(TEntity entity, bool deferCommit = false)
+        {
+            Repository.UpdateSync(entity, deferCommit);
+        }
+
+
         /// <summary>
         /// Deletes the specified entity.
         /// </summary>
@@ -138,6 +174,15 @@ namespace Trident.Business
         {
             await Repository.Delete(entity, deferCommit);
         }
+
+        public void DeleteSync(TEntity entity, bool deferCommit = false)
+        {
+            Repository.DeleteSync(entity, deferCommit);
+        }
+
+      
+
+      
     }
 
 
@@ -154,8 +199,10 @@ namespace Trident.Business
     /// <seealso cref="Trident.Data.Contracts.IProvider{TId, TEntity, TSummary, Trident.Search.SearchCriteria}" />
     /// <seealso cref="SearchCriteria" />
     /// <seealso cref="SearchCriteria" />
-    public abstract class ProviderBase<TId, TEntity, TSummary> : ProviderBase<TId, TEntity, TSummary, SearchCriteria>, IProvider<TId, TEntity, TSummary>
+    public abstract class ProviderBase<TId, TEntity, TLookup, TSummary> : ProviderBase<TId, TEntity, TLookup, TSummary, SearchCriteria>, 
+        IProvider<TId, TEntity, TLookup, TSummary>
         where TEntity : Domain.EntityBase<TId>
+        where TLookup : Domain.Lookup,new()
         where TSummary : Domain.Entity
     {
 
@@ -163,7 +210,7 @@ namespace Trident.Business
         /// Initializes a new instance of the <see cref="ProviderBase{TId, TEntity, TSummary}" /> class.
         /// </summary>
         /// <param name="repository">The repository.</param>
-        protected ProviderBase(ISearchRepository<TEntity, TSummary, SearchCriteria> repository) : base(repository) { }
+        protected ProviderBase(ISearchRepository<TEntity, TLookup, TSummary> repository) : base(repository) { }
 
     }
 
@@ -174,15 +221,35 @@ namespace Trident.Business
     /// <typeparam name="TEntity">The type of the t entity.</typeparam>
     /// <seealso cref="Trident.Business.ProviderBase{TId, TEntity, TEntity}" />
     /// <seealso cref="Trident.Data.Contracts.IProvider{TId, TEntity, TEntity}" />
-    public abstract class ProviderBase<TId, TEntity> : ProviderBase<TId, TEntity, TEntity>, IProvider<TId, TEntity>
+    public abstract class ProviderBase<TId, TEntity, TLookup> : ProviderBase<TId, TEntity, TLookup, TEntity>, IProvider<TId, TEntity, TLookup>
         where TEntity : Domain.EntityBase<TId>
+        where TLookup : Domain.Lookup, new()
     {
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProviderBase{TId, TEntity}" /> class.
         /// </summary>
         /// <param name="repository">The repository.</param>
-        protected ProviderBase(ISearchRepository<TEntity, TEntity, SearchCriteria> repository) : base(repository) { }
+        protected ProviderBase(ISearchRepository<TEntity, TLookup> repository) : base(repository) { }
+
+    }
+
+    /// <summary>
+    /// Class ProviderBase.
+    /// </summary>
+    /// <typeparam name="TId">The type of the t identifier.</typeparam>
+    /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+    /// <seealso cref="Trident.Business.ProviderBase{TId, TEntity, TEntity}" />
+    /// <seealso cref="Trident.Data.Contracts.IProvider{TId, TEntity, TEntity}" />
+    public abstract class ProviderBase<TId, TEntity> : ProviderBase<TId, TEntity, Domain.Lookup>, IProvider<TId, TEntity>
+        where TEntity : Domain.EntityBase<TId>      
+    {
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProviderBase{TId, TEntity}" /> class.
+        /// </summary>
+        /// <param name="repository">The repository.</param>
+        protected ProviderBase(ISearchRepository<TEntity> repository) : base(repository) { }
 
     }
 }

@@ -16,15 +16,16 @@ namespace Trident.Business
     /// <typeparam name="TSummary">The type of the t summary.</typeparam>
     /// <typeparam name="TCriteria">The type of the t criteria.</typeparam>
     /// <seealso cref="Trident.Data.Contracts.IReadOnlyProvider{TEntity, TSummary, TCriteria}" />
-    public abstract class ReadOnlyProviderBase<TEntity, TSummary, TCriteria> : IReadOnlyProvider<TEntity, TSummary, TCriteria>
+    public abstract class ReadOnlyProviderBase<TEntity, TLookup, TSummary, TCriteria> : IReadOnlyProvider<TEntity, TLookup, TSummary, TCriteria>
         where TEntity : class
+        where TLookup : Domain.Lookup, new()
         where TSummary : class
         where TCriteria : SearchCriteria
     {
         /// <summary>
         /// The repository
         /// </summary>
-        private readonly ISearchRepository<TEntity, TSummary, TCriteria> _repository;
+        private readonly ISearchRepository<TEntity, TLookup, TSummary, TCriteria> _repository;
         /// <summary>
         /// The combinded default filters
         /// </summary>
@@ -47,13 +48,13 @@ namespace Trident.Business
         /// Gets the repository.
         /// </summary>
         /// <value>The repository.</value>
-        protected ISearchRepository<TEntity, TSummary, TCriteria> Repository => _repository;
+        protected ISearchRepository<TEntity, TLookup, TSummary, TCriteria> Repository => _repository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ReadOnlyProviderBase{TEntity, TSummary, TCriteria}" /> class.
         /// </summary>
         /// <param name="repository">The repository.</param>
-        protected ReadOnlyProviderBase(ISearchRepository<TEntity, TSummary, TCriteria> repository)
+        protected ReadOnlyProviderBase(ISearchRepository<TEntity, TLookup, TSummary, TCriteria> repository)
         {
 
             _repository = repository;
@@ -89,10 +90,10 @@ namespace Trident.Business
         public virtual async Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             IEnumerable<string> includeProperties = null, bool noTracking = false, bool loadChildren = false,
-            bool applyDefaultfilters = true)
+            bool applyDefaultFilters = true)
         {
             var propertyIncluded = includeProperties ?? DefaultIncludedProperties;
-            filter = (applyDefaultfilters) ? ApplyDefaultFilters(filter) : filter;
+            filter = (applyDefaultFilters) ? ApplyDefaultFilters(filter) : filter;
             var results = await _repository.Get(filter, orderBy, propertyIncluded, noTracking);
 
             if (loadChildren)
@@ -104,6 +105,30 @@ namespace Trident.Business
             }
 
             return results;
+        }
+
+        public IEnumerable<TEntity> GetSync(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, 
+            IOrderedQueryable<TEntity>> orderBy = null, IEnumerable<string> includeProperties = null, 
+            bool noTracking = false, bool loadChildren = false, bool applyDefaultFilters = true)
+        {
+            var propertyIncluded = includeProperties ?? DefaultIncludedProperties;
+            filter = (applyDefaultFilters) ? ApplyDefaultFilters(filter) : filter;
+            var results =  _repository.GetSync(filter, orderBy, propertyIncluded, noTracking);
+
+            if (loadChildren)
+            {
+                foreach (var entity in results)
+                {
+                    LoadChildrenSync(entity, noTracking);
+                }
+            }
+
+            return results;
+        }
+
+        public bool ExistsSync(Expression<Func<TEntity, bool>> filter, bool applyDefaultFilters = true)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -131,6 +156,25 @@ namespace Trident.Business
             return obj;
         }
 
+
+        public TEntity GetByIdSync(object id, bool detach = false, bool loadChildren = false, bool applyDefaultFilters = true)
+        {
+            var obj = _repository.GetByIdSync(id, detach);
+            if (applyDefaultFilters && obj != null)
+            {
+                var filter = GetCombinedDefaultFilters()?.Compile();
+                obj = (filter == null || filter(obj)) ? obj : null;
+            }
+
+            if (obj != null && loadChildren)
+            {
+                LoadChildrenSync(obj, detach);
+            }
+
+            return obj;
+        }
+             
+
         /// <summary>
         /// Loads the children.
         /// </summary>
@@ -140,6 +184,11 @@ namespace Trident.Business
         protected virtual Task LoadChildren(TEntity entity, bool noTracking = false)
         {
             return Task.CompletedTask;
+        }
+
+        protected virtual void LoadChildrenSync(TEntity entity, bool noTracking = false)
+        {
+            
         }
 
         /// <summary>
@@ -153,6 +202,39 @@ namespace Trident.Business
             return Task.CompletedTask;
         }
 
+        /// <summary>
+        /// Loads the children.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="noTracking">if set to <c>true</c> [no tracking].</param>
+        /// <returns>Task.</returns>
+        protected virtual void LoadChildrenSync(IEnumerable<TSummary> entity, bool noTracking = false)
+        {
+          
+        }
+
+        /// <summary>
+        /// Searches the repository for entities given the specified criteria.
+        /// </summary>
+        /// <param name="criteria">The criteria.</param>
+        /// <param name="loadChildren">if set to <c>true</c> [load children].</param>
+        /// <returns>Task&lt;SearchResults&lt;TSummary, TCriteria&gt;&gt;.</returns>
+        public virtual async Task<SearchResults<TLookup, TCriteria>> SearchLookups(TCriteria criteria)
+        {
+            ApplyDefaultFilters(criteria);
+            var searchResult = await _repository.SearchLookups(criteria, new List<string>());
+
+            return searchResult;
+        }
+
+        public virtual SearchResults<TLookup, TCriteria> SearchLookupsSync(TCriteria criteria)
+        {
+            ApplyDefaultFilters(criteria);
+            var searchResult = _repository.SearchLookupsSync(criteria, new List<string>());
+
+            return searchResult;
+        }
+
 
         /// <summary>
         /// Searches the repository for entities given the specified criteria.
@@ -163,11 +245,32 @@ namespace Trident.Business
         public virtual async Task<SearchResults<TSummary, TCriteria>> Search(TCriteria criteria, bool loadChildren = false)
         {
             ApplyDefaultFilters(criteria);
-            var searchResult =  await _repository.Search(criteria, DefaultIncludedProperties);
+            var searchResult = await _repository.Search(criteria, DefaultIncludedProperties);
 
             if (loadChildren)
             {
                 await this.LoadChildren(searchResult.Results);
+            }
+
+            return searchResult;
+        }
+
+
+
+        /// <summary>
+        /// Searches the repository for entities given the specified criteria.
+        /// </summary>
+        /// <param name="criteria">The criteria.</param>
+        /// <param name="loadChildren">if set to <c>true</c> [load children].</param>
+        /// <returns>Task&lt;SearchResults&lt;TSummary, TCriteria&gt;&gt;.</returns>
+        public virtual SearchResults<TSummary, TCriteria> SearchSync(TCriteria criteria, bool loadChildren = false)
+        {
+            ApplyDefaultFilters(criteria);
+            var searchResult = _repository.SearchSync(criteria, DefaultIncludedProperties);
+
+            if (loadChildren)
+            {
+                this.LoadChildren(searchResult.Results);
             }
 
             return searchResult;
@@ -234,5 +337,64 @@ namespace Trident.Business
                 }
             }
         }
+
     }
+
+
+
+    /// <summary>
+    /// Provides an abstract read-only implementation of a provider class.
+    /// Does not implement write behavior to the underlying persistence medium
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+    /// <typeparam name="TSummary">The type of the t summary.</typeparam>
+    /// <typeparam name="TCriteria">The type of the t criteria.</typeparam>
+    /// <seealso cref="Trident.Data.Contracts.IReadOnlyProvider{TEntity, TSummary, TCriteria}" />
+    public abstract class ReadOnlyProviderBase<TEntity, TLookup, TSummary> : ReadOnlyProviderBase<TEntity, TLookup, TSummary, SearchCriteria>,
+        IReadOnlyProvider<TEntity, TLookup, TSummary>
+        where TEntity : class
+        where TLookup : Domain.Lookup, new()
+        where TSummary : class
+    {
+        protected ReadOnlyProviderBase(ISearchRepository<TEntity, TLookup, TSummary, SearchCriteria> repository) : base(repository)
+        {
+        }
+    }
+
+    /// <summary>
+    /// Provides an abstract read-only implementation of a provider class.
+    /// Does not implement write behavior to the underlying persistence medium
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+    /// <typeparam name="TSummary">The type of the t summary.</typeparam>
+    /// <typeparam name="TCriteria">The type of the t criteria.</typeparam>
+    /// <seealso cref="Trident.Data.Contracts.IReadOnlyProvider{TEntity, TSummary, TCriteria}" />
+    public abstract class ReadOnlyProviderBase<TEntity, TLookup> : ReadOnlyProviderBase<TEntity, TLookup, TEntity>,
+        IReadOnlyProvider<TEntity, TLookup>
+        where TEntity : class
+        where TLookup : Domain.Lookup, new()
+
+    {
+        protected ReadOnlyProviderBase(ISearchRepository<TEntity, TLookup> repository) : base(repository)
+        {
+        }
+    }
+
+    /// <summary>
+    /// Provides an abstract read-only implementation of a provider class.
+    /// Does not implement write behavior to the underlying persistence medium
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+    /// <typeparam name="TSummary">The type of the t summary.</typeparam>
+    /// <typeparam name="TCriteria">The type of the t criteria.</typeparam>
+    /// <seealso cref="Trident.Data.Contracts.IReadOnlyProvider{TEntity, TSummary, TCriteria}" />
+    public abstract class ReadOnlyProviderBase<TEntity> : ReadOnlyProviderBase<TEntity, Domain.Lookup>,
+        IReadOnlyProvider<TEntity>
+        where TEntity : class
+    {
+        protected ReadOnlyProviderBase(ISearchRepository<TEntity> repository) : base(repository)
+        {
+        }
+    }
+
 }

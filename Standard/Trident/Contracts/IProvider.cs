@@ -20,8 +20,9 @@ namespace Trident.Data.Contracts
     /// <typeparam name="TSummary">The type of the t summary.</typeparam>
     /// <typeparam name="TCriteria">The type of the t criteria.</typeparam>
     /// <seealso cref="Trident.Data.Contracts.IProvider" />
-    public interface IReadOnlyProvider<TEntity, TSummary, TCriteria> : IProvider
+    public interface IReadOnlyProvider<TEntity, TLookup, TSummary, TCriteria> : IProvider
         where TEntity : class
+        where TLookup : Domain.Lookup,new()
         where TSummary : class
         where TCriteria : SearchCriteria
     {
@@ -39,7 +40,9 @@ namespace Trident.Data.Contracts
         /// <param name="loadChildren">if set to <c>true</c> [load children].</param>
         /// <param name="applyDefaultFilters">if set to <c>true</c> [apply default filters].</param>
         /// <returns>Task&lt;TEntity&gt;.</returns>
-        Task<TEntity> GetById(object id, bool detach = false, bool loadChildren=false, bool applyDefaultFilters = true);
+        Task<TEntity> GetById(object id, bool detach = false, bool loadChildren = false, bool applyDefaultFilters = true);
+
+        TEntity GetByIdSync(object id, bool detach = false, bool loadChildren = false, bool applyDefaultFilters = true);
 
         /// <summary>
         /// Gets entities matching the specified filter.
@@ -53,7 +56,12 @@ namespace Trident.Data.Contracts
         /// <returns>Task&lt;IEnumerable&lt;TEntity&gt;&gt;.</returns>
         Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity, bool>> filter = null,
              Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-            IEnumerable<string> includeProperties = null, bool noTracking = false, bool loadChildren=false, bool applyDefaultFilters = true);
+            IEnumerable<string> includeProperties = null, bool noTracking = false, bool loadChildren = false, bool applyDefaultFilters = true);
+
+        IEnumerable<TEntity> GetSync(Expression<Func<TEntity, bool>> filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+           IEnumerable<string> includeProperties = null, bool noTracking = false, bool loadChildren = false, bool applyDefaultFilters = true);
+
 
         /// <summary>
         /// Determines of any entities exist matching the specified filter.
@@ -63,6 +71,8 @@ namespace Trident.Data.Contracts
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> Exists(Expression<Func<TEntity, bool>> filter, bool applyDefaultFilters = true);
 
+        bool ExistsSync(Expression<Func<TEntity, bool>> filter, bool applyDefaultFilters = true);
+
         /// <summary>
         /// Searches the repository for entities given the specified criteria.
         /// </summary>
@@ -70,6 +80,19 @@ namespace Trident.Data.Contracts
         /// <param name="loadChildren">if set to <c>true</c> [load children].</param>
         /// <returns>Task&lt;SearchResults&lt;TSummary, TCriteria&gt;&gt;.</returns>
         Task<SearchResults<TSummary, TCriteria>> Search(TCriteria criteria, bool loadChildren = false);
+
+
+        /// <summary>
+        /// Searches the repository for entities given the specified criteria.
+        /// </summary>
+        /// <param name="criteria">The criteria.</param>
+        /// <param name="loadChildren">if set to <c>true</c> [load children].</param>
+        /// <returns>Task&lt;SearchResults&lt;TSummary, TCriteria&gt;&gt;.</returns>
+        SearchResults<TSummary, TCriteria> SearchSync(TCriteria criteria, bool loadChildren = false);
+
+        Task<SearchResults<TLookup, TCriteria>> SearchLookups(TCriteria criteria);
+
+        SearchResults<TLookup, TCriteria> SearchLookupsSync(TCriteria criteria);
     }
 
     /// <summary>
@@ -77,9 +100,10 @@ namespace Trident.Data.Contracts
     /// </summary>
     /// <typeparam name="TEntity">The type of the t entity.</typeparam>
     /// <typeparam name="TSummary">The type of the t summary.</typeparam>
-    /// <seealso cref="Trident.Data.Contracts.IReadOnlyProvider{TEntity, TSummary, Trident.Search.SearchCriteria}" />
-    public interface IReadOnlyProvider<TEntity, TSummary> : IReadOnlyProvider<TEntity, TSummary, SearchCriteria>
+    /// <seealso cref="Trident.Data.Contracts.IReadOnlyProvider{TEntity, TLookup, TSummary, Trident.Search.SearchCriteria}" />
+    public interface IReadOnlyProvider<TEntity, TLookup, TSummary> : IReadOnlyProvider<TEntity, TLookup, TSummary, SearchCriteria>
        where TEntity : class
+       where TLookup : Domain.Lookup,new()
        where TSummary : class
     { }
 
@@ -88,8 +112,18 @@ namespace Trident.Data.Contracts
     /// </summary>
     /// <typeparam name="TEntity">The type of the t entity.</typeparam>
     /// <seealso cref="Trident.Data.Contracts.IReadOnlyProvider{TEntity, TEntity}" />
-    public interface IReadOnlyProvider<TEntity> : IReadOnlyProvider<TEntity, TEntity>
-       where TEntity : class   
+    public interface IReadOnlyProvider<TEntity, TLookup> : IReadOnlyProvider<TEntity, TLookup, TEntity>
+       where TEntity : class
+       where TLookup : Domain.Lookup,new()
+    { }
+
+    /// <summary>
+    /// Interface IReadOnlyProvider
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+    /// <seealso cref="Trident.Data.Contracts.IReadOnlyProvider{TEntity, Domain.Lookup{object} TEntity}" />
+    public interface IReadOnlyProvider<TEntity> : IReadOnlyProvider<TEntity, Domain.Lookup>
+       where TEntity : class
     { }
 
 
@@ -103,9 +137,10 @@ namespace Trident.Data.Contracts
     /// <typeparam name="TCriteria">The type of the criteria.</typeparam>
     /// <seealso cref="Trident.Data.Contracts.IReadOnlyProvider{TEntity, TSummary, TCriteria}" />
     /// <seealso cref="Trident.Data.Contracts.IProvider" />
-    public interface IProvider<TId, TEntity, TSummary, TCriteria> : IReadOnlyProvider<TEntity, TSummary, TCriteria>
+    public interface IProvider<TId, TEntity, TLookup, TSummary, TCriteria> : IReadOnlyProvider<TEntity, TLookup, TSummary, TCriteria>
         where TEntity : Domain.EntityBase<TId>
-        where TSummary :Domain.Entity
+        where TLookup : Domain.Lookup,new()
+        where TSummary : Domain.Entity
         where TCriteria : SearchCriteria
     {
 
@@ -119,6 +154,8 @@ namespace Trident.Data.Contracts
         /// <returns>Task&lt;IEnumerable&lt;TEntity&gt;&gt;.</returns>
         Task<IEnumerable<TEntity>> GetByIds(IEnumerable<TId> ids, bool detach = false, bool loadChildren = false, bool applyDefaultFilters = true);
 
+        IEnumerable<TEntity> GetByIdsSync(IEnumerable<TId> ids, bool detach = false, bool loadChildren = false, bool applyDefaultFilters = true);
+
         /// <summary>
         /// Inserts the specified entity.
         /// </summary>
@@ -126,6 +163,8 @@ namespace Trident.Data.Contracts
         /// <param name="deferCommit">if set to <c>true</c> [defer commit].</param>
         /// <returns>Task.</returns>
         Task Insert(TEntity entity, bool deferCommit = false);
+
+        void InsertSync(TEntity entity, bool deferCommit = false);
 
         /// <summary>
         /// Updates the specified entity.
@@ -135,6 +174,8 @@ namespace Trident.Data.Contracts
         /// <returns>Task.</returns>
         Task Update(TEntity entity, bool deferCommit = false);
 
+        void UpdateSync(TEntity entity, bool deferCommit = false);
+
         /// <summary>
         /// Deletes the specified entity.
         /// </summary>
@@ -142,6 +183,8 @@ namespace Trident.Data.Contracts
         /// <param name="deferCommit">if set to <c>true</c> [defer commit].</param>
         /// <returns>Task.</returns>
         Task Delete(TEntity entity, bool deferCommit = false);
+
+        void DeleteSync(TEntity entity, bool deferCommit = false);
 
     }
 
@@ -153,8 +196,9 @@ namespace Trident.Data.Contracts
     /// <typeparam name="TEntity">The type of the t entity.</typeparam>
     /// <typeparam name="TSummary">The type of the t summary.</typeparam>
     /// <seealso cref="Trident.Data.Contracts.IProvider{TId, TEntity, TSummary, Trident.Search.SearchCriteria}" />
-    public interface IProvider<TId, TEntity, TSummary> : IProvider<TId, TEntity, TSummary, SearchCriteria>
+    public interface IProvider<TId, TEntity, TLookup, TSummary> : IProvider<TId, TEntity, TLookup, TSummary, SearchCriteria>
         where TEntity : Domain.EntityBase<TId>
+        where TLookup : Domain.Lookup,new()
         where TSummary : Domain.Entity
     { }
 
@@ -163,9 +207,21 @@ namespace Trident.Data.Contracts
     /// </summary>
     /// <typeparam name="TId">The type of the t identifier.</typeparam>
     /// <typeparam name="TEntity">The type of the t entity.</typeparam>
-    /// <seealso cref="Trident.Data.Contracts.IProvider{TId, TEntity, TEntity}" />
-    public interface IProvider<TId, TEntity> : IProvider<TId, TEntity, TEntity>
-        where TEntity : Domain.EntityBase<TId>        
+    /// <seealso cref="Trident.Data.Contracts.IProvider{TId, TEntity, TLookup, TEntity}" />
+    public interface IProvider<TId, TEntity, TLookup> : IProvider<TId, TEntity, TLookup, TEntity>
+        where TEntity : Domain.EntityBase<TId>
+        where TLookup : Domain.Lookup,new()
     { }
+
+    /// <summary>
+    /// Interface IProvider
+    /// </summary>
+    /// <typeparam name="TId">The type of the t identifier.</typeparam>
+    /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+    /// <seealso cref="Trident.Data.Contracts.IProvider{TId, TEntity, TLookup, TEntity}" />
+    public interface IProvider<TId, TEntity> : IProvider<TId, TEntity, Domain.Lookup>
+        where TEntity : Domain.EntityBase<TId>
+    { }
+
 
 }

@@ -7,6 +7,7 @@ using Trident.Contracts.Enums;
 using Trident.Domain;
 using System;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Trident.EFCore.AsyncWorkaround
 {
@@ -22,9 +23,10 @@ namespace Trident.EFCore.AsyncWorkaround
     /// <seealso cref="Trident.Core.Search.ISearchRepository{TEntity, TSummery, TCriteria}" />
     /// <seealso cref="Trident.Data.EntityFramework.EFRepository{TEntity}" />
     /// <seealso cref="Trident.TimeSummit.Repositories.Contracts.ISearchRepositoryBase{TEntity, TSummery, TCriteria}" />
-    public abstract class EFCoreAsyncCosmosWorkaroundSearchRepositoryBase<TEntity, TSummery, TCriteria> : EFCoreAsyncCosmosWorkaroundRepository<TEntity>, ISearchRepository<TEntity, TSummery, TCriteria>
+    public abstract class EFCoreAsyncCosmosWorkaroundSearchRepositoryBase<TEntity, TLookup, TSummery, TCriteria> : EFCoreAsyncCosmosWorkaroundRepository<TEntity>, ISearchRepository<TEntity, TLookup, TSummery, TCriteria>
         where TEntity : Entity
-        where TSummery : class
+        where TLookup : Domain.Lookup, new()
+        where TSummery : Entity
         where TCriteria : SearchCriteria
     {
         /// <summary>
@@ -65,6 +67,111 @@ namespace Trident.EFCore.AsyncWorkaround
 
         public SearchResults<TSummery, TCriteria> SearchSync(TCriteria searchCriteria, IEnumerable<string> includedProperties = null)
         {
+            var query = BuildQuery(searchCriteria, includedProperties);
+
+            // Get total Records before returning results
+            var totalRecords = query.Count();
+
+            //apply paging
+            query = ApplyPaging(query, searchCriteria);
+
+            var results = query.ToList();
+
+            return SearchResultContent(results, searchCriteria, totalRecords);
+        }
+
+
+        protected virtual IQueryable<TSummery> ApplyKeywordSearch(IQueryable<TSummery> source, string keywords)         
+        {
+            return source;
+        }
+
+        /// <summary>
+        /// Applies paging to the specified query given the search criteria current page and page size.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="searchCriteria">The search criteria.</param>
+        /// <returns>IQueryable&lt;T&gt;.</returns>
+        protected virtual IQueryable<T> ApplyPaging<T>(IQueryable<T> source, TCriteria searchCriteria)
+            where T : class
+        {
+            return _queryBuilder.ApplyPaging(source, searchCriteria);
+        }
+
+        /// <summary>
+        /// Applies the order by clauses to the IQueryable given the specified dictionary.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="filterBy">The filter by.</param>
+        /// <returns>IQueryable&lt;T&gt;.</returns>
+        protected virtual IQueryable<T> ApplyOrderBy<T>(IQueryable<T> source, Dictionary<string, SortOrder> filterBy)
+            where T : class
+        {
+            return _queryBuilder.ApplyOrderBy(source, filterBy);
+        }
+
+        /// <summary>
+        /// Applies filtering to the specified query given the internal FilterBag Object member of SearchCriteria.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="criteria">The criteria.</param>
+        /// <returns>IQueryable&lt;TSummery&gt;.</returns>
+        protected virtual IQueryable<T> ApplyFilter<T>(IQueryable<T> source, SearchCriteria criteria)
+            where T : class
+        {
+           
+            var filters = (criteria?.Filters?.Any() ?? false) 
+                ? _queryBuilder.ApplyFilter(source, criteria, Context) 
+                : source;
+            return _queryBuilder.ApplyFilterBag(filters, criteria);
+        }
+
+        /// <summary>
+        /// Searches the content of the result.
+        /// </summary>
+        /// <param name="results">The results.</param>
+        /// <param name="criteria">The criteria.</param>
+        /// <param name="totalRecords">The total records.</param>
+        /// <returns>SearchResults&lt;T, C&gt;.</returns>
+        protected virtual SearchResults<TSummery, TCriteria> SearchResultContent(List<TSummery> results, TCriteria criteria, int totalRecords)
+        {
+            return _resultsBuilder.Build(results, criteria, totalRecords);
+        }
+
+        public Task<SearchResults<TLookup, TCriteria>> SearchLookups(TCriteria criteria, IEnumerable<string>  includedProperties = null)
+        {
+            return Task.FromResult(SearchLookupsSync(criteria, includedProperties));
+        }
+
+        protected virtual Expression<Func<TSummery, string>> EntityDisplayConverter { get; } = (TSummery e) => e.Id.ToString();
+
+        public SearchResults<TLookup, TCriteria> SearchLookupsSync(TCriteria criteria, IEnumerable<string> includedProperties = null)
+        {
+            var query = BuildQuery(criteria, includedProperties);
+
+            // Get total Records before returning results
+            var totalRecords = query.Count();
+
+            //apply paging
+            query = ApplyPaging(query, criteria);
+
+            var FullLookupSelector =
+            EntityDisplayConverter.Use((TSummery entity, Func<TSummery, string> selector) => new TLookup
+            {
+                Id = entity.Id,
+                Display = selector(entity)
+            });
+
+            var results = (query
+                .Select(FullLookupSelector))
+                .ToList();
+
+            return SearchLookupsResultContent(results, criteria, totalRecords);
+        }
+
+
+        private IQueryable<TSummery> BuildQuery(TCriteria searchCriteria, IEnumerable<string> includedProperties = null)
+        {
             var query = base.Context.Query<TSummery>();
 
             //apply keyword search
@@ -90,63 +197,7 @@ namespace Trident.EFCore.AsyncWorkaround
                 });
             }
 
-            // Get total Records before returning results
-            var totalRecords = query.Count();
-
-            //apply paging
-            query = ApplyPaging(query, searchCriteria);
-
-            var results = query.ToList();
-
-            return SearchResultContent(results, searchCriteria, totalRecords);
-        }
-
-        /// <summary>
-        /// Then implemented in a derivied class, applies filters given the specified keywords string.
-        /// </summary>
-        /// <param name="source">The source.</param>
-        /// <param name="keywords">The keywords.</param>
-        /// <returns>IQueryable&lt;TSummery&gt;.</returns>
-        protected virtual IQueryable<TSummery> ApplyKeywordSearch(IQueryable<TSummery> source,  string keywords)
-        {
-            return source;
-        }
-
-        /// <summary>
-        /// Applies paging to the specified query given the search criteria current page and page size.
-        /// </summary>
-        /// <param name="source">The source.</param>
-        /// <param name="searchCriteria">The search criteria.</param>
-        /// <returns>IQueryable&lt;T&gt;.</returns>
-        protected virtual IQueryable<TSummery> ApplyPaging(IQueryable<TSummery> source, TCriteria searchCriteria)
-        {
-            return _queryBuilder.ApplyPaging(source, searchCriteria);
-        }
-
-        /// <summary>
-        /// Applies the order by clauses to the IQueryable given the specified dictionary.
-        /// </summary>
-        /// <param name="source">The source.</param>
-        /// <param name="filterBy">The filter by.</param>
-        /// <returns>IQueryable&lt;T&gt;.</returns>
-        protected virtual IQueryable<TSummery> ApplyOrderBy(IQueryable<TSummery> source, Dictionary<string, SortOrder> filterBy)
-        {
-            return _queryBuilder.ApplyOrderBy(source, filterBy);
-        }
-
-        /// <summary>
-        /// Applies filtering to the specified query given the internal FilterBag Object member of SearchCriteria.
-        /// </summary>
-        /// <param name="source">The source.</param>
-        /// <param name="criteria">The criteria.</param>
-        /// <returns>IQueryable&lt;TSummery&gt;.</returns>
-        protected virtual IQueryable<TSummery> ApplyFilter(IQueryable<TSummery> source, SearchCriteria criteria)
-        {
-           
-            var filters = (criteria?.Filters?.Any() ?? false) 
-                ? _queryBuilder.ApplyFilter(source, criteria, Context) 
-                : source;
-            return _queryBuilder.ApplyFilterBag(filters, criteria);
+            return query;
         }
 
         /// <summary>
@@ -156,12 +207,11 @@ namespace Trident.EFCore.AsyncWorkaround
         /// <param name="criteria">The criteria.</param>
         /// <param name="totalRecords">The total records.</param>
         /// <returns>SearchResults&lt;T, C&gt;.</returns>
-        protected virtual SearchResults<TSummery, TCriteria> SearchResultContent(List<TSummery> results, TCriteria criteria, int totalRecords)
+        protected virtual SearchResults<TLookup, TCriteria> SearchLookupsResultContent(List<TLookup> results, TCriteria criteria, int totalRecords)
         {
             return _resultsBuilder.Build(results, criteria, totalRecords);
         }
 
-      
     }
 
 
@@ -174,10 +224,11 @@ namespace Trident.EFCore.AsyncWorkaround
     /// <seealso cref="Trident.Data.EntityFramework.EFCore.AsyncWorkaround.EFCoreAsyncCosmosWorkaroundSearchRepositoryBase{TEntity, TSummery, Trident.Core.Search.SearchCriteria}" />
     /// <seealso cref="Trident.Data.EntityFramework.EFSearchRepositoryBase{TEntity, TSummery, Trident.Core.Search.SearchCriteria}" />
     /// <seealso cref="Trident.Core.Search.ISearchRepository{TEntity, TSummery, Trident.Core.Search.SearchCriteria}" />
-    public abstract class EFCoreAsyncCosmosWorkaroundSearchRepositoryBase<TEntity, TSummery> : EFCoreAsyncCosmosWorkaroundSearchRepositoryBase<TEntity, TSummery, SearchCriteria>, 
-        ISearchRepository<TEntity, TSummery>
+    public abstract class EFCoreAsyncCosmosWorkaroundSearchRepositoryBase<TEntity, TLookup, TSummery> : EFCoreAsyncCosmosWorkaroundSearchRepositoryBase<TEntity, TLookup, TSummery, SearchCriteria>, 
+        ISearchRepository<TEntity, TLookup, TSummery>
        where TEntity : Entity
-       where TSummery : class
+       where TLookup : Domain.Lookup, new()
+       where TSummery : Entity
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EFCoreAsyncCosmosWorkaroundSearchRepositoryBase{TEntity, TSummery}"/> class.
@@ -202,8 +253,36 @@ namespace Trident.EFCore.AsyncWorkaround
     /// <typeparam name="TEntity">The type of the t entity.</typeparam>
     /// <seealso cref="Trident.Data.EntityFramework.EFCore.AsyncWorkaround.EFCoreAsyncCosmosWorkaroundSearchRepositoryBase{TEntity, TEntity}" />
     /// <seealso cref="Trident.Core.Search.ISearchRepository{TEntity, TEntity}" />
-    public abstract class EFCoreAsyncCosmosWorkaroundSearchRepositoryBase<TEntity> : EFCoreAsyncCosmosWorkaroundSearchRepositoryBase<TEntity, TEntity>, ISearchRepository<TEntity>
+    public abstract class EFCoreAsyncCosmosWorkaroundSearchRepositoryBase<TEntity, TLookup> : EFCoreAsyncCosmosWorkaroundSearchRepositoryBase<TEntity, TLookup, TEntity>, ISearchRepository<TEntity, TLookup>
      where TEntity : Entity
+     where TLookup : Domain.Lookup, new()
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EFCoreAsyncCosmosWorkaroundSearchRepositoryBase{TEntity}"/> class.
+        /// </summary>
+        /// <param name="resultsBuilder">The results builder.</param>
+        /// <param name="queryBuilder">The query builder.</param>
+        /// <param name="abstractContextFactory">The abstract context factory.</param>
+        public EFCoreAsyncCosmosWorkaroundSearchRepositoryBase(
+            ISearchResultsBuilder resultsBuilder,
+            ISearchQueryBuilder queryBuilder,
+            IAbstractContextFactory abstractContextFactory)
+            : base(resultsBuilder, queryBuilder, abstractContextFactory)
+        {
+        }
+    }
+
+
+    /// <summary>
+    /// Class EFCoreAsyncCosmosWorkaroundSearchRepositoryBase.
+    /// Implements the <see cref="Trident.Data.EntityFramework.EFCore.AsyncWorkaround.EFCoreAsyncCosmosWorkaroundSearchRepositoryBase{TEntity, TEntity}" />
+    /// Implements the <see cref="Trident.Core.Search.ISearchRepository{TEntity, TEntity}" />
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+    /// <seealso cref="Trident.Data.EntityFramework.EFCore.AsyncWorkaround.EFCoreAsyncCosmosWorkaroundSearchRepositoryBase{TEntity, TEntity}" />
+    /// <seealso cref="Trident.Core.Search.ISearchRepository{TEntity}" />
+    public abstract class EFCoreAsyncCosmosWorkaroundSearchRepositoryBase<TEntity> : EFCoreAsyncCosmosWorkaroundSearchRepositoryBase<TEntity, Domain.Lookup, TEntity>, ISearchRepository<TEntity>
+     where TEntity : Entity    
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EFCoreAsyncCosmosWorkaroundSearchRepositoryBase{TEntity}"/> class.

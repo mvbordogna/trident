@@ -373,6 +373,30 @@ namespace Trident
                 Expression.OrElse(left, right), parameter);
         }
 
+        public static Expression<Func<T1, T2>> Use<T1, T2, T3, T4>(this Expression<Func<T3, T4>> expression,
+                Expression<Func<T1, Func<T3, T4>, T2>> other)
+        {
+            return Expression.Lambda<Func<T1, T2>>(
+                other.Body.Replace(other.Parameters[1], expression),
+                other.Parameters[0]);
+        }
+        //another overload if there are two selectors
+        public static Expression<Func<T1, T2>> Use<T1, T2, T3, T4, T5, T6>(
+            this Expression<Func<T3, T4>> firstExpression,
+            Expression<Func<T5, T6>> secondExpression,
+            Expression<Func<T1, Func<T3, T4>, Func<T5, T6>, T2>> other)
+        {
+            return Expression.Lambda<Func<T1, T2>>(
+                other.Body.Replace(other.Parameters[1], firstExpression)
+                    .Replace(other.Parameters[2], secondExpression),
+                other.Parameters[0]);
+        }
+
+        public static Expression Replace(this Expression expression, Expression searchEx, Expression replaceEx)
+        {
+            return new ReplaceExpressionVisitor(searchEx, replaceEx).Visit(expression);
+        }
+
         public static bool IsNullableMember(this Type memberType)
         {
             return memberType.IsGenericType && memberType.GetGenericTypeDefinition() == typeof(Nullable<>);

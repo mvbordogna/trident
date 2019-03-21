@@ -20,8 +20,9 @@ namespace Trident.EF6
     /// <seealso cref="Trident.Search.ISearchRepository{TEntity, TSummery, TCriteria}" />
     /// <seealso cref="Trident.EF6.EFRepository{TEntity}" />
     /// <seealso cref="Trident.TimeSummit.Repositories.Contracts.ISearchRepositoryBase{TEntity, TSummery, TCriteria}" />
-    public abstract class EFSearchRepositoryBase<TEntity, TSummery, TCriteria> : EFRepository<TEntity>, ISearchRepository<TEntity, TSummery, TCriteria>
+    public abstract class EFSearchRepositoryBase<TEntity, TLookup, TSummery, TCriteria> : EFRepository<TEntity>, ISearchRepository<TEntity, TLookup, TSummery, TCriteria>
         where TEntity : Entity
+        where TLookup : Domain.Lookup, new()
         where TSummery : class
         where TCriteria : SearchCriteria
     {
@@ -191,7 +192,15 @@ namespace Trident.EF6
             return _resultsBuilder.Build(results, criteria, totalRecords);
         }
 
-    
+        public Task<SearchResults<TLookup, TCriteria>> SearchLookups(TCriteria criteria, IEnumerable<string> defaultIncludedProperties = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public SearchResults<TLookup, TCriteria> SearchLookupsSync(TCriteria criteria, IEnumerable<string> defaultIncludedProperties = null)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 
@@ -202,8 +211,10 @@ namespace Trident.EF6
     /// <typeparam name="TSummery">The type of the t summery.</typeparam>
     /// <seealso cref="Trident.EF6.EFSearchRepositoryBase{TEntity, TSummery, Trident.Search.SearchCriteria}" />
     /// <seealso cref="Trident.Search.ISearchRepository{TEntity, TSummery, Trident.Search.SearchCriteria}" />
-    public abstract class EFSearchRepositoryBase<TEntity, TSummery> : EFSearchRepositoryBase<TEntity, TSummery, SearchCriteria>, ISearchRepository<TEntity, TSummery, SearchCriteria>
+    public abstract class EFSearchRepositoryBase<TEntity, TLookup, TSummery> : EFSearchRepositoryBase<TEntity, TLookup, TSummery, SearchCriteria>, 
+       ISearchRepository<TEntity, TLookup, TSummery, SearchCriteria>
        where TEntity : Entity
+       where TLookup : Domain.Lookup, new()
        where TSummery : class
     {
         /// <summary>
@@ -229,8 +240,37 @@ namespace Trident.EF6
     /// <typeparam name="TEntity">The type of the t entity.</typeparam>
     /// <seealso cref="Trident.EF6.EFSearchRepositoryBase{TEntity, TEntity}" />
     /// <seealso cref="Trident.Search.ISearchRepository{TEntity, TEntity}" />
-    public abstract class EFSearchRepositoryBase<TEntity> : EFSearchRepositoryBase<TEntity, TEntity>, ISearchRepository<TEntity, TEntity>
-     where TEntity : Entity
+    public abstract class EFSearchRepositoryBase<TEntity, TLookup> : EFSearchRepositoryBase<TEntity, TLookup, TEntity>, 
+        ISearchRepository<TEntity, TLookup, TEntity>
+        where TEntity : Entity
+        where TLookup : Domain.Lookup, new()
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EFSearchRepositoryBase{TEntity}"/> class.
+        /// </summary>
+        /// <param name="resultsBuilder">The results builder.</param>
+        /// <param name="queryBuilder">The query builder.</param>
+        /// <param name="abstractContextFactory">The abstract context factory.</param>
+        public EFSearchRepositoryBase(
+            ISearchResultsBuilder resultsBuilder,
+            ISearchQueryBuilder queryBuilder,
+            IAbstractContextFactory abstractContextFactory)
+            : base(resultsBuilder, queryBuilder, abstractContextFactory)
+        {
+        }
+    }
+
+    /// <summary>
+    /// Class EFSearchRepositoryBase.
+    /// Implements the <see cref="Trident.EF6.EFSearchRepositoryBase{TEntity, TEntity}" />
+    /// Implements the <see cref="Trident.Search.ISearchRepository{TEntity, TEntity}" />
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+    /// <seealso cref="Trident.EF6.EFSearchRepositoryBase{TEntity, TEntity}" />
+    /// <seealso cref="Trident.Search.ISearchRepository{TEntity, TEntity}" />
+    public abstract class EFSearchRepositoryBase<TEntity> : EFSearchRepositoryBase<TEntity, Domain.Lookup, TEntity>,
+        ISearchRepository<TEntity, Domain.Lookup, TEntity>
+        where TEntity : Entity       
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EFSearchRepositoryBase{TEntity}"/> class.

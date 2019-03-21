@@ -23,9 +23,10 @@ namespace Trident.Business
     /// <typeparam name="TCriteria">The type of the t criteria.</typeparam>
     /// <seealso cref="Trident.Contracts.IManager{TId, TEntity, TSummary, TCriteria}" />
     /// <seealso cref="Trident.Contracts.IManager{TEntity, TSummary, TCriteria}" />
-    public abstract class ManagerBase<TId, TEntity, TSummary, TCriteria> : ReadOnlyManagerBase<TEntity, TSummary, TCriteria>,
-            IManager<TId, TEntity, TSummary, TCriteria>
+    public abstract class ManagerBase<TId, TEntity, TLookup, TSummary, TCriteria> : ReadOnlyManagerBase<TEntity, TLookup, TSummary, TCriteria>,
+            IManager<TId, TEntity, TLookup, TSummary, TCriteria>
         where TEntity : EntityBase<TId>
+        where TLookup : Domain.Lookup, new()
         where TSummary : Entity
         where TCriteria : SearchCriteria
     {
@@ -40,7 +41,7 @@ namespace Trident.Business
         /// <param name="validationManager">The validation manager.</param>
         /// <param name="workflowManager">The workflow manager.</param>
         protected ManagerBase(
-            IProvider<TId, TEntity, TSummary, TCriteria> provider,
+            IProvider<TId, TEntity, TLookup, TSummary, TCriteria> provider,
             IValidationManager<TEntity> validationManager = null,
             IWorkflowManager<TEntity> workflowManager = null) : base(provider)
         {
@@ -54,13 +55,19 @@ namespace Trident.Business
         /// Gets the provider.
         /// </summary>
         /// <value>The provider.</value>
-        protected new IProvider<TId, TEntity, TSummary, TCriteria> Provider { get; }
+        protected new IProvider<TId, TEntity, TLookup, TSummary, TCriteria> Provider { get; }
 
 
         [NonTransactional]
         public async Task<IEnumerable<TEntity>> GetByIds(IEnumerable<TId> ids, bool loadChildren = false)
         {
             return await Provider.GetByIds(ids, loadChildren: loadChildren);
+        }
+
+        [NonTransactional]
+        public IEnumerable<TEntity> GetByIdsSync(IEnumerable<TId> ids, bool loadChildren = false)
+        {
+            return Provider.GetByIdsSync(ids, loadChildren: loadChildren);
         }
 
         /// <summary>
@@ -73,6 +80,12 @@ namespace Trident.Business
         {
             return await this.Save(entity, deferCommit, null);
         }
+
+        public TEntity SaveSync(TEntity entity, bool deferCommit = false)
+        {
+            throw new NotImplementedException();
+        }
+
 
 
         /// <summary>
@@ -101,6 +114,32 @@ namespace Trident.Business
         }
 
 
+        protected TEntity SaveSync(TEntity entity, bool deferCommit, IDictionary<string, object> contextBag = null)
+        {
+            var existing = GetOriginalSync(entity);
+            var isNew = existing == null;
+
+            var context = CreateBusinessContextSync(isNew ? Operation.Insert : Operation.Update, entity, existing, contextBag);
+            WorkflowManager?.RunSync(context, isNew ? OperationStage.BeforeInsert : OperationStage.BeforeUpdate);
+
+            ValidationManager?.ValidateSync(context);
+            WorkflowManager?.RunSync(context, OperationStage.PostValidation);
+            if (isNew)
+            {
+                Provider.InsertSync(entity, deferCommit);
+            }
+            else
+            {
+                Provider.UpdateSync(entity, deferCommit);
+            }
+
+            SaveChildrenSync(entity, existing, deferCommit);
+            WorkflowManager?.Run(context, isNew ? OperationStage.AfterInsert : OperationStage.AfterUpdate);
+            return entity;
+        }
+
+
+
         public async Task<IEnumerable<TEntity>> BulkSave(IEnumerable<TEntity> entities)
         {
             entities.GuardIsNotNull(nameof(entities));
@@ -124,6 +163,42 @@ namespace Trident.Business
                 //TODO: needed to think about this for bulk
                 //await this.BulkSaveChildren(entities, existing);
                 await WorkflowManager?.Run(context, isNew ? OperationStage.AfterInsert : OperationStage.AfterUpdate);
+
+                counter++;
+            }
+
+            return entities;
+        }
+
+        public IEnumerable<TEntity> BulkSaveSync(IEnumerable<TEntity> entities)
+        {
+            entities.GuardIsNotNull(nameof(entities));
+            var existingDict = GetOriginalsSync(entities);
+            int counter = 0;
+            int lastEntityIndex = entities.Count() - 1;
+            foreach (var entity in entities)
+            {
+                var existing = existingDict.ContainsKey(entity.Id) ? existingDict[entity.Id] : null;
+                var isNew = existing == null;
+
+                var context = CreateBusinessContextSync(isNew ? Operation.Insert : Operation.Update, entity, existing);
+                WorkflowManager?.RunSync(context, isNew ? OperationStage.BeforeInsert : OperationStage.BeforeUpdate);
+
+                ValidationManager?.ValidateSync(context);
+                WorkflowManager?.RunSync(context, OperationStage.PostValidation);
+
+                if (isNew)
+                {
+                    Provider.Insert(entity, counter != lastEntityIndex);
+                }
+                else
+                {
+                    Provider.Update(entity, counter != lastEntityIndex);
+                }
+
+                //TODO: needed to think about this for bulk
+                //await this.BulkSaveChildren(entities, existing);
+                WorkflowManager?.RunSync(context, isNew ? OperationStage.AfterInsert : OperationStage.AfterUpdate);
 
                 counter++;
             }
@@ -158,6 +233,23 @@ namespace Trident.Business
         }
 
 
+        public TEntity InsertSync(TEntity entity, bool deferCommit = false)
+        {
+            var existing = GetOriginalSync(entity);
+            if (existing != null)
+            {
+                throw new InvalidOperationException("Cannot insert an entity that already exists, use PUT Method instead of POST.");
+            }
+
+            var context = CreateBusinessContextSync(Operation.Insert, entity, null);
+            WorkflowManager?.RunSync(context, OperationStage.BeforeInsert);
+            ValidationManager?.ValidateSync(context);
+            WorkflowManager?.RunSync(context, OperationStage.PostValidation);
+            Provider.InsertSync(entity, deferCommit);
+            SaveChildrenSync(entity, existing, deferCommit);
+            WorkflowManager?.RunSync(context, OperationStage.AfterInsert);
+            return entity;
+        }
 
         /// <summary>
         /// Updates the specified entity.
@@ -178,6 +270,20 @@ namespace Trident.Business
             return entity;
         }
 
+
+        public TEntity UpdateSync(TEntity entity, bool deferCommit = false)
+        {
+            var existing = GetOriginalSync(entity);
+            var context = CreateBusinessContextSync(Operation.Update, entity, existing);
+            WorkflowManager?.RunSync(context, OperationStage.BeforeUpdate);
+            ValidationManager?.Validate(context);
+            WorkflowManager?.RunSync(context, OperationStage.PostValidation);
+            Provider.UpdateSync(entity, deferCommit);
+            SaveChildrenSync(entity, existing, deferCommit);
+            WorkflowManager?.RunSync(context, OperationStage.AfterUpdate);
+            return entity;
+        }
+
         /// <summary>
         /// Deletes the specified entity.
         /// </summary>
@@ -194,6 +300,20 @@ namespace Trident.Business
             await DeleteChildren(existing, deferCommit);
             await Provider.Delete(entity, deferCommit);
             await WorkflowManager?.Run(context, OperationStage.AfterDelete);
+            return true;
+        }
+
+
+        public bool DeleteSync(TEntity entity, bool deferCommit = false)
+        {
+            var existing = GetOriginalSync(entity);
+            var context = CreateBusinessContextSync(Operation.Delete, entity, existing);
+            WorkflowManager?.RunSync(context, OperationStage.BeforeDelete);
+            ValidationManager?.ValidateSync(context);
+            WorkflowManager?.RunSync(context, OperationStage.PostValidation);
+            DeleteChildrenSync(existing, deferCommit);
+            Provider.DeleteSync(entity, deferCommit);
+            WorkflowManager?.RunSync(context, OperationStage.AfterDelete);
             return true;
         }
 
@@ -219,6 +339,27 @@ namespace Trident.Business
             return true;
         }
 
+        public bool BulkDeleteSync(IEnumerable<TEntity> entities)
+        {
+            entities.GuardIsNotNull(nameof(entities));
+            var existingDict = GetOriginalsSync(entities);
+            int counter = 0;
+            int lasEntityIndex = entities.Count() - 1;
+            foreach (var entity in entities)
+            {
+                var existing = existingDict.ContainsKey(entity.Id) ? existingDict[entity.Id] : null;
+                var context = CreateBusinessContextSync(Operation.Delete, entity, existing);
+                WorkflowManager?.RunSync(context, OperationStage.BeforeDelete);
+                ValidationManager?.ValidateSync(context);
+                WorkflowManager?.RunSync(context, OperationStage.PostValidation);
+                DeleteChildrenSync(existing, counter != lasEntityIndex);
+                Provider.DeleteSync(entity, counter != lasEntityIndex);
+                WorkflowManager?.RunSync(context, OperationStage.AfterDelete);
+                counter++;
+            }
+            return true;
+        }
+
         /// <summary>
         /// Deletes all the entities matching the ids in the list.
         /// </summary>
@@ -227,6 +368,11 @@ namespace Trident.Business
         public async Task<bool> BulkDelete(IEnumerable<TId> entityIds)
         {
             return await BulkDelete(await Get(x => entityIds.Contains(x.Id)));
+        }      
+
+        public bool BulkDeleteSync(IEnumerable<TId> entityIds)
+        {
+            return BulkDeleteSync(GetSync(x => entityIds.Contains(x.Id)));
         }
 
         /// <summary>
@@ -242,6 +388,12 @@ namespace Trident.Business
             return await Patch(destination, deferCommit, patches: patches);
         }
 
+        public TEntity PatchSync(TId id, bool deferCommit = false, params Action<TEntity>[] patches)
+        {
+            var destination = GetByIdSync(id);
+            GuardPatch(destination);
+            return PatchSync(destination, deferCommit, patches: patches);
+        }
 
         public async Task<TEntity> Patch(TId id, Dictionary<string, object> patches, IDictionary<string, Action<TEntity>> overridePatches = null, bool deferCommit = false)
         {
@@ -249,6 +401,14 @@ namespace Trident.Business
             GuardPatch(destination);
             var actions = CreatePatchActions(patches, overridePatches);
             return await Patch(destination, deferCommit, patches: actions.ToArray());
+        }
+
+        public TEntity PatchSync(TId id, Dictionary<string, object> patches, IDictionary<string, Action<TEntity>> overridePatches = null, bool deferCommit = false)
+        {
+            var destination = GetByIdSync(id);
+            GuardPatch(destination);
+            var actions = CreatePatchActions(patches, overridePatches);
+            return PatchSync(destination, deferCommit, patches: actions.ToArray());
         }
 
         private static void GuardPatch(TEntity destination)
@@ -269,10 +429,27 @@ namespace Trident.Business
             return await Save(destination, deferCommit, contextBag);
         }
 
+
+        protected TEntity PatchSync(TEntity destination, bool deferCommit = false, IDictionary<string, object> contextBag = null, params Action<TEntity>[] patches)
+        {
+            foreach (var patch in patches)
+            {
+                patch(destination);
+            }
+
+            return SaveSync(destination, deferCommit, contextBag);
+        }
+
         protected async Task<TEntity> Patch(TEntity destination, Dictionary<string, object> patches, bool deferCommit = false)
         {
             var actions = CreatePatchActions(patches);
             return await Patch(destination, deferCommit, patches: actions.ToArray());
+        }
+
+        protected TEntity PatchSync(TEntity destination, Dictionary<string, object> patches, bool deferCommit = false)
+        {
+            var actions = CreatePatchActions(patches);
+            return PatchSync(destination, deferCommit, patches: actions.ToArray());
         }
 
 
@@ -317,6 +494,16 @@ namespace Trident.Business
             return null;
         }
 
+        private TEntity GetOriginalSync(TEntity entity)
+        {
+            if (entity.Id != null && !Equals(entity.Id, default(TId)))
+            {
+                return Provider.GetByIdSync(entity.Id, true, true);
+            }
+
+            return null;
+        }
+
         protected virtual async Task<Dictionary<TId, TEntity>> GetOriginals(IEnumerable<TEntity> entities)
         {
             if (entities?.Any() ?? false)
@@ -326,6 +513,22 @@ namespace Trident.Business
                     .Select(x => x.Id).ToList();
 
                 return (await Provider.Get(filter: x => entityKeys.Contains(x.Id), noTracking: true))
+                    .ToDictionary(x => x.Id);
+            }
+
+            return null;
+        }
+
+
+        protected virtual Dictionary<TId, TEntity> GetOriginalsSync(IEnumerable<TEntity> entities)
+        {
+            if (entities?.Any() ?? false)
+            {
+                var entityKeys = entities
+                    .Where(x => !Equals(x.Id, default(TId)))
+                    .Select(x => x.Id).ToList();
+
+                return (Provider.GetSync(filter: x => entityKeys.Contains(x.Id), noTracking: true))
                     .ToDictionary(x => x.Id);
             }
 
@@ -354,10 +557,15 @@ namespace Trident.Business
         /// <returns>TWorkflowContext.</returns>
         protected virtual Task<BusinessContext<TEntity>> CreateBusinessContext(Operation operation, TEntity entity, TEntity original, IDictionary<string, object> contextBag = null)
         {
-            return Task.FromResult(new BusinessContext<TEntity>(entity, original, contextBag)
+            return Task.FromResult(CreateBusinessContextSync(operation, entity, original, contextBag));
+        }
+
+        protected virtual BusinessContext<TEntity> CreateBusinessContextSync(Operation operation, TEntity entity, TEntity original, IDictionary<string, object> contextBag = null)
+        {
+            return new BusinessContext<TEntity>(entity, original, contextBag)
             {
                 Operation = operation
-            });
+            };
         }
 
         /// <summary>
@@ -371,6 +579,11 @@ namespace Trident.Business
             return Task.CompletedTask;
         }
 
+        protected virtual void SaveChildrenSync(TEntity entity, TEntity existing, bool deferCommit = false)
+        {
+
+        }
+
         /// <summary>
         /// When Overridden in a derived class, uses a child provider to deleted the specified entities children.
         /// </summary>
@@ -380,6 +593,10 @@ namespace Trident.Business
         {
             return Task.CompletedTask;
         }
+
+        protected virtual void DeleteChildrenSync(TEntity existing, bool deferCommit = false)
+        {
+        }
     }
 
     /// <summary>
@@ -388,12 +605,11 @@ namespace Trident.Business
     /// <typeparam name="TId">The type of the t identifier.</typeparam>
     /// <typeparam name="TEntity">The type of the t entity.</typeparam>
     /// <typeparam name="TSummary">The type of the t summary.</typeparam>
-    public abstract class ManagerBase<TId, TEntity, TSummary>
-        : ManagerBase<TId, TEntity, TSummary, SearchCriteria>, IManager<TId, TEntity, TSummary>
-
-        where TEntity : EntityBase<TId>
+    public abstract class ManagerBase<TId, TEntity, TLookup, TSummary>
+        : ManagerBase<TId, TEntity, TLookup, TSummary, SearchCriteria>, IManager<TId, TEntity, TLookup, TSummary>
+       where TEntity : EntityBase<TId>
+       where TLookup : Domain.Lookup, new()
        where TSummary : Entity
-
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ManagerBase" /> class.
@@ -402,7 +618,32 @@ namespace Trident.Business
         /// <param name="validationManager">The validation manager.</param>
         /// <param name="workflowManager">The workflow manager.</param>
         protected ManagerBase(
-            IProvider<TId, TEntity, TSummary> provider,
+            IProvider<TId, TEntity, TLookup, TSummary> provider,
+            IValidationManager<TEntity> validationManager = null,
+            IWorkflowManager<TEntity> workflowManager = null) : base(provider, validationManager, workflowManager) { }
+    }
+
+
+    /// <summary>
+    /// Class ManagerBase.
+    /// </summary>
+    /// <typeparam name="TId">The type of the t identifier.</typeparam>
+    /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+    /// <seealso cref="SearchCriteria" />
+    /// <seealso cref="SearchCriteria" />
+    public abstract class ManagerBase<TId, TEntity, TLookup>
+       : ManagerBase<TId, TEntity, TLookup, TEntity>, IManager<TId, TEntity, TLookup>
+       where TEntity : EntityBase<TId>
+       where TLookup : Domain.Lookup, new()
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ManagerBase{TId, TEntity}" /> class.
+        /// </summary>      
+        /// <param name="provider">The provider.</param>
+        /// <param name="validationManager">The validation manager.</param>
+        /// <param name="workflowManager">The workflow manager.</param>
+        protected ManagerBase(
+            IProvider<TId, TEntity, TLookup> provider,
             IValidationManager<TEntity> validationManager = null,
             IWorkflowManager<TEntity> workflowManager = null) : base(provider, validationManager, workflowManager) { }
     }
@@ -416,7 +657,7 @@ namespace Trident.Business
     /// <seealso cref="SearchCriteria" />
     /// <seealso cref="SearchCriteria" />
     public abstract class ManagerBase<TId, TEntity>
-       : ManagerBase<TId, TEntity, TEntity>, IManager<TId, TEntity>
+       : ManagerBase<TId, TEntity, Domain.Lookup>, IManager<TId, TEntity>
        where TEntity : EntityBase<TId>
     {
         /// <summary>

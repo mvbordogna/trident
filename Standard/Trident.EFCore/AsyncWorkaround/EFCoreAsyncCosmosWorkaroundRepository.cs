@@ -60,6 +60,8 @@ namespace Trident.EFCore.AsyncWorkaround
             return await Task.FromResult(result);
         }
 
+      
+
         /// <summary>
         /// Gets the entities matching the specified filter.
         /// </summary>

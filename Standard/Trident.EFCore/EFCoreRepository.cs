@@ -43,6 +43,13 @@ namespace Trident.EFCore
             return await q.FirstOrDefaultAsync(idExpression);
         }
 
+        public override TEntity GetByIdSync(object id, bool detach = false)
+        {
+            var idExpression = TypeExtensions.CreateTypedCompareExpression<TEntity>(nameof(Entity.Id), id);
+            var q = base.Context.Query<TEntity>(detach);
+            return q.FirstOrDefault(idExpression);
+        }
+
         /// <summary>
         /// Gets the by ids.
         /// </summary>
@@ -54,6 +61,12 @@ namespace Trident.EFCore
         {
             return await base.Context.Query<TEntity>(detach)
                  .Where(x => ids.Contains((TEntityId)x.Id)).ToListAsync();          
+        }
+
+        public override IEnumerable<TEntity> GetByIdsSync<TEntityId>(IEnumerable<TEntityId> ids, bool detach = false)
+        {
+            return base.Context.Query<TEntity>(detach)
+                  .Where(x => ids.Contains((TEntityId)x.Id)).ToList();
         }
 
         /// <summary>
@@ -89,6 +102,32 @@ namespace Trident.EFCore
             return await query.ToListAsync();
         }
 
+
+        public override IEnumerable<TEntity> GetSync(Expression<Func<TEntity, bool>> filter = null,
+           Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+           IEnumerable<string> includeProperties = null, bool noTracking = false)
+        {
+            IQueryable<TEntity> query = base.Context.Query<TEntity>(noTracking);
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            if (includeProperties != null)
+            {
+                query = includeProperties
+                    .Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
+            }
+
+            if (orderBy != null)
+            {
+                query = orderBy(query);
+            }
+
+            return query.ToList();
+        }
+
         /// <summary>
         /// Returns a value indicating if any entity exists matching the specified filter.
         /// </summary>
@@ -98,6 +137,12 @@ namespace Trident.EFCore
         {
             IQueryable<TEntity> query = base.Context.Query<TEntity>();
             return await query.AnyAsync(filter);
+        }
+
+        public override bool ExistSync(Expression<Func<TEntity, bool>> filter)
+        {
+            IQueryable<TEntity> query = base.Context.Query<TEntity>();
+            return query.Any(filter);
         }
 
         /// <summary>

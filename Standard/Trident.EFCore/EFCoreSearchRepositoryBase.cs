@@ -7,6 +7,7 @@ using Trident.Contracts.Enums;
 using Trident.Domain;
 using System;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Trident.EFCore
 {
@@ -22,9 +23,10 @@ namespace Trident.EFCore
     /// <seealso cref="Trident.Search.ISearchRepository{TEntity, TSummery, TCriteria}" />
     /// <seealso cref="Trident.Data.EntityFramework.EFRepository{TEntity}" />
     /// <seealso cref="Trident.TimeSummit.Repositories.Contracts.ISearchRepositoryBase{TEntity, TSummery, TCriteria}" />
-    public abstract class EFCoreSearchRepositoryBase<TEntity, TSummery, TCriteria> : EFCoreRepository<TEntity>, ISearchRepository<TEntity, TSummery, TCriteria>
+    public abstract class EFCoreSearchRepositoryBase<TEntity, TLookup, TSummery, TCriteria> : EFCoreRepository<TEntity>, ISearchRepository<TEntity, TLookup, TSummery, TCriteria>
         where TEntity : Entity
-        where TSummery : class
+        where TLookup : Domain.Lookup, new()
+        where TSummery : Entity
         where TCriteria : SearchCriteria
     {
         /// <summary>
@@ -87,6 +89,67 @@ namespace Trident.EFCore
             return SearchResultContent(results, searchCriteria, totalRecords);
         }
 
+        protected virtual Expression<Func<TSummery, string>> EntityDisplayConverter { get; } = (TSummery e) => e.Id.ToString();
+
+
+
+        public SearchResults<TLookup, TCriteria> SearchLookupsSync(TCriteria criteria, IEnumerable<string> includedProperties = null)
+        {
+            var query = BuildQuery(criteria, includedProperties)
+                .AsNoTracking();
+       
+            // Get total Records before returning results
+            var totalRecords = query.Count();
+
+            //apply paging
+            query = ApplyPaging(query, criteria);
+
+            var FullLookupSelector =
+            EntityDisplayConverter.Use((TSummery entity, Func<TSummery, string> selector) => new TLookup
+            {
+                Id = entity.Id,
+                Display = selector(entity)
+            });
+
+            var results = (query
+                .Select(FullLookupSelector))
+                .ToList();
+
+            return SearchLookupsResultContent(results, criteria, totalRecords);
+        }
+
+     
+
+        /// <summary>
+        /// Searches the specified search criteria.
+        /// </summary>
+        /// <param name="searchCriteria">The search criteria.</param>
+        /// <param name="includedProperties">The included properties.</param>
+        /// <returns>Task&lt;SearchResults&lt;TSummary, TCriteria&gt;&gt;.</returns>
+        public virtual async Task<SearchResults<TLookup, TCriteria>> SearchLookups(TCriteria searchCriteria, IEnumerable<string> includedProperties = null)
+        {
+            var query = BuildQuery(searchCriteria, includedProperties)
+                .AsNoTracking();
+
+            // Get total Records before returning results
+            var totalRecords = await query.CountAsync();
+
+            //apply paging
+            query = ApplyPaging(query, searchCriteria);
+
+            var FullLookupSelector =
+            EntityDisplayConverter.Use((TSummery entity, Func<TSummery, string> selector) => new TLookup
+            {
+                Id = entity.Id,
+                Display = selector(entity)
+            });
+
+            var results = await (query
+                .Select(FullLookupSelector))
+                .ToListAsync();
+           
+            return SearchLookupsResultContent(results, searchCriteria, totalRecords);
+        }
 
         private IQueryable<TSummery> BuildQuery(TCriteria searchCriteria, IEnumerable<string> includedProperties = null)
         {
@@ -120,13 +183,15 @@ namespace Trident.EFCore
 
 
 
+
         /// <summary>
         /// Then implemented in a derivied class, applies filters given the specified keywords string.
         /// </summary>
         /// <param name="source">The source.</param>
         /// <param name="keywords">The keywords.</param>
         /// <returns>IQueryable&lt;TSummery&gt;.</returns>
-        protected virtual IQueryable<TSummery> ApplyKeywordSearch(IQueryable<TSummery> source,  string keywords)
+        protected virtual IQueryable<T> ApplyKeywordSearch<T>(IQueryable<T> source, string keywords)
+            where T : class
         {
             return source;
         }
@@ -137,7 +202,8 @@ namespace Trident.EFCore
         /// <param name="source">The source.</param>
         /// <param name="searchCriteria">The search criteria.</param>
         /// <returns>IQueryable&lt;T&gt;.</returns>
-        protected virtual IQueryable<TSummery> ApplyPaging(IQueryable<TSummery> source, TCriteria searchCriteria)
+        protected virtual IQueryable<T> ApplyPaging<T>(IQueryable<T> source, TCriteria searchCriteria)
+            where T : class
         {
             return _queryBuilder.ApplyPaging(source, searchCriteria);
         }
@@ -148,7 +214,8 @@ namespace Trident.EFCore
         /// <param name="source">The source.</param>
         /// <param name="filterBy">The filter by.</param>
         /// <returns>IQueryable&lt;T&gt;.</returns>
-        protected virtual IQueryable<TSummery> ApplyOrderBy(IQueryable<TSummery> source, Dictionary<string, SortOrder> filterBy)
+        protected virtual IQueryable<T> ApplyOrderBy<T>(IQueryable<T> source, Dictionary<string, SortOrder> filterBy)
+            where T : class
         {
             return _queryBuilder.ApplyOrderBy(source, filterBy);
         }
@@ -159,11 +226,12 @@ namespace Trident.EFCore
         /// <param name="source">The source.</param>
         /// <param name="criteria">The criteria.</param>
         /// <returns>IQueryable&lt;TSummery&gt;.</returns>
-        protected virtual IQueryable<TSummery> ApplyFilter(IQueryable<TSummery> source, SearchCriteria criteria)
+        protected virtual IQueryable<T> ApplyFilter<T>(IQueryable<T> source, SearchCriteria criteria)
+            where T : class
         {
-           
-            var filters = (criteria?.Filters?.Any() ?? false) 
-                ? _queryBuilder.ApplyFilter(source, criteria, Context) 
+
+            var filters = (criteria?.Filters?.Any() ?? false)
+                ? _queryBuilder.ApplyFilter(source, criteria, Context)
                 : source;
             return _queryBuilder.ApplyFilterBag(filters, criteria);
         }
@@ -178,7 +246,20 @@ namespace Trident.EFCore
         protected virtual SearchResults<TSummery, TCriteria> SearchResultContent(List<TSummery> results, TCriteria criteria, int totalRecords)
         {
             return _resultsBuilder.Build(results, criteria, totalRecords);
-        }             
+        }
+
+        /// <summary>
+        /// Searches the content of the result.
+        /// </summary>
+        /// <param name="results">The results.</param>
+        /// <param name="criteria">The criteria.</param>
+        /// <param name="totalRecords">The total records.</param>
+        /// <returns>SearchResults&lt;T, C&gt;.</returns>
+        protected virtual SearchResults<TLookup, TCriteria> SearchLookupsResultContent(List<TLookup> results, TCriteria criteria, int totalRecords)
+        {
+            return _resultsBuilder.Build(results, criteria, totalRecords);
+        }
+
     }
 
 
@@ -191,9 +272,10 @@ namespace Trident.EFCore
     /// <seealso cref="Trident.EFCore.EFCoreSearchRepositoryBase{TEntity, TSummery, Trident.Search.SearchCriteria}" />
     /// <seealso cref="Trident.Data.EntityFramework.EFSearchRepositoryBase{TEntity, TSummery, Trident.Search.SearchCriteria}" />
     /// <seealso cref="Trident.Search.ISearchRepository{TEntity, TSummery, Trident.Search.SearchCriteria}" />
-    public abstract class EFCoreSearchRepositoryBase<TEntity, TSummery> : EFCoreSearchRepositoryBase<TEntity, TSummery, SearchCriteria>, ISearchRepository<TEntity, TSummery>
+    public abstract class EFCoreSearchRepositoryBase<TEntity, TLookup, TSummery> : EFCoreSearchRepositoryBase<TEntity, TLookup, TSummery, SearchCriteria>, ISearchRepository<TEntity, TLookup, TSummery>
        where TEntity : Entity
-       where TSummery : class
+       where TLookup : Domain.Lookup, new()
+       where TSummery : Entity
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EFCoreSearchRepositoryBase{TEntity, TSummery}" /> class.
@@ -218,8 +300,9 @@ namespace Trident.EFCore
     /// <typeparam name="TEntity">The type of the t entity.</typeparam>
     /// <seealso cref="Trident.EFCore.EFCoreSearchRepositoryBase{TEntity, TEntity}" />
     /// <seealso cref="Trident.Search.ISearchRepository{TEntity, TEntity}" />
-    public abstract class EFCoreSearchRepositoryBase<TEntity> : EFCoreSearchRepositoryBase<TEntity, TEntity>, ISearchRepository<TEntity>
+    public abstract class EFCoreSearchRepositoryBase<TEntity, TLookup> : EFCoreSearchRepositoryBase<TEntity, TLookup, TEntity>, ISearchRepository<TEntity, TLookup>
      where TEntity : Entity
+     where TLookup : Domain.Lookup, new()
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EFCoreSearchRepositoryBase{TEntity}" /> class.
@@ -236,6 +319,32 @@ namespace Trident.EFCore
         }
     }
 
+
+    /// <summary>
+    /// Class EFCoreSearchRepositoryBase.
+    /// Implements the <see cref="Trident.EFCore.EFCoreSearchRepositoryBase{TEntity, TEntity}" />
+    /// Implements the <see cref="Trident.Search.ISearchRepository{TEntity, TEntity}" />
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+    /// <seealso cref="Trident.EFCore.EFCoreSearchRepositoryBase{TEntity, TEntity}" />
+    /// <seealso cref="Trident.Search.ISearchRepository{TEntity, TEntity}" />
+    public abstract class EFCoreSearchRepositoryBase<TEntity> : EFCoreSearchRepositoryBase<TEntity, Domain.Lookup, TEntity>, ISearchRepository<TEntity>
+     where TEntity : Entity
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EFCoreSearchRepositoryBase{TEntity}" /> class.
+        /// </summary>
+        /// <param name="resultsBuilder">The results builder.</param>
+        /// <param name="queryBuilder">The query builder.</param>
+        /// <param name="abstractContextFactory">The abstract context factory.</param>
+        public EFCoreSearchRepositoryBase(
+            ISearchResultsBuilder resultsBuilder,
+            ISearchQueryBuilder queryBuilder,
+            IAbstractContextFactory abstractContextFactory)
+            : base(resultsBuilder, queryBuilder, abstractContextFactory)
+        {
+        }
+    }
 }
 
 

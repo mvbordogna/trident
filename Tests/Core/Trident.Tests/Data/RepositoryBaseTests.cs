@@ -170,12 +170,27 @@ namespace Trident.Tests.Data
                 throw new NotImplementedException();
             }
 
+            public override bool ExistSync(Expression<Func<MockEntity, bool>> filter)
+            {
+                throw new NotImplementedException();
+            }
+
             public override Task<IEnumerable<MockEntity>> Get(Expression<Func<MockEntity, bool>> filter = null, Func<IQueryable<MockEntity>, IOrderedQueryable<MockEntity>> orderBy = null, IEnumerable<string> includeProperties = null, bool noTracking = false)
             {
                 throw new NotImplementedException();
             }
 
             public override Task<IEnumerable<MockEntity>> GetByIds<TId>(IEnumerable<TId> ids, bool detach = false)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override IEnumerable<MockEntity> GetByIdsSync<TEntityId>(IEnumerable<TEntityId> ids, bool detach = false)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override IEnumerable<MockEntity> GetSync(Expression<Func<MockEntity, bool>> filter = null, Func<IQueryable<MockEntity>, IOrderedQueryable<MockEntity>> orderBy = null, IEnumerable<string> includeProperties = null, bool noTracking = false)
             {
                 throw new NotImplementedException();
             }

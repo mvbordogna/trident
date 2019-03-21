@@ -25,6 +25,19 @@ namespace Trident.Data.Contracts
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             IEnumerable<string> includeProperties = null, bool noTracking=false);
 
+
+        /// <summary>
+        /// Gets the entities matching the specified filter.
+        /// </summary>
+        /// <param name="filter">The filter.</param>
+        /// <param name="orderBy">The order by.</param>
+        /// <param name="includeProperties">The include properties.</param>
+        /// <param name="noTracking">if set to <c>true</c> [no tracking].</param>
+        /// <returns>Task&lt;IEnumerable&lt;TEntity&gt;&gt;.</returns>
+        IEnumerable<TEntity> GetSync(Expression<Func<TEntity, bool>> filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            IEnumerable<string> includeProperties = null, bool noTracking = false);
+
         /// <summary>
         /// Returns a value indicating if any entity exists matching the specified filter.
         /// </summary>

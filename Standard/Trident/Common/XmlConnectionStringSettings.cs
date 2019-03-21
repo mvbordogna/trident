@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 
 namespace Trident.Common
@@ -18,27 +17,29 @@ namespace Trident.Common
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns>System.String.</returns>
-        public System.Configuration.ConnectionStringSettings this[string key]  
+        public ConnectionStringSettings this[string key]
         {
             get
             {
-                return ConfigurationManager.ConnectionStrings[key];               
-            }            
+                return null;
+                //return System.Configuration.ConfigurationManager.ConnectionStrings[key];
+            }
         }
         /// <summary>
         /// Gets the <see cref="System.String" /> at the specified index.
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns>System.String.</returns>
-        public System.Configuration.ConnectionStringSettings this[int index]
+        public ConnectionStringSettings this[int index]
         {
             get
             {
                 try
                 {
-                    return ConfigurationManager.ConnectionStrings[index];
+                    return null;
+                    //return System.Configuration.ConfigurationManager.ConnectionStrings[index];
                 }
-                catch (ConfigurationErrorsException)
+                catch (Exception ex)
                 {
                     return null;
                 }
@@ -47,15 +48,17 @@ namespace Trident.Common
 
         public IEnumerator<ConnectionStringSettings> GetEnumerator()
         {
-            return ConfigurationManager.ConnectionStrings
-                .OfType<ConnectionStringSettings>()
-                .GetEnumerator();         
+            return null; 
+            //return System.Configuration.ConfigurationManager.ConnectionStrings
+            //    .OfType<System.Configuration.ConnectionStringSettings>()
+            //    .GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return ConfigurationManager.ConnectionStrings
-                .GetEnumerator();
+            return null;
+            //return System.Configuration.ConfigurationManager.ConnectionStrings
+            //    .GetEnumerator();
         }
     }
 }

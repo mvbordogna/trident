@@ -18,6 +18,7 @@ using Trident.Rest;
 using Trident.Rest.Contracts;
 using Trident.Common;
 using Trident.Mapper;
+using Trident.Caching;
 
 namespace Trident.IoC
 {
@@ -75,6 +76,12 @@ namespace Trident.IoC
             UsingTridentTransactions(this ContainerBuilder builder)
         {
             return builder.RegisterType<TransactionScopeFactory>().As<ITransactionScopeFactory>().SingleInstance();
+        }
+
+        public static IRegistrationBuilder<InMemoryCachingManager, ReflectionActivatorData, SingleRegistrationStyle>
+            UsingTridentInMemberCachingManager(this ContainerBuilder builder)
+        {
+            return builder.RegisterType<InMemoryCachingManager>().As<ICachingManager>().SingleInstance();
         }
 
         public static IRegistrationBuilder<Object, AF.Features.Scanning.ScanningActivatorData, DynamicRegistrationStyle>

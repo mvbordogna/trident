@@ -78,6 +78,21 @@ namespace Trident.Framework.EF6.Tests
         private class EFRepositoryBaseConcrete : EFRepository<MockEntity>
         {
             public EFRepositoryBaseConcrete(IAbstractContextFactory contextFactory) : base(contextFactory) { }
+
+            public override bool ExistSync(Expression<Func<MockEntity, bool>> filter)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override IEnumerable<MockEntity> GetByIdsSync<TEntityId>(IEnumerable<TEntityId> ids, bool detach = false)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override IEnumerable<MockEntity> GetSync(Expression<Func<MockEntity, bool>> filter = null, Func<IQueryable<MockEntity>, IOrderedQueryable<MockEntity>> orderBy = null, IEnumerable<string> includeProperties = null, bool noTracking = false)
+            {
+                throw new NotImplementedException();
+            }
         }
         public class MockEntity:EntityBase<Guid>
         {

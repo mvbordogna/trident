@@ -474,6 +474,12 @@ namespace Trident.IoC
             return this;
         }
 
+        public IIoCProvider UsingTridentInMemberCachingManager()
+        {
+            _builder.UsingTridentInMemberCachingManager();
+            return this;
+        }
+
         public IIoCProvider UsingTridentValidationManagers(params Assembly[] targetAssemblies)
         {
             _builder.UsingTridentValidationManagers(targetAssemblies);

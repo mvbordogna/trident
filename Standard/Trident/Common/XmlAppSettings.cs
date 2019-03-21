@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 
 namespace Trident.Common
 {
@@ -19,7 +18,8 @@ namespace Trident.Common
         {
             get
             {
-                return ConfigurationManager.AppSettings[key];               
+                return null;
+                //return System.Configuration.ConfigurationManager.AppSettings[key];               
             }            
         }
         /// <summary>
@@ -33,7 +33,8 @@ namespace Trident.Common
             {
                 try
                 {
-                    return ConfigurationManager.AppSettings[index];
+                    return null;
+                   // return System.Configuration.ConfigurationManager.AppSettings[index];
                 }
                 catch (ArgumentOutOfRangeException)
                 {
@@ -45,7 +46,8 @@ namespace Trident.Common
         public T GetSection<T>(string sectionName = null)
             where T : class
         {
-            return ConfigurationManager.GetSection(sectionName ?? typeof(T).Name) as T;
+            return null;
+            //return System.Configuration.ConfigurationManager.GetSection(sectionName ?? typeof(T).Name) as T;
         }
     }
 }

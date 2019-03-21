@@ -9,6 +9,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Threading.Tasks;
+using Trident.Domain;
 
 namespace Trident.Rest
 {
@@ -23,7 +24,7 @@ namespace Trident.Rest
     /// <typeparam name="TTargetEntityId">The type of the t target entity identifier.</typeparam>
     /// <seealso cref="Trident.Data.Contracts.IRepositoryBase{TEntity}" />
     /// <seealso cref="Trident.Search.ISearchRepository{TEntity}" />
-    public abstract class RestRepositoryBase<TEntity, TTargetEntity, TEntityId, TTargetEntityId> : IRepositoryBase<TEntity>, ISearchRepository<TEntity>
+    public abstract class RestRepositoryBase<TEntity,TTargetEntity, TEntityId, TTargetEntityId> : IRepositoryBase<TEntity>, ISearchRepository<TEntity>
         where TEntity : class, IHaveId<TEntityId>
         where TTargetEntity : class, IHaveId<TTargetEntityId>, new()
     {
@@ -650,7 +651,21 @@ namespace Trident.Rest
 
             return results;
         }
+             
 
+        public IEnumerable<TEntity> GetSync(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, IEnumerable<string> includeProperties = null, bool noTracking = false)
+        {
+            throw new NotImplementedException();
+        }
 
+        public Task<SearchResults<Lookup, SearchCriteria>> SearchLookups(SearchCriteria criteria, IEnumerable<string> defaultIncludedProperties = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public SearchResults<Lookup, SearchCriteria> SearchLookupsSync(SearchCriteria criteria, IEnumerable<string> defaultIncludedProperties = null)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
