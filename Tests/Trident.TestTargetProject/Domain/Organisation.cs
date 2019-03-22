@@ -10,6 +10,7 @@ namespace Trident.TestTargetProject.Domain
     [Container("Organisations")]
     public class Organisation : EntityGuidBase
     {
+        public int Age { get; set; }
         public string Name { get; set; }
         public DateTimeOffset Created { get; set; }
 

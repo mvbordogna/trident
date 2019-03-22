@@ -21,7 +21,7 @@
             };
         }
 
-        public static AxiomFilter BuildString(this GroupEnd last)
+        public static AxiomFilter Build(this GroupEnd last)
         {
             var end = ((IJunction)last);
             return new AxiomFilter()
@@ -32,12 +32,22 @@
             };
         }
 
+        public static AxiomTokenizer AddAxiom(this AxiomFilterBuilder left, Axiom axiom)
+        {
+            return new AxiomTokenizer(null, axiom);
+        }
+
         public static GroupStart StartGroup(this AxiomFilterBuilder left)
         {
             return new GroupStart();
         }
 
         public static GroupStart StartGroup(this GroupStart parent)
+        {
+            return new GroupStart(parent);
+        }
+
+        public static GroupStart StartGroup(this Not parent)
         {
             return new GroupStart(parent);
         }
@@ -95,5 +105,31 @@
         {
             return new AxiomTokenizer(parent, axiom);
         }
+
+
+        public static Not Not(this Not parent)
+        {
+           return new Not(parent);
+        }
+        public static Not Not(this ILogicalOperator parent)
+        {
+           return new Not(parent);
+        }
+
+        public static Not Not(this GroupStart parent)
+        {
+            return new Not(parent);
+        }
+
+        public static Not Not(this GroupEnd parent)
+        {
+            return new Not(parent);
+        }
+
+        public static Not Not(this AxiomFilterBuilder parent)
+        {
+            return new Not(null);
+        }
+
     }
 }

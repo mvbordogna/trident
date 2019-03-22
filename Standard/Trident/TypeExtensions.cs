@@ -313,7 +313,7 @@ namespace Trident
         {
             var bindingFlags = BindingFlags.Public | BindingFlags.Instance;
 
-            var paramExpression = Expression.Parameter(typeof(T), key);
+            var paramExpression = Expression.Parameter(typeof(T), "x");
             var propertyInfo = typeof(T).GetProperties(bindingFlags).FirstOrDefault(x => x.Name == key && x.PropertyType == typeof(TKey));
             var keyPropertyExpression = Expression.Property(paramExpression, propertyInfo);
             var constantExpression = Expression.Constant(value);
@@ -330,7 +330,7 @@ namespace Trident
         {
             var bindingFlags = BindingFlags.Public | BindingFlags.Instance;
 
-            var paramExpression = Expression.Parameter(typeof(T), "entity");
+            var paramExpression = Expression.Parameter(typeof(T), "x");
             var propertyInfo = typeof(T).GetProperties(bindingFlags).FirstOrDefault(x => x.Name == key && x.PropertyType == value.GetType());
             var keyPropertyExpression = Expression.Property(paramExpression, propertyInfo);
             var constantExpression = Expression.Constant(value);
@@ -346,7 +346,7 @@ namespace Trident
 
         public static Expression<Func<T, bool>> AndAlso<T>(this Expression<Func<T, bool>> expr1, Expression<Func<T, bool>> expr2)
         {
-            var parameter = Expression.Parameter(typeof(T));
+            var parameter = Expression.Parameter(typeof(T), "x");
 
             var leftVisitor = new ReplaceExpressionVisitor(expr1.Parameters[0], parameter);
             var left = leftVisitor.Visit(expr1.Body);
@@ -357,11 +357,22 @@ namespace Trident
             return Expression.Lambda<Func<T, bool>>(
                 Expression.AndAlso(left, right), parameter);
         }
+               
+        public static Expression<Func<T, bool>> Not<T>(this Expression<Func<T, bool>> expr1)
+        {
+            var parameter = Expression.Parameter(typeof(T), "x");
+
+            var leftVisitor = new ReplaceExpressionVisitor(expr1.Parameters[0], parameter);
+            var left = leftVisitor.Visit(expr1.Body);
+                    
+            return Expression.Lambda<Func<T, bool>>(
+                Expression.Not(left), parameter);
+        }
 
 
         public static Expression<Func<T, bool>> OrElse<T>(this Expression<Func<T, bool>> expr1, Expression<Func<T, bool>> expr2)
         {
-            var parameter = Expression.Parameter(typeof(T));
+            var parameter = Expression.Parameter(typeof(T), "x");
 
             var leftVisitor = new ReplaceExpressionVisitor(expr1.Parameters[0], parameter);
             var left = leftVisitor.Visit(expr1.Body);
@@ -413,6 +424,26 @@ namespace Trident
             return Expression.AndAlso(hasValueExpression, equals);
         }
 
+        internal static Expression NullableComparision(
+            Func<Expression, Expression, BinaryExpression> comparisionFunc,
+            Expression memberExpression,
+            ConstantExpression constantToCompare)
+        {
+            // Other cases removed, for simplicity. This answer only demonstrates
+            // how to handle c => c.Weight != 5000f.
+            var hasValueExpression = Expression.Property(memberExpression, "HasValue");
+            var valueExpression = Expression.Property(memberExpression, "Value");
+            var comparer = comparisionFunc(valueExpression, constantToCompare);
+            return Expression.AndAlso(hasValueExpression, comparer);
+        }     
+
+        public static BinaryExpression GetStringEvalOperationExpression(string stringOperationName, Expression a, Expression b)
+        {      
+            MethodInfo method = typeof(string).GetMethod(stringOperationName, new[] { typeof(string) });
+            var containsMethodExp = Expression.Call(a, method, b);
+            var constExp = Expression.Constant(true);
+            return Expression.Equal(containsMethodExp, constExp);
+        }
 
 
 

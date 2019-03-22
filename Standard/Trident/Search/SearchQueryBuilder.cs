@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using Trident.Extensions;
 using Trident.Data.Contracts;
 
 namespace Trident.Search
@@ -15,6 +14,22 @@ namespace Trident.Search
     /// <seealso cref="Trident.Search.ISearchQueryBuilder" />
     public class SearchQueryBuilder : ISearchQueryBuilder
     {
+        static Dictionary<CompareOperators, Func<Expression, Expression, BinaryExpression>> _operatorDict
+             = new Dictionary<CompareOperators, Func<Expression, Expression, BinaryExpression>>()
+             {
+                { CompareOperators.eq,  Expression.Equal },
+                { CompareOperators.ne,  Expression.NotEqual },
+                { CompareOperators.gt,  Expression.GreaterThan },
+                { CompareOperators.gte,  Expression.GreaterThanOrEqual },
+                { CompareOperators.lt,  Expression.LessThan },
+                { CompareOperators.lte,  Expression.LessThanOrEqual },
+                { CompareOperators.contains,  (a,b) => TypeExtensions. GetStringEvalOperationExpression(nameof(String.Contains), a, b) },
+                { CompareOperators.startsWith,  (a,b) => TypeExtensions. GetStringEvalOperationExpression(nameof(String.StartsWith), a, b) },
+                { CompareOperators.endWith,  (a,b) => TypeExtensions. GetStringEvalOperationExpression(nameof(String.EndsWith), a, b) }
+             };
+
+
+
         /// <summary>
         /// The complex filter factory
         /// </summary>
@@ -130,39 +145,42 @@ namespace Trident.Search
                 }
                 else
                 {
-                    var type = typeof(T);
-                    var paramExpression = Expression.Parameter(type, key);
-                    var property = type.GetProperties(BindingFlags.Public | BindingFlags.Instance).FirstOrDefault(x => x.Name == key);
-                    if (property == null)
-                        throw new ArgumentException($"{key} is not a valid member of {type.FullName}");
-                    var keyPropertyExpression = Expression.Property(paramExpression, property);
-                    var typeDelegate = TypeExtensions.GetParserFunction(keyPropertyExpression.Type);
-                    object filterValue = null;
+                    Expression<Func<T, bool>> ce = null;
                     var filterValueType = filterBy[key].GetType();
-
-                    if (filterValueType == typeof(string))
+                    if (filterValueType == typeof(AxiomFilter))
                     {
-                        filterValue = typeDelegate(filterBy[key] as string);
+                        var af = (AxiomFilter)filterBy[key];
+                        ce = af.ToExpression<T>();                       
+                    }                  
+                    else if (typeof(Axiom).IsAssignableFrom(filterValueType) )
+                    {                       
+                        var ax = (Axiom)filterBy[key];
+                        ce = ax.ToExpression<T>();
                     }
-                    else if (filterValueType.IsPrimitive())
+                    else if (typeof(Compare).IsAssignableFrom(filterValueType))
                     {
-                        filterValue = filterBy[key];
+                        var comparer = (Compare)filterBy[key];
+                        var ax = new Axiom(comparer, key);
+                        ce = ax.ToExpression<T>();
                     }
-                    else throw new NotSupportedException("Complex filter values are only supported using ComplexFilterStrategies.");
-                  
-                    var constantExpression = Expression.Constant(filterValue);
+                    else
+                    {
+                        ce = new Axiom()
+                        {
+                            Field = key,
+                            Value = filterBy[key],
+                            Operator = CompareOperators.eq
+                        }.ToExpression<T>();                       
+                    }
 
-                    var equalExpression = !TypeExtensions.IsNullableMember(keyPropertyExpression.Type)
-                        ? Expression.Equal(keyPropertyExpression, constantExpression)
-                        : TypeExtensions.NullableEquals(keyPropertyExpression, constantExpression);
-
-                    var conditionalExpression = Expression.Lambda<Func<T, bool>>(equalExpression, paramExpression);
-                    source = source.Where(conditionalExpression);
+                    source = source.Where(ce);
                 }
             }
 
             return source = _complexFilterFactory.ApplyAdapterFilters(source, criteria, context);
         }
+
+      
 
         /// <summary>
         /// Applies any filters found in the criteria Filterbag.
