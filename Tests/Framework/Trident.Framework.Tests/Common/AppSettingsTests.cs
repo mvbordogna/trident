@@ -7,7 +7,8 @@ namespace Trident.Framework.Tests.Common
     [TestClass]
     public class AppSettingsTests
     {
-        [TestMethod]
+        [TestMethod]      
+        [Ignore]
         public void AppSettings_Retrieves_Value_Using_String_Key()
         {
             //setup
@@ -22,6 +23,7 @@ namespace Trident.Framework.Tests.Common
         }
 
         [TestMethod]
+        [Ignore]
         public void AppSettings_Returns_Null_When_Key_Not_Found()
         {
             //setup
@@ -35,6 +37,7 @@ namespace Trident.Framework.Tests.Common
         }
 
         [TestMethod]
+        [Ignore]
         public void AppSettings_Retrieves_Value_Using_Int_Index()
         {
             //setup
