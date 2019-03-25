@@ -60,7 +60,7 @@ namespace Trident.Search
             };
 
             Func<object, Expression<Func<T, bool>>> GetAxiomFunc = (object o) =>
-            {             
+            {
                 if (!(o is Token))
                     return o as Expression<Func<T, bool>>;
 
@@ -72,31 +72,41 @@ namespace Trident.Search
             {
                 var parser = new Parser();
                 var tokens = parser.Tokenize(reader).ToList();
-                var rpn = parser.ShuntingYard(tokens).Cast<object>().ToList();
+                var rpn = parser.ShuntingYard(tokens).ToList();
+                var processStack = new Stack<object>();
+                var i = 0;
 
-                int i = 0;
-                while (rpn.Count() > 1)
+                do
                 {
-                    if (rpn[i] is Token)
+                    var t = rpn[i];
+                    if (IsBinOperator(t.Value))
                     {
-                        var t = (Token)rpn[i];
-                        if (IsBinOperator(t.Value))
-                        {
-                            rpn[i] = junctionDict[t.Value](GetAxiomFunc(rpn[i - 2]), GetAxiomFunc(rpn[i - 1]));
-                            rpn.RemoveAt(i - 2);
-                            rpn.RemoveAt(i - 2);
-                            i -= 2;
-                        }
-                        else if (IsUnaryOperator(t.Value))
-                        {
-                            rpn[i] = TypeExtensions.Not(GetAxiomFunc(rpn[i - 1]));
-                            rpn.RemoveAt(i - 1);
-                            i--;
-                        }
+                        processStack.Push(
+                            junctionDict[t.Value](
+                                GetAxiomFunc(processStack.Pop()),
+                                GetAxiomFunc(processStack.Pop())
+                            )
+                        );
                     }
+                    else if (IsUnaryOperator(t.Value))
+                    {
+
+                        processStack.Push(
+                             TypeExtensions.Not(
+                                GetAxiomFunc(processStack.Pop())
+                            )
+                        );
+                    }
+                    else
+                    {
+                        processStack.Push(t);
+                    }
+
                     i++;
                 }
-                var exp = rpn[0] as Expression<Func<T, bool>>;
+                while (i < rpn.Count);
+
+                var exp = processStack.Pop() as Expression<Func<T, bool>>;
 
                 return (exp.CanReduce)
                     ? exp.Reduce() as Expression<Func<T, bool>>
