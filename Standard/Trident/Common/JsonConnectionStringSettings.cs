@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,8 +27,15 @@ namespace Trident.Common
                         : null)
                         .Where(x=> x != null)
                        .ToList();
-            connStrings.ForEach(x => SetProviderName(x));          
+            connStrings.ForEach(x => SetProviderName(x));
+            connStrings.ForEach(x => RemoveProviderName(x));
+        }
 
+        private void RemoveProviderName(ConnectionStringSettings x)
+        {
+            var dict = x.ConnectionString.ToDictionary(';', '=');
+            
+            x.ConnectionString = string.Join(";", dict.Where(t => t.Key.ToLower() != "providername" && !string.IsNullOrEmpty(t.Key)).Select(t => $"{t.Key}={t.Value}"));
         }
 
         private void SetProviderName(ConnectionStringSettings x)

@@ -35,16 +35,20 @@ namespace Trident.Core.TestConsole
                   },
                 ValidateInitialization = true,
                 EnableTransactions = true,
-                ModuleTypes = new Type[] {
+                ModuleTypes = new Type[] { 
                      typeof(AppModule),
                      typeof(BizModule)
                },
 
-                AutoDetectConfigFiles = true,
-            }, (builder) =>
+                AutoDetectConfigFiles = true
+            },
+            null,
+            (tBuilder) =>
             {
+
                 //add additional configs here, must be using json config style
-                builder.AddEnvironmentVariables();
+                tBuilder.AddEnvironmentVariables();
+
             });
 
             var x = AxiomFilterBuilder.CreateFilter()

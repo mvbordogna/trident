@@ -15,10 +15,11 @@ namespace Trident
     public static class Trident
     {
 
-        public static TridentApplicationContext Initialize(TridentOptions options, Action<IConfigurationBuilder> configMethod = null)
+        public static TridentApplicationContext Initialize(TridentOptions options, ContainerBuilder builder = null, Action<IConfigurationBuilder> configMethod = null)
         {
             var targetAssemblies = options.TargetAssemblies;
-            var p = Activator.CreateInstance(options.IoCProviderType = typeof(IoC.AutofacIoCProvider)) as IIoCProvider;
+            options.IoCProviderType = typeof(IoC.AutofacIoCProvider);
+            var p = Activator.CreateInstance(options.IoCProviderType, builder) as IIoCProvider;
             p.RegisterSelf();
             
             SetupConfiguration(options, configMethod);
@@ -67,12 +68,14 @@ namespace Trident
                 p.RegisterModule(t);
             }
 
-            p.Build();
+            if (options.BuildContainer)
+                p.Build();
 
             if (options.ValidateInitialization)
                 p.VerifyAndThrow();
 
-            return new TridentApplicationContext(p.Get<IIoCServiceLocator>(), options);
+            var container = p as IIoCServiceLocator;
+            return new TridentApplicationContext(container, options);
         }
 
         private static void RegisterDataProviderPackages(IIoCProvider ioc, TridentOptions config, IConnectionStringSettings connStringManager)
@@ -183,8 +186,15 @@ namespace Trident
 
     public class TridentOptions
     {
+        public TridentOptions()
+        {
+            ModuleTypes = new Type[0];
+        }
+
 
         internal string BinDir { get; set; }
+
+        public bool BuildContainer { get; set; } = true;
 
         public bool EnableTransactions { get; set; } = true;
 

@@ -176,9 +176,7 @@ namespace Trident.EFCore
            where T : class
         {
             var paramsString = String.Join(",", parameters.Select(x => x.ParameterName));
-            IQueryable<T> queryable = new List<T>().AsQueryable();
-
-            var result = queryable.FromSql($"exec {procedureName} {paramsString}", parameters);
+            var result = Set<T>().FromSqlRaw($"exec {procedureName} {paramsString}", parameters);
 
             if (!noTracking)
             {
@@ -204,9 +202,8 @@ namespace Trident.EFCore
              where T : class
         {
             var paramsString = String.Join(",", parameters.Select(x => x.ParameterName));
-            IQueryable<T> queryable = new List<T>().AsQueryable();
 
-            var result = queryable.FromSql($"exec {procedureName} {paramsString}", parameters);
+            var result = Set<T>().FromSqlRaw($"exec {procedureName} {paramsString}", parameters);
 
             if (!noTracking)
             {

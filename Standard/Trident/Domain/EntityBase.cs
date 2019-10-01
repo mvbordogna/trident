@@ -100,4 +100,10 @@ namespace Trident.Domain
 
     }
 
+    public abstract class TridentDualIdenityEntityBase<T> : EntityBase<T>
+    {
+        public Guid Identifier { get; set; }
+    }
+
+
 }

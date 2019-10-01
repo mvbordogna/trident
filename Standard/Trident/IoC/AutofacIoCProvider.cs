@@ -44,7 +44,7 @@ namespace Trident.IoC
         /// Initializes a new instance of the <see cref="AutofacIoCProvider"/> class.
         /// </summary>
         /// <param name="builder">The builder.</param>
-        protected AutofacIoCProvider(ContainerBuilder builder)
+        public AutofacIoCProvider(ContainerBuilder builder)
         {
             _builder = builder;
         }

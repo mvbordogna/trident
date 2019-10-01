@@ -53,5 +53,7 @@ namespace Trident.Web.Resources
         public Dictionary<string, string> Filters { get; set; }
 
         public bool ApplyDefaultFilters { get; set; } = true;
+
+        public bool LoadChildren { get; set; } = false;
     }
 }

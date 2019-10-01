@@ -7,7 +7,8 @@ using System.Data.Common;
 using System;
 using System.Reflection;
 using System.IO;
-using System.Data.SqlClient;
+//using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 
 namespace Trident.EFCore
 { 
