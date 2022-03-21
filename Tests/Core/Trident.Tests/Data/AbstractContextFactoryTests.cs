@@ -1,12 +1,12 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Trident.Testing.TestScopes;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using System;
+using System.Reflection;
+using Trident.Contracts.Enums;
 using Trident.Data;
 using Trident.Data.Contracts;
-using Moq;
 using Trident.IoC;
-using Trident.Contracts.Enums;
-using System.Reflection;
+using Trident.Testing.TestScopes;
 
 namespace Trident.Tests.Data
 {
@@ -16,9 +16,9 @@ namespace Trident.Tests.Data
         [TestMethod]
         public void AbstractContextFactory_Create_Returns_Shared_Context()
         {
-            using(var scope = new DefaultScope())
+            using (var scope = new DefaultScope())
             {
-               var actual = scope.InstanceUnderTest.Create<IContext>(typeof(SharedSourceTestEntity));
+                var actual = scope.InstanceUnderTest.Create<IContext>(typeof(SharedSourceTestEntity));
                 Assert.IsNotNull(actual);
                 Assert.IsInstanceOfType(actual, typeof(ITestSharedContext));
             }
@@ -70,13 +70,13 @@ namespace Trident.Tests.Data
         private class DefaultScope : DisposableTestScope<AbstractContextFactory>
         {
             public DefaultScope()
-            {                
-                ServiceLocatorMock = new Mock<IIoCServiceLocator>();           
-                SharedContextFactoryMock = new Mock<ISharedContextFactory<IContext>>();            
+            {
+                ServiceLocatorMock = new Mock<IIoCServiceLocator>();
+                SharedContextFactoryMock = new Mock<ISharedContextFactory<IContext>>();
                 SharedContextMock = new Mock<ITestSharedContext>();
-   
-                
-                ServiceLocatorMock.Setup(x=> x.GetNamed<ISharedContextFactory>(SharedDataSource.DefaultDB.ToString()))
+
+
+                ServiceLocatorMock.Setup(x => x.GetNamed<ISharedContextFactory>(SharedDataSource.DefaultDB.ToString()))
                     .Returns(SharedContextFactoryMock.Object);
 
                 SharedContextFactoryMock.Setup(x => x.Get(typeof(SharedSourceTestEntity), SharedDataSource.DefaultDB.ToString())).
@@ -91,18 +91,18 @@ namespace Trident.Tests.Data
                 InstanceUnderTest = new AbstractContextFactory(ServiceLocatorMock.Object);
             }
 
-            public Mock<ISharedContextFactory<IContext>> SharedContextFactoryMock { get; private set; }        
-            public Mock<IIoCServiceLocator> ServiceLocatorMock { get; private set; }         
+            public Mock<ISharedContextFactory<IContext>> SharedContextFactoryMock { get; private set; }
+            public Mock<IIoCServiceLocator> ServiceLocatorMock { get; private set; }
             public Mock<ITestSharedContext> SharedContextMock { get; private set; }
-          
-         
+
+
         }
-            
+
         public interface ITestSharedContext : IContext { }
 
         public class UnResolvableDataSourceEntity { };
 
-       [UseSharedDataSource(nameof(SharedDataSource.DefaultDB))]
+        [UseSharedDataSource(nameof(SharedDataSource.DefaultDB))]
         public class SharedSourceTestEntity
         {
             public Guid Id { get; set; }

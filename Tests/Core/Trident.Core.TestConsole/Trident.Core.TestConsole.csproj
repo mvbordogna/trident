@@ -1,8 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,15 +18,14 @@
     </Content>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Core\Trident.Core.Web\Trident.Core.Web.csproj" />
-    <ProjectReference Include="..\..\..\Standard\Trident.EFCore\Trident.EFCore.csproj" />
-    <ProjectReference Include="..\..\..\Standard\Trident.Azure\Trident.Azure.csproj" />
-    <ProjectReference Include="..\..\..\Standard\Trident.Contracts\Trident.Contracts.csproj" />
-    <ProjectReference Include="..\..\..\Standard\Trident.Serilog\Trident.Serilog.csproj" />
-    <ProjectReference Include="..\..\..\Standard\Trident.Web\Trident.Web.csproj" />
-    <ProjectReference Include="..\..\..\Standard\Trident\Trident.csproj" />
-    <ProjectReference Include="..\..\Trident.TestTargetProject\Trident.TestTargetProject.csproj" />
+  <ItemGroup> 
+    <ProjectReference Include="..\..\..\Core\Trident.EFCore\Trident.EFCore.csproj" />
+    <ProjectReference Include="..\..\..\Core\Trident.Azure\Trident.Azure.csproj" />
+    <ProjectReference Include="..\..\..\Core\Trident.Contracts\Trident.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\Core\Trident.Serilog\Trident.Serilog.csproj" />
+    <ProjectReference Include="..\..\..\Core\Trident.Web\Trident.Web.csproj" />
+    <ProjectReference Include="..\..\..\Core\Trident\Trident.csproj" />
+    <ProjectReference Include="..\..\Trident.TestTargetProject\Trident.Samples.Domain.csproj" />
     <ProjectReference Include="..\Trident.Core.TestRepositories\Trident.Core.TestRepositories.csproj" />
   </ItemGroup>
 

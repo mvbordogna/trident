@@ -1,15 +1,13 @@
-﻿using Autofac;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Trident.IoC;
 
 namespace Trident.TestTargetProject
 {
-    public class BizModule:Module
+    public class BizModule : ModuleBase
     {
-        protected override void Load(ContainerBuilder builder)
+        public override void Configure(IIoCProvider builder)
         {
-            base.Load(builder);
+            base.Configure(builder);
         }
+
     }
 }

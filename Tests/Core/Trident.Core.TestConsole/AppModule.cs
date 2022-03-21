@@ -1,13 +1,13 @@
 ﻿using Autofac;
+using Trident.IoC;
 
 namespace Trident.Core.TestConsole
 {
-    class AppModule : Autofac.Module
+    class AppModule : ModuleBase
     {
-        protected override void Load(ContainerBuilder builder)
+        public override void Configure(IIoCProvider builder)
         {
-           
-
+            base.Configure(builder);
         }
     }
 }

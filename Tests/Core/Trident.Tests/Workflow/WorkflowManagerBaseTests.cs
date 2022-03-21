@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Trident.Testing;
 using Trident.Business;
+using Trident.Logging;
 
 namespace Trident.Tests.Workflow
 {
@@ -57,18 +58,18 @@ namespace Trident.Tests.Workflow
             public TestWorkflowManager() : base(new List<IWorkflowTask> {
                 new TestTask2(),
                 new TestTask1()
-            })
+            }, new Moq.Mock<ILog>().Object)
             { }
 
             public TestWorkflowManager(bool defaultConstructor) : base(new IWorkflowTask[] {
                     new TestTask2(),
                     new TestTask1()
-                }) { }
+                }, new Moq.Mock<ILog>().Object) { }
 
 
             public TestWorkflowManager(int byPassAutoOrderingLogic) : base(new IWorkflowTask[] {
                    new TestPassingRule()
-                })
+                }, new Moq.Mock<ILog>().Object)
             { }
         }
 

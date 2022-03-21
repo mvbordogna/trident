@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Trident.Framework.Tests</RootNamespace>
     <AssemblyName>Trident.Framework.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">15.0</VisualStudioVersion>
@@ -20,6 +20,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <IsPackable>false</IsPackable>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -66,10 +67,6 @@
     <ProjectReference Include="..\..\..\Standard\Trident.Contracts\Trident.Contracts.csproj">
       <Project>{f95afc22-8ea3-40ac-9d83-37be67989ee6}</Project>
       <Name>Trident.Contracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Framework\Trident.Framework\Trident.Framework.csproj">
-      <Project>{46486879-7b58-4731-8b0e-84d0b0fa37a4}</Project>
-      <Name>Trident.Framework</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Standard\Trident.Testing\Trident.Testing.csproj">
       <Project>{ebe9653d-c8ea-4004-bff6-984a93d58b2b}</Project>

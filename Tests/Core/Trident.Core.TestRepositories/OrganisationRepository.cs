@@ -8,8 +8,10 @@ namespace Trident.Core.TestRepositories
     {
         public OrganisationRepository(ISearchResultsBuilder resultsBuilder,
             ISearchQueryBuilder queryBuilder,
-            IAbstractContextFactory abstractContextFactory)
-            : base(resultsBuilder, queryBuilder, abstractContextFactory)
+            IAbstractContextFactory abstractContextFactory,
+            IQueryableHelper queryableHelper
+            )
+            : base(resultsBuilder, queryBuilder, abstractContextFactory, queryableHelper)
         {
         }
     }

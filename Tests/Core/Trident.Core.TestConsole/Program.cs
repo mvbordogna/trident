@@ -24,7 +24,7 @@ namespace Trident.Core.TestConsole
 
 
 
-            var appContext = Trident.Initialize(new TridentOptions()
+            var appContext = TridentOptionsBuilder.Initialize(new TridentOptions()
             {
                 TargetAssemblies = new Assembly[]
                   {
@@ -42,7 +42,6 @@ namespace Trident.Core.TestConsole
 
                 AutoDetectConfigFiles = true
             },
-            null,
             (tBuilder) =>
             {
 

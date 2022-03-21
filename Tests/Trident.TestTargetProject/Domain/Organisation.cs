@@ -7,7 +7,7 @@ using Trident.Domain;
 namespace Trident.TestTargetProject.Domain
 {
     [UseSharedDataSource(DBSources.CosmosDB)]
-    [Container("Organisations")]
+    //[Container("Organisations", "0")]
     public class Organisation : EntityGuidBase
     {
         public int Age { get; set; }
@@ -24,7 +24,7 @@ namespace Trident.TestTargetProject.Domain
 
 
     [UseSharedDataSource(DBSources.CosmosDB)]
-    [Container("Organisations")]
+    //[Container("Organisations", "0")]
     public class OrgStatus : EntityGuidBase
     {
 

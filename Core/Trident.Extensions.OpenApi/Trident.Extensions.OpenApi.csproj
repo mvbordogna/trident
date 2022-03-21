@@ -1,0 +1,65 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <IsPackable>true</IsPackable>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageId>Trident.Extensions.OpenApi</PackageId>
+    <Owners>Aliencube</Owners>
+    <Authors>Justin Yoo</Authors>
+    <Company>Aliencube Community</Company>
+    <Version>1.0.0</Version>
+    <Title>Trident.Extensions.OpenApi</Title>
+    <Product>Trident.Extensions.OpenApi</Product>
+    <Summary>This package helps render Open API document and Swagger UI through Azure Functions endpoints.</Summary>
+    <Description>This package helps render Open API document and Swagger UI through Azure Functions endpoints.</Description>
+    <PackageTags>Azure-Functions, Open-API, Swagger, Swagger-UI</PackageTags>
+    <Copyright>Aliencube Community</Copyright>
+    <PackageLicenseUrl>https://github.com/aliencube/AzureFunctions.Extensions/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/aliencube/AzureFunctions.Extensions</PackageProjectUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/aliencube/AzureFunctions.Extensions/master/icons/Trident.Extensions.OpenApi.OpenApi.png</PackageIconUrl>
+    <RepositoryUrl>https://github.com/aliencube/AzureFunctions.Extensions</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <DocumentationFile>bin\Debug\net461\Trident.Extensions.OpenApi.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\netstandard2.0\Trident.Extensions.OpenApi.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <DocumentationFile>bin\Release\net461\Trident.Extensions.OpenApi.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\netstandard2.0\Trident.Extensions.OpenApi.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(Configuration)'=='Release'">
+    <PackageReference Include="Trident.Extensions.OpenApi.Configuration.AppSettings" Version="1.2.0" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Http" Version="3.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Lists\**" />
+    <EmbeddedResource Remove="Lists\**" />
+    <None Remove="Lists\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Azure.Functions.Worker.Core" Version="1.4.0" />
+    <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.0.13" />
+    <PackageReference Include="Microsoft.OpenApi" Version="1.2.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="System.IO.FileSystem.Primitives" Version="4.3.0" />
+    <PackageReference Include="System.Runtime.Handles" Version="4.3.0" />
+    <PackageReference Include="System.Runtime.InteropServices" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="dist/index.html" />
+    <EmbeddedResource Include="dist/swagger-ui.css" />
+    <EmbeddedResource Include="dist/swagger-ui-bundle.js" />
+    <EmbeddedResource Include="dist/swagger-ui-standalone-preset.js" />
+  </ItemGroup>
+
+</Project>

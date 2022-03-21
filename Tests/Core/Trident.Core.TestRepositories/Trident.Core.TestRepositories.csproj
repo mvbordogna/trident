@@ -1,16 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
-    <ApplicationIcon />
-    <StartupObject />
+    <TargetFramework>net6.0</TargetFramework>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Standard\Trident.EFCore\Trident.EFCore.csproj" />
-    <ProjectReference Include="..\..\..\Standard\Trident\Trident.csproj" />
-    <ProjectReference Include="..\..\Trident.TestTargetProject\Trident.TestTargetProject.csproj" />
+    <ProjectReference Include="..\..\..\Core\Trident.EFCore\Trident.EFCore.csproj" />
+    <ProjectReference Include="..\..\..\Core\Trident\Trident.csproj" />
+    <ProjectReference Include="..\..\Trident.TestTargetProject\Trident.Samples.Domain.csproj" />
   </ItemGroup>
 
 </Project>

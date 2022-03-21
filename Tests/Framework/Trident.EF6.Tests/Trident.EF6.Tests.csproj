@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Trident.Framework.EF6.Tests</RootNamespace>
     <AssemblyName>Trident.Framework.EF6.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">15.0</VisualStudioVersion>
@@ -20,6 +20,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <IsPackable>false</IsPackable>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -57,21 +58,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Framework\Trident.EF6\Trident.EF6.csproj">
-      <Project>{547199a9-3cc0-490f-bdf9-b35c1f35cf7a}</Project>
-      <Name>Trident.EF6</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Standard\Trident.Contracts\Trident.Contracts.csproj">
       <Project>{f95afc22-8ea3-40ac-9d83-37be67989ee6}</Project>
       <Name>Trident.Contracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Framework\Trident.Framework\Trident.Framework.csproj">
-      <Project>{46486879-7b58-4731-8b0e-84d0b0fa37a4}</Project>
-      <Name>Trident.Framework</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Framework\Trident.Framework.Testing\Trident.Framework.Testing.csproj">
-      <Project>{4c1b4817-d5e9-40f5-a388-c35a9eab7bab}</Project>
-      <Name>Trident.Framework.Testing</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Standard\Trident.Testing\Trident.Testing.csproj">
       <Project>{ebe9653d-c8ea-4004-bff6-984a93d58b2b}</Project>
@@ -84,7 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Autofac">
-      <Version>4.9.1</Version>
+      <Version>6.0.0</Version>
     </PackageReference>
     <PackageReference Include="EntityFramework">
       <Version>6.2.0</Version>
