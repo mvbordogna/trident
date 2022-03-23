@@ -4,18 +4,18 @@
     <TargetFramework>net6.0</TargetFramework>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Autofac.Configuration" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+	<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Trident.Extensions.AutoMapper\Trident.Extensions.AutoMapper.csproj" />
-    <ProjectReference Include="..\Trident.Extensions.DependencyInjection\Trident.Extensions.DependencyInjection.csproj" />
-    <ProjectReference Include="..\Trident\Trident.csproj" />
+    <ProjectReference Include="..\Trident.Contracts\Trident.Contracts.csproj" />
+    <ProjectReference Include="..\Trident.Extensions\Trident.Extensions.csproj" />
+    <ProjectReference Include="..\Trident.IoC\Trident.IoC.csproj" />
   </ItemGroup>
 
 </Project>

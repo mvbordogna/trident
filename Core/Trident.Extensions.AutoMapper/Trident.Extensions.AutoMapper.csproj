@@ -4,7 +4,6 @@
     <TargetFramework>net6.0</TargetFramework>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
 
@@ -16,6 +15,7 @@
 
 
   <ItemGroup>
+    <ProjectReference Include="..\Trident.Contracts.Api\Trident.Contracts.Api.csproj" />
     <ProjectReference Include="..\Trident\Trident.csproj" />
   </ItemGroup>
 

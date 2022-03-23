@@ -1,0 +1,45 @@
+@inherits DateFilter
+@typeparam TOutputValue
+
+<h6 class="small-grey-label col-sm-12 mb-2">
+    @FilterOptions.Label DATE RANGE
+</h6>
+
+<div class="form-group col-sm-6">
+    <div class="filter-label">
+        <RadzenLabel Text="From"
+                     Component="from_date"
+                     Style="font-size: 14px !important; line-height: 22px; font-weight: 400 !important"></RadzenLabel>
+        @if (LowerBoundValue != null)
+        {
+            <ButtonComponent ButtonType="@BsButtonType.Link" ParentMethod="@ResetToDefault">
+                Clear
+            </ButtonComponent>
+        }
+    </div>
+
+    <RadzenDatePicker TValue="DateTime?"
+                      DateFormat="@this.FormatMask"
+                      ValueChanged="@(async (value) => { await this.ValueChanged(Bounds.Lower, value); })"
+                      Value="LowerBoundValue"
+                      Name="from_date"/>
+</div>
+
+<div class="form-group col-sm-6">
+    <div class="filter-label">
+        <RadzenLabel Text="To"
+                     Component="to_date"
+                     Style="font-size: 14px !important; line-height: 22px; font-weight: 400 !important"></RadzenLabel>
+        @if (UpperBoundValue != null)
+        {
+            <ButtonComponent ButtonType="@BsButtonType.Link" ParentMethod="@ResetToDefault">
+                Clear
+            </ButtonComponent>
+        }
+    </div>
+    <RadzenDatePicker TValue="DateTime?"
+                      Value="this.UpperBoundValue"
+                      DateFormat="@this.FormatMask"
+                      ValueChanged="@(async (value) => { await this.ValueChanged(Bounds.Upper, value); })"
+                      Name="to_date" />
+</div>

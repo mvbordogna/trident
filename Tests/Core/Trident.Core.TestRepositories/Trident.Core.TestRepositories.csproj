@@ -11,7 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\Trident.EFCore\Trident.EFCore.csproj" />
     <ProjectReference Include="..\..\..\Core\Trident\Trident.csproj" />
-    <ProjectReference Include="..\..\Trident.TestTargetProject\Trident.Samples.Domain.csproj" />
+    <ProjectReference Include="..\..\Trident.TestTargetProject\Trident.Test.Domain.csproj" />
   </ItemGroup>
 
 </Project>

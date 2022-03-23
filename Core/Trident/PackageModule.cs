@@ -2,7 +2,7 @@
 
 namespace Trident
 {
-    public class PackageModule : ModuleBase
+    public class PackageModule : TridentModule
     {
         public override void Configure(IIoCProvider builder)
         {

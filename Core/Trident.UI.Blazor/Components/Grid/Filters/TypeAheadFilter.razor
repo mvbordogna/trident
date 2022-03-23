@@ -1,0 +1,24 @@
+@using Trident.UI.Blazor.Components.Buttons
+@using Trident.UI.Blazor.Components.Grid.Filters
+@inherits TypeAheadFilter
+@typeparam TOutputValue
+
+<div class="form-group col-sm-6">
+    <div class="filter-label">
+        <RadzenLabel Text="@FilterOptions.Label" Component="@($"typeAheadFilter{InstanceId}")"></RadzenLabel>
+        @if (Value != null)
+        {
+            <ButtonComponent ButtonType="@BsButtonType.Link" ParentMethod="@ResetToDefault">
+                Clear
+            </ButtonComponent>
+        }
+    </div>
+    <RadzenAutoComplete LoadData="OnLoadData"
+                        MinLength="3"
+                        Data=ListData
+                        Value="@Value"
+                        TextProperty="Display"                       
+                        Placeholder="Select..."
+                        Change="OnSelectionChanged"
+                        Name="@($"typeAheadFilter{InstanceId}")" />
+</div>

@@ -1,0 +1,27 @@
+@inherits GridFilterPanel
+@typeparam TItem
+
+<form autocomplete="off" class="grid-filter-panel row @(Visible ? "" : "d-none")">
+    @foreach (var fragmentGroup in _filterRenderFragments)
+    {
+        @foreach (var fragment in fragmentGroup)
+        {
+            @fragment
+        }
+        <hr class="col-11"/>
+    }
+
+    <br class="col-12"/>
+
+    <div class="filter-btn-group">
+        <ButtonComponent ParentMethod="OnApplyFilters" ButtonType="@BsButtonType.Danger" Disabled="@EnableApply">
+            APPLY
+        </ButtonComponent>
+        <ButtonComponent ParentMethod="OnCloseRequested" ButtonType="@BsButtonType.Secondary" CssClass="ml-2">
+            CLOSE
+        </ButtonComponent>
+        <ButtonComponent ParentMethod="ClearAllFilters" ButtonType="@BsButtonType.Link" CssClass="mt-1 ml-2">
+            Clear All Filters
+        </ButtonComponent>
+    </div>
+</form>

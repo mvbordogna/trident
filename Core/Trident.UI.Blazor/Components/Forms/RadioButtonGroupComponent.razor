@@ -1,0 +1,24 @@
+@inherits BaseRazorComponent
+
+<InputRadioGroup TValue="string"
+                 ValueChanged="UpdateCurrentValue"
+                 Value="SelectedValue"
+                 ValueExpression="() => SelectedValue"
+                 Name="@Id">
+    <div>
+        @foreach (var option in RadioButtonOptions)
+        {
+            <div class="form-check @(Inline ? "form-check-inline" : "")">
+                <InputRadio Value="option.DataValue"
+                            disabled="@(option.Disabled ?? Disabled)"
+                            id="@($"{option.DataValue}_{Id}")"
+                            class="form-check-input"
+                            type="checkbox"
+                            Name="@Id"/>
+                <label class="form-check-label" for="@($"{option.DataValue}_{Id}")">
+                    @Localizer.GetText(option.TextToDisplay)
+                </label>
+            </div>
+        }
+    </div>
+</InputRadioGroup>

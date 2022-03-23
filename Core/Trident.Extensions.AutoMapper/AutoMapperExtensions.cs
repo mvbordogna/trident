@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using Trident.Api.Search;
 using Trident.Domain;
+using Trident.IoC;
 using Trident.Search;
 
 namespace Trident.Mapper
@@ -15,6 +16,15 @@ namespace Trident.Mapper
     /// </summary>
     public static class AutoMapperExtensions
     {
+
+        public static IIoCProvider UsingTridentMapperProfiles(this IIoCProvider builder, params Assembly[] targetAssemblies)
+        {
+            builder.Register<ServiceMapperRegistry, IMapperRegistry>(LifeSpan.SingleInstance);
+            return builder.RegisterAll<AutoMapper.Profile>(targetAssemblies, LifeSpan.SingleInstance);
+
+        }
+
+
         /// <summary>
         /// Use this method before any forMember invocation mapping definions It will clear all mappings,
         /// NOTE: Property names that match between two types will automatically have a map create for them,
@@ -130,7 +140,23 @@ namespace Trident.Mapper
 
 
         }
-
+        public static void ConfigureAllSupportedPrimitiveCollectionTypes(this Profile cfg)
+        {
+            Type[] supportedTypes =
+                {
+                typeof(Guid), typeof(string), typeof(int),
+                typeof(long), typeof(decimal), typeof(DateTime),
+                typeof(DateTimeOffset), typeof(float), typeof(double)
+            };
+            var openGenericConfigMethod = typeof(AutoMapperExtensions)
+                .GetMethod(nameof(ConfigurePrimiativeCollectionMapping), BindingFlags.NonPublic | BindingFlags.Static);
+            var parameters = new object[] { cfg };
+            foreach (Type type in supportedTypes)
+            {
+                openGenericConfigMethod.MakeGenericMethod(type)
+                    .Invoke(null, parameters);
+            }
+        }
         public static IMappingExpression AddAdvancedFilterTypeMapping(this IMappingExpression targetmap)
         {
             return targetmap

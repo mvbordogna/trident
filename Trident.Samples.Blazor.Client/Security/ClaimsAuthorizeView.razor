@@ -1,0 +1,9 @@
+<AuthorizeView Policy="@ClaimsAuthorizeView.PolicyName" Resource="Claim">
+    <Authorized>
+        @this.ChildContent
+    </Authorized>
+    <NotAuthorized>
+        You are not authorized for this conent. 
+    </NotAuthorized>
+</AuthorizeView>
+

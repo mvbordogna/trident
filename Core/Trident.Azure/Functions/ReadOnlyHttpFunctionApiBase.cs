@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Threading.Tasks;
@@ -72,7 +73,37 @@ namespace Trident.Azure.Functions
 
             return response;
         }
+        protected async Task<HttpResponseData> GetAll(HttpRequestData req, string logName)
+        {
+            HttpResponseData response;
 
+            try
+            {
+                AppLogger.Information<ReadOnlyHttpFunctionApiBase<TModel, TEntity, TId>>(messageTemplate: $"{logName} - Received Request");
+
+                var entities = await Manager.Get();
+                if (entities != null && entities.Any())
+                {
+                    var models = Mapper.Map<IEnumerable<TModel>>(entities);
+                    response = req.CreateResponse(HttpStatusCode.OK);
+                    await response.WriteAsJsonAsync(models);
+                }
+                else
+                {
+                    response = req.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+                AppLogger.Information<ReadOnlyHttpFunctionApiBase<TModel, TEntity, TId>>(messageTemplate: $"{logName} - Completed");
+
+            }
+            catch (Exception ex)
+            {
+                AppLogger.Error<ReadOnlyHttpFunctionApiBase<TModel, TEntity, TId>>(ex, ex.Message);
+                response = req.CreateResponse(HttpStatusCode.InternalServerError);
+            }
+
+            return response;
+        }
         protected async Task<HttpResponseData> GetById(HttpRequestData req, TId id, string logName, Func<object, bool> isValidUrlParameters = null)
         {
             HttpResponseData response;
@@ -85,7 +116,7 @@ namespace Trident.Azure.Functions
                 if (entity != null)
                 {
                     var model = Mapper.Map<TModel>(entity);
-                    if (!isValidUrlParameters(model))
+                    if (isValidUrlParameters != null && !isValidUrlParameters(model))
                     {
                         throw new ArgumentException("Invalid Url Parameters.");
                     }

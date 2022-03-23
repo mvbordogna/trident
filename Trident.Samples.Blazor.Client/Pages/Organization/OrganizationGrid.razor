@@ -1,0 +1,30 @@
+@page "/Orgs"
+@using Trident.Samples.Contracts.Models
+
+    <div class="container-card container">
+        <div class="row align-items-center">
+            <div class="col-md">
+                <div class="sch-font-helvetica-25">
+                    <span>Organizations</span>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md">
+                <PagableGridView TModel="OrganizationModel" Results="@_results" class="bs-class" EnablePaging="false" EnableSorting="false" OnDataLoad="LoadData" EnableFilters ="false" EnableRowExpansion="false">
+                    <CustomButton>
+                        <ButtonComponent ParentMethod="@(() => NavigateToNewOrganization())">
+                            <img src="/img/icon-add.svg" alt="Add Organization"/> NEW
+                        </ButtonComponent>
+                    </CustomButton>
+                    <Columns>
+                        <ColumnDefinition TItem="OrganizationModel" Property="@nameof(OrganizationModel.Name)" Title="Name" PropertyType="typeof(string)" />
+                        <ColumnDefinition TItem="OrganizationModel" Property="@nameof(OrganizationModel.Age)" Title="Age" PropertyType="typeof(string)" />
+                        
+                    </Columns>
+                </PagableGridView>
+            </div>
+        </div>
+    </div>
+

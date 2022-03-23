@@ -3,7 +3,7 @@ using Trident.IoC;
 
 namespace Trident.EFCore
 {
-    public class PackageModule : ModuleBase, IModule
+    public class PackageModule : IoCModule
     {
       
         public override void Configure(IIoCProvider builder)

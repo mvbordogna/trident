@@ -1,0 +1,180 @@
+@inherits BaseRazorComponent
+@typeparam TModel
+
+<style>
+    /** For hover  **/
+    .rz-selectable .rz-datatable-even:hover:not(.rz-state-highlight) > td,
+    .rz-selectable .rz-datatable-odd:hover:not(.rz-state-highlight) > td {
+        background-color: #D9EBF1 !important;
+    }
+
+    /** Color of text when hover **/
+
+    .rz-selectable .rz-datatable-even:hover:not(.rz-state-highlight) .rz-cell-data,
+    .rz-selectable .rz-datatable-odd:hover:not(.rz-state-highlight) .rz-cell-data {
+        color: black !important;
+    }
+</style>
+
+@if (Columns != null)
+{
+    <CascadingValue Value="this" Name="ParentGrid">
+        @Columns
+    </CascadingValue>
+}
+
+<div class="grid-view-header">
+    <div class="grid-view-header__left-side">
+        @if (CustomButton != null)
+        {
+            @CustomButton
+        }
+    </div>
+
+    <div class="grid-view-header__right-side position-relative">
+        @if (EnableSearch)
+        {
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <i class="fa fa-search"></i>
+                    </div>
+                </div>
+                <RadzenTextBox Name="Keywords" Value="@GetKeywords()" ValueChanged="@SetKeywords" @onkeyup="@OnSearchKeyUp" class="form-control" id="txt_Grid_Search"/>
+            </div>
+
+            <ButtonComponent ParentMethod="@OnSearchButtonClick" ButtonType="@BsButtonType.Secondary" Id="main_Grid_Search">
+                @Localizer.GetText("SEARCH")
+            </ButtonComponent>
+        }
+
+        @if (EnableFilters)
+        {
+            <ButtonComponent ParentMethod="@OnFilterButtonClick" ButtonType="@BsButtonType.Secondary" Id="main_Grid_Search">
+                <img src="img/icon-filter.svg" alt="filter icon"/> @Localizer.GetText("FILTERS")
+            </ButtonComponent>
+        }
+
+        @if (ShowExport)
+        {
+            <CsvExport FileName="@ExportFileName" GetDataAsync="@ExportGetData"></CsvExport>
+        }
+    </div>
+</div>
+
+<br/>
+
+@if (FilterVisible)
+{
+    <GridFilterPanel TItem="TModel" @bind-Visible="ShowFilters" SearchCriteria="@Results?.Info" CriteriaChanged="OnFilterPanelCriteriaChanged" Columns="_columns"/>
+}
+
+<div class="pageable-grid-view-container">
+    @if (EnableRowExpansion)
+    {
+        <RadzenDataGrid @ref="Grid"
+                        IsLoading="@IsLoading"
+                        Data="@Results?.Results"
+                        TItem="TModel"
+                        AllowPaging="false"
+                        RowClick="OnRowClick"
+                        Count="@(Results?.Info?.TotalRecords ?? 0)"
+                        AllowSorting="@EnableSorting"
+                        LoadData="LoadData"
+                        class="@("rz-selectable " + CssClasses)"
+                        ExpandMode="DataGridExpandMode.Single"
+                        RowExpand="RowExpanding"
+                        RowRender="RowRender">
+            <Template Context="Item">
+                <CascadingValue Value="this" Name="ParentGrid">
+                    @Template(Item)
+                </CascadingValue>
+            </Template>
+            <Columns>
+                @foreach (var col in _columns)
+                {
+                    @if (col.Template != null)
+                    {
+                        <RadzenDataGridColumn TItem="TModel" Property="@col.Property" Title="@col.Title" Type="@col.PropertyType" Visible="@(!col.HideColumn)" SortProperty="@col.PropertyMemberPath" Sortable="@col.EnableSorting" Width="@col.Width">
+                            <Template>
+                                @col.Template(context)
+                            </Template>
+                        </RadzenDataGridColumn>
+                    }
+                    else
+                    {
+                        <RadzenDataGridColumn TItem="TModel" Property="@col.Property" Title="@col.Title" Type="@col.PropertyType" Visible="@(!col.HideColumn)" SortProperty="@col.PropertyMemberPath" Sortable="@col.EnableSorting"/>
+                    }
+                }
+            </Columns>
+        </RadzenDataGrid>
+    }
+    else
+    {
+        <RadzenDataGrid @ref="Grid"
+                        IsLoading="@IsLoading"
+                        Data="@Results?.Results"
+                        TItem="TModel"
+                        AllowPaging="false"
+                        RowClick="OnRowClick"
+                        Count="@(Results?.Info?.TotalRecords ?? 0)"
+                        AllowSorting="@EnableSorting"
+                        LoadData="LoadData"
+                        class="@("rz-selectable " + CssClasses)"
+                        RowExpand="RowExpanding"
+                        RowRender="RowRender">
+            <Columns>
+                @foreach (var col in _columns)
+                {
+                    @if (col.Template != null)
+                    {
+                        <RadzenDataGridColumn TItem="TModel" Property="@col.Property" Title="@col.Title" Type="@col.PropertyType" Visible="@(!col.HideColumn)" Width="@col.Width" SortProperty="@col.PropertyMemberPath" Sortable="@col.EnableSorting">
+                            <Template>
+                                @col.Template(context)
+                            </Template>
+                        </RadzenDataGridColumn>
+                    }
+                    else
+                    {
+                        <RadzenDataGridColumn TItem="TModel" Property="@col.Property" Title="@col.Title" Type="@col.PropertyType" Visible="@(!col.HideColumn)" SortProperty="@col.PropertyMemberPath" Sortable="@col.EnableSorting" Width="@col.Width"/>
+                    }
+                }
+            </Columns>
+        </RadzenDataGrid>
+    }
+</div>
+
+@if (EnablePaging)
+{
+    <div class="row">
+        <div class="col-md-4 pg-previous-col">
+            @if (Results != null)
+            {
+                <RadzenButton Disabled="@(this.Start == 0)" Icon="skip_previous" Click="@PreviousClicked"></RadzenButton>
+                <RadzenButton Disabled="@(this.Start + this.PageSize >= this.Count)" Icon="skip_next" style="margin-left: 20px" Click="@NextClicked"></RadzenButton>
+            }
+        </div>
+        <div class="col-md-4 text-center pg-count-col">
+            @if (Results != null)
+            {
+                <RadzenLabel Text="@($"From {this.Start + 1} to {EndPageCount} of {Results.Info?.TotalRecords}")">
+                </RadzenLabel>
+            }
+            else
+            {
+                <RadzenLabel Text="An error occurred while loading data." class="pageable-grid-error-label">
+                </RadzenLabel>
+            }
+        </div>
+        <div class="col-md-4 text-right pg-next-col">
+            @if (Results != null)
+            {
+                <RadzenDropDown Data="@_pageSizes"
+                                @bind-Value="@PageSize"
+                                Name="Dropdown0"
+                                Change="@PagerSizeChanged">
+                </RadzenDropDown>
+            }
+        </div>
+    </div>
+}

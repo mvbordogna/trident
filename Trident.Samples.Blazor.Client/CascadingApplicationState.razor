@@ -1,0 +1,21 @@
+@*@using Trident.UI.Client.Contracts.Models
+
+<CascadingValue TValue="Task<AuthenticationState>" Value="@this._currentAuthenticationStateTask" Name="authenticationStateTask">
+    <CascadingValue TValue="ApplicationContext" Value="@this.ApplicationContext" Name="Application">
+        @if (ChildContent != null && (_applicationDataLoaded ||
+                                      NavigationManager.ToBaseRelativePath(NavigationManager.Uri) == "" ||
+                                      NavigationManager.Uri.Contains("authentication/login") ||
+                                      NavigationManager.ToBaseRelativePath(NavigationManager.Uri) == "authentication/logout") ||
+                                      NavigationManager.Uri.Contains("authentication/login-callback") ||
+                                      NavigationManager.Uri.Contains("authentication/logout-callback") ||
+                                      NavigationManager.ToBaseRelativePath(NavigationManager.Uri) == "authentication/logged-out")
+        {
+            @ChildContent
+        }
+        else
+        {
+            <PageLoadingComponent Loading="true"/>
+        }
+    </CascadingValue>
+</CascadingValue>
+*@

@@ -2,7 +2,7 @@
 
 namespace Trident.TestTargetProject
 {
-    public class BizModule : ModuleBase
+    public class BizModule : IoCModule
     {
         public override void Configure(IIoCProvider builder)
         {

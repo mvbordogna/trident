@@ -1,0 +1,7 @@
+.input-group-text {
+    height: 38px;
+}
+
+::deep .rz-textbox {
+    height: 38px;
+}

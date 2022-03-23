@@ -43,7 +43,7 @@ namespace Trident.Core.Tests.Common
             var scope = new DefaultTestScope();
 
             //act
-            var actual = scope.InstanceUnderTest[scope.TestIndex];
+            var actual = scope.InstanceUnderTest[scope.TestIndex.ToString()];
 
             //assert
             Assert.AreEqual(scope.ExpectedTestKeyValue, actual);
@@ -57,7 +57,7 @@ namespace Trident.Core.Tests.Common
             var scope = new DefaultTestScope();
 
             //act
-            var actual = scope.InstanceUnderTest[100000000];
+            var actual = scope.InstanceUnderTest["100000000"];
 
             //assert
             Assert.IsNull(actual);

@@ -1,0 +1,6 @@
+@inherits BaseRazorComponent
+<div style='text-align:center;margin:auto;'>
+    @((MarkupString)Localizer.GetText(Text))
+    <br />
+    <RadzenButton class="btn btn-primary" Click="OkButton_Clicked">@Localizer.GetText("OK")</RadzenButton>
+</div>
