@@ -37,6 +37,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\Trident.Azure\Trident.Azure.csproj" />
     <ProjectReference Include="..\..\..\Core\Trident.EFCore\Trident.EFCore.csproj" />
+    <ProjectReference Include="..\..\..\Core\Trident.Extensions.AutoMapper\Trident.Extensions.AutoMapper.csproj" />
     <ProjectReference Include="..\..\..\Core\Trident\Trident.csproj" />
     <ProjectReference Include="..\..\..\Core\Trident.Testing\Trident.Testing.csproj" />
   </ItemGroup>

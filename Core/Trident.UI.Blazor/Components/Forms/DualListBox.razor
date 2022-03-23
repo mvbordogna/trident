@@ -1,0 +1,41 @@
+@typeparam TItem
+@typeparam TValue
+
+<div class="row dual-list-box-container">
+    <div class="col-sm-5">
+        <RadzenListBox @ref="LeftControl"
+                       TValue="EnumerableQuery<TValue>"
+                       Data="RemainingData"
+                       TextProperty="@TextProperty"
+                       ValueProperty="@ValueProperty"
+                       Multiple="true"
+                       Style="height:200px; width: 100%;">
+        </RadzenListBox>
+    </div>
+    <div class="col-sm-2 move-role-btn-group">
+        <ButtonComponent ParentMethod="MoveRight" CssClass="move-role-btn">
+            <ChildContent>
+                ADD <i class="fa fa-arrow-right"></i>
+            </ChildContent>
+        </ButtonComponent>
+
+        <ButtonComponent ParentMethod="MoveLeft" CssClass="move-role-btn">
+            <ChildContent>
+                <i class="fa fa-arrow-left"></i> REMOVE
+            </ChildContent>
+        </ButtonComponent>
+    </div>
+    <div class="col-sm-5">
+        <RadzenListBox @ref="RightControl"
+                       TValue="EnumerableQuery<TValue>"
+                       Data="SelectedData"
+                       TextProperty="@TextProperty"
+                       ValueProperty="@ValueProperty"
+                       Multiple="true"
+                       Style="height:200px; width: 100%;">
+        </RadzenListBox>
+    </div>
+</div>
+
+
+

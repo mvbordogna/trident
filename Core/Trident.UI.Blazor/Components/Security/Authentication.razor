@@ -1,0 +1,14 @@
+@*@page "/authentication/{action}"
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+
+                     TAuthenticationState="ApplicationAuthenticationState"  AuthenticationState="AuthenticationState"     
+                             OnLogInSucceeded="SetUserState"
+                             OnLogOutSucceeded="SetAnonymousState"
+<RemoteAuthenticatorViewCore Action="@Action"
+                             TAuthenticationState="ApplicationAuthenticationState"
+                             AuthenticationState="AuthenticationState"
+                             OnLogInSucceeded="RestoreState"
+                             OnLogOutSucceeded="RestoreState" />
+
+
+*@

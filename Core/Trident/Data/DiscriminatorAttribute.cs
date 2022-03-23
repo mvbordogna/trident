@@ -13,5 +13,9 @@ namespace Trident.Data
             Property = property;
             Value = value;
         }
+        public DiscriminatorAttribute(string value)
+        {
+            Value = value;
+        }
     }
 }

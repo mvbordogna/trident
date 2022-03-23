@@ -3,20 +3,12 @@ using System.Threading.Tasks;
 namespace Trident.Data.Contracts
 {
     /// <summary>
-    /// Interface IRepositoryBase
-    /// </summary>
-    public interface IRepositoryBase
-    {
-
-    }
-
-    /// <summary>
     /// Interface IReadOnlyResponsitory
     /// Implements the <see cref="TridentOptionsBuilder.Data.Contracts.IRepositoryBase" />
     /// </summary>
     /// <typeparam name="TEntity">The type of the t entity.</typeparam>
     /// <seealso cref="TridentOptionsBuilder.Data.Contracts.IRepositoryBase" />
-    public interface IReadOnlyRepository<TEntity>: IRepositoryBase
+    public interface IReadOnlyRepository<TEntity>: IRepository
         where TEntity : class
     {
 

@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Services\**" />
+    <EmbeddedResource Remove="Services\**" />
+    <None Remove="Services\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="..\..\Solution Items\GlobalAssembly.cs" Link="Properties\GlobalAssembly.cs" />
   </ItemGroup>
 
@@ -15,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
+    <ProjectReference Include="..\Trident.IoC\Trident.IoC.csproj" />
   </ItemGroup>
 
 </Project>

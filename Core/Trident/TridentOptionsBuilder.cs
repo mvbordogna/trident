@@ -74,8 +74,7 @@ namespace Trident
             p.UsingTridentWorkflowManagers(targetAssemblies);
             p.UsingTridentWorkflowTasks(targetAssemblies);
             p.UsingTridentFactories(targetAssemblies);
-            p.UsingTridentResolvers(targetAssemblies);
-            p.UsingTridentMapperProfiles(targetAssemblies);
+            p.UsingTridentResolvers(targetAssemblies);      
 
             RegisterDataProviderPackages(p, options, connStringManager);
 

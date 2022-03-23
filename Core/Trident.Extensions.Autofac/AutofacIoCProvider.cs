@@ -14,6 +14,8 @@ using Autofac.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
+using Trident.Contracts;
+using Trident.Data.Contracts;
 
 namespace Trident.IoC
 {
@@ -195,7 +197,7 @@ namespace Trident.IoC
         public IIoCProvider RegisterModule(Type moduleType)
         {
             moduleType.GuardIsNotNull(nameof(moduleType));
-            var instance = (IModule)Activator.CreateInstance(moduleType);
+            var instance = (IIoCModule)Activator.CreateInstance(moduleType);
             instance.GuardIsNotNull(nameof(instance));
             instance.Configure(this);
             return this;
@@ -222,6 +224,46 @@ namespace Trident.IoC
         }
 
 
+        public IIoCProvider RegisterAllAsTarget<T>(Assembly[] targetAssemblies, LifeSpan lifeSpan = LifeSpan.InstancePerLifetimeScope)
+        {
+            var temp = _builder.RegisterAssemblyTypes(targetAssemblies)
+                 .Where(x => !x.IsAbstract && typeof(T).IsAssignableFrom(x))
+                 .As<T>();
+
+            ApplyLifeTime(temp, lifeSpan);
+            return this;
+        }
+
+
+        public IIoCProvider RegisterGeneric(Type openGenericType, Type openGenericInterface, Assembly[] targetAssemblies, bool registerSelf = false, LifeSpan lifeSpan = LifeSpan.InstancePerLifetimeScope)
+        {
+
+            //this registers the default
+            var temp = _builder.RegisterGeneric(openGenericType)
+                      .As(openGenericInterface)
+                      .AsSelf();
+
+            if (registerSelf)
+                temp = temp.AsSelf();
+
+            ApplyLifeTime(temp, lifeSpan);
+            return this;
+        }
+
+        public IIoCProvider RegisterAll(Type targetType, Assembly[] targetAssemblies, bool registerSelf = false, LifeSpan lifeSpan = LifeSpan.InstancePerLifetimeScope)
+        {
+            var temp = _builder.RegisterAssemblyTypes(targetAssemblies)
+                 .Where(x => !x.IsAbstract && targetType.IsAssignableFrom(x))
+                 .AsImplementedInterfaces();
+
+            if (registerSelf)
+                temp = temp.AsSelf();
+
+            ApplyLifeTime(temp, lifeSpan);
+            return this;
+        }
+
+
         /// <summary>
         /// Registers the behavior.
         /// </summary>
@@ -240,6 +282,16 @@ namespace Trident.IoC
             return this;
         }
 
+        public IIoCProvider RegisterStrategy<T>(params Assembly[] targetAssemblies)
+        {
+            _builder.RegisterAssemblyTypes(targetAssemblies)
+              .Where(x => !x.IsAbstract && typeof(T).IsAssignableFrom(x))
+              .InstancePerLifetimeScope()
+              .As<T>()
+              .AsSelf();
+
+            return this;
+        }
 
         public IIoCProvider RegisterBehavior<InterfaceOfT>(Func<InterfaceOfT> constructionFunc, string serviceName, LifeSpan lifeSpan = LifeSpan.InstancePerLifetimeScope)
         {
@@ -350,7 +402,7 @@ namespace Trident.IoC
             return this;
         }
 
-        public IIoCProvider RegisterModuleInstance(ModuleBase packageModule)
+        public IIoCProvider RegisterModuleInstance(IoCModule packageModule)
         {
             packageModule.GuardIsNotNull(nameof(instance));
             packageModule.Configure(this);
@@ -482,6 +534,22 @@ namespace Trident.IoC
             }
         }
 
+        private void ApplyLifeTime(IRegistrationBuilder<object, ReflectionActivatorData, DynamicRegistrationStyle> x, LifeSpan lifeSpan)
+        {
+            switch (lifeSpan)
+            {
+                case LifeSpan.InstancePerLifetimeScope:
+                    x.InstancePerLifetimeScope();
+                    break;
+                case LifeSpan.NewInstancePerRequest:
+                    x.InstancePerRequest();
+                    break;
+                case LifeSpan.SingleInstance:
+                    x.SingleInstance();
+                    break;
+            }
+        }
+
 
 
         /// <summary>
@@ -490,9 +558,13 @@ namespace Trident.IoC
         /// <typeparam name="T"></typeparam>
         /// <typeparam name="InterfaceOfT">The type of the interface of t.</typeparam>
         /// <returns>IIoCProvider.</returns>
-        public IIoCProvider RegisterSingleton<T, InterfaceOfT>()
+        public IIoCProvider RegisterSingleton<T, InterfaceOfT>(bool registerSelf = false)
         {
-            _builder.RegisterType<T>().As<InterfaceOfT>().SingleInstance();
+            var temp = _builder.RegisterType<T>().As<InterfaceOfT>().SingleInstance();
+
+            if (registerSelf)
+                temp.AsSelf();
+
             return this;
         }
 
@@ -522,152 +594,6 @@ namespace Trident.IoC
             _builder.RegisterInstance(instance).As<InterfaceOfT>().SingleInstance();
             return this;
         }
-
-        #region Trident Using Feature
-
-        public IIoCProvider UsingTridentEntityComparer()
-        {
-            _builder.UsingTridentEntityComparer();
-            return this;
-        }
-
-        public IIoCProvider UsingTridentFileStorage()
-        {
-            _builder.UsingTridentFileStorage();
-            return this;
-        }
-
-        public IIoCProvider UsingTridentData()
-        {
-            _builder.UsingTridentData();
-            return this;
-        }
-
-        public IIoCProvider UsingTridentMapperProfiles(params Assembly[] targetAssemblies)
-        {
-            _builder.UsingTridentMapperProfiles(targetAssemblies);
-            return this;
-        }
-
-        public IIoCProvider UsingTridentTransactions()
-        {
-            _builder.UsingTridentTransactions();
-            return this;
-        }
-
-        public IIoCProvider UsingTridentInMemberCachingManager()
-        {
-            _builder.UsingTridentInMemberCachingManager();
-            return this;
-        }
-
-        public IIoCProvider UsingTridentValidationManagers(params Assembly[] targetAssemblies)
-        {
-            _builder.UsingTridentValidationManagers(targetAssemblies);
-            return this;
-        }
-
-        public IIoCProvider UsingTridentValidationRules(params Assembly[] targetAssemblies)
-        {
-            _builder.UsingTridentValidationRules(targetAssemblies);
-            return this;
-        }
-
-        public IIoCProvider UsingTridentWorkflowManagers(params Assembly[] targetAssemblies)
-        {
-            _builder.UsingTridentWorkflowManagers(targetAssemblies);
-            return this;
-        }
-
-        public IIoCProvider UsingTridentWorkflowTasks(params Assembly[] targetAssemblies)
-        {
-            _builder.UsingTridentWorkflowTasks(targetAssemblies);
-            return this;
-        }
-
-        public IIoCProvider UsingTridentProviders(params Assembly[] targetAssemblies)
-        {
-            _builder.UsingTridentProviders(targetAssemblies);
-            return this;
-        }
-
-
-        public IIoCProvider UsingTridentManagers(params Assembly[] targetAssemblies)
-        {
-            _builder.UsingTridentManagers(targetAssemblies);
-            return this;
-        }
-
-        public IIoCProvider UsingTridentRepositories(params Assembly[] targetAssemblies)
-        {
-            _builder.UsingTridentRepositories(targetAssemblies);
-            return this;
-        }
-
-        /// <summary>
-        /// Registers the data source dependencies.
-        /// </summary>
-        /// <param name="builder">The builder.</param>
-        /// <param name="targetAssemblies">The target assemblies.</param>
-        public IIoCProvider UsingTridentSearch(params Assembly[] targetAssemblies)
-        {
-            _builder.UsingTridentSearch(targetAssemblies);
-            return this;
-        }
-
-        public IIoCProvider UsingTridentResolvers(params Assembly[] targetAssemblies)
-        {
-            _builder.UsingTridentResolvers(targetAssemblies);
-            return this;
-        }
-
-        public IIoCProvider UsingTridentFactories(params Assembly[] targetAssemblies)
-        {
-            _builder.UsingTridentFactories(targetAssemblies);
-            return this;
-        }
-
-        public IIoCProvider UsingTridentStrategy<T>(params Assembly[] targetAssemblies)
-        {
-            _builder.UsingTridentStrategy<T>(targetAssemblies);
-            return this;
-        }
-
-
-        public IIoCProvider UsingTridentAppSettingsXmlManager()
-
-        {
-            _builder.UsingTridentAppSettingsXmlManager();
-            return this;
-        }
-
-        public IIoCProvider UsingTridentAppSettingsJsonManager()
-
-        {
-            _builder.UsingTridentAppSettingsJsonManager();
-            return this;
-        }
-
-        public IIoCProvider UsingTridentConnectionStringXmlManager()
-        {
-            _builder.UsingTridentConnectionStringXmlManager();
-            return this;
-        }
-
-        public IIoCProvider UsingTridentConnectionStringJsonManager()
-        {
-            _builder.UsingTridentConnectionStringJsonManager();
-            return this;
-        }
-
-        public IIoCProvider UsingTridentLoggerFactory(ILoggerFactory loggerFactory)
-        {
-            _builder.RegisterInstance(loggerFactory)
-                .As<ILoggerFactory>();
-            return this;
-        }
-
-        #endregion
 
         /// <summary>
         /// Builds this instance.
@@ -828,7 +754,7 @@ namespace Trident.IoC
                 _disposed = true;
                 if (disposing)
                 {
-                    using (_container) { }                   
+                    using (_container) { }
                 }
             }
         }
@@ -868,13 +794,80 @@ namespace Trident.IoC
         {
             foreach (var item in moduleTypes)
             {
-                var instance = (IModule)Activator.CreateInstance(item);
+                var instance = (IIoCModule)Activator.CreateInstance(item);
                 instance.GuardIsNotNull(nameof(instance));
                 instance.Configure(this);
             }
             return this;
         }
 
+        public IIoCProvider UsingTridentLoggerFactory(ILoggerFactory loggerFactory)
+        {
+            _builder.RegisterInstance(loggerFactory)
+                .As<ILoggerFactory>();
+            return this;
+        }
+
+
+        public IIoCProvider UsingTridentResolvers(params Assembly[] targetAssemblies)
+        {
+            _builder.RegisterAssemblyTypes(targetAssemblies)
+                 .Where(x => !x.IsAbstract && typeof(IResolver).IsAssignableFrom(x))
+                 .InstancePerLifetimeScope()
+                 .AsImplementedInterfaces()
+                 .AsSelf();
+
+            return this;
+        }
+
+        public IIoCProvider UsingTridentFactories(params Assembly[] targetAssemblies)
+        {
+
+            _builder.RegisterAssemblyTypes(targetAssemblies)
+                   .Where(x => !x.IsAbstract && typeof(IFactory).IsAssignableFrom(x))
+                   .InstancePerLifetimeScope()
+                   .AsImplementedInterfaces()
+                   .AsSelf();
+
+            return this;
+        }
+
+        public IIoCProvider UsingTridentProviders(params Assembly[] targetAssemblies)
+
+        {
+            _builder.RegisterAssemblyTypes(targetAssemblies)
+                .Where(x => !x.IsAbstract && typeof(IProvider).IsAssignableFrom(x))
+                .InstancePerLifetimeScope()
+                .AsImplementedInterfaces()
+                .AsSelf();
+            return this;
+        }
+
+
+        public IIoCProvider UsingTridentManagers(params Assembly[] targetAssemblies)
+
+        {
+            _builder.RegisterAssemblyTypes(targetAssemblies)
+                 .Where(x => !x.IsAbstract && typeof(IManager).IsAssignableFrom(x))
+                 .InstancePerLifetimeScope()
+                 .AsImplementedInterfaces()
+                 .AsSelf();
+
+            return this;
+        }
+
+
+
+        public IIoCProvider UsingTridentRepositories(params Assembly[] targetAssemblies)
+
+        {
+            _builder.RegisterAssemblyTypes(targetAssemblies)
+                 .Where(x => !x.IsAbstract && typeof(IRepository).IsAssignableFrom(x))
+                 .InstancePerLifetimeScope()
+                 .AsImplementedInterfaces()
+                 .AsSelf();
+            return this;
+        }
 
     }
 }

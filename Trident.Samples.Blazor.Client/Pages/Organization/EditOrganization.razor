@@ -1,0 +1,49 @@
+@using Trident.Samples.Contracts.Models
+@using Trident.Samples.Blazor.Client.Components
+@page "/Organization/New"
+
+
+@if (_exceptionOccured)
+{
+    <ExceptionComponent />
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="row ra-summary-section-question-row">
+                <span class="col ra-summary-field-name">Name</span>
+                <span class="col ra-summary-field-value">@organization?.Name</span>
+            </div>
+            <div class="row ra-summary-section-question-row">
+                <span class="col ra-summary-field-name">Age</span>
+                <span class="col ra-summary-field-value">@organization?.Age</span>
+            </div>
+            <div class="row ra-summary-section-question-row">
+                <span class="col ra-summary-field-name">Type</span>
+                <span class="col ra-summary-field-value">@organization?.OrgType</span>
+            </div>
+            <div class="row ra-summary-section-question-row">
+                <span class="col ra-summary-field-name">Departments</span>
+                 @for (var i = 0; i < @organization.Departments.Count; i++)
+                    {
+                        var option = organization.Departments[i];
+                        <div class="form-check pb-4">
+                            <input type="checkbox"
+                                   class="form-check-input"
+                                   checked=@IsDepartmentSelected(option)
+                                   id="@($"term-{i}")"
+                                   @onchange="@(args => CheckboxClicked(option, args.Value))" />
+                            <label class="form-check-label pl-5 ">
+                                @option.Name
+                            </label>
+                        </div>
+                    }
+
+            </div>
+            <br />
+            <br />
+            
+        </div>
+    </div>
+}

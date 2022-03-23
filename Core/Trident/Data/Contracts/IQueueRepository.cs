@@ -8,7 +8,7 @@ namespace Trident.Data.Contracts
     /// </summary>
     /// <typeparam name="TEntity">The type of the t entity.</typeparam>
     /// <seealso cref="TridentOptionsBuilder.Data.Contracts.IRepositoryBase" />
-    public interface IQueueRepository<TEntity>: IRepositoryBase
+    public interface IQueueRepository<TEntity>: IRepository
     {
         /// <summary>
         /// Checks for the existance of the queue.

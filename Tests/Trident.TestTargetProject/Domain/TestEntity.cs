@@ -8,4 +8,4 @@ namespace Trident.TestTargetProject.Domain
     {
         public string Name { get; set; }
     }
-}
+}                                                                

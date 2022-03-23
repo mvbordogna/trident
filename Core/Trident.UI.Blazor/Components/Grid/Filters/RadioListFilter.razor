@@ -1,0 +1,21 @@
+@inherits RadioListFilter
+@typeparam TOutputValue
+
+<div class="form-group col-sm-4">
+    <div class="filter-label">
+        <RadzenLabel Text="@FilterOptions.Label" Component="@Name"></RadzenLabel>
+        @if (Value != null)
+        {
+            <ButtonComponent ButtonType="@BsButtonType.Link" ParentMethod="@ResetToDefault">
+                Clear
+            </ButtonComponent>
+        }
+    </div>
+    <RadzenRadioButtonList TValue="TOutputValue"
+                           Value="this.Value"
+                           Name="@Name"
+                           Data="@this.ListData"
+                           TextProperty="Display"
+                           ValueProperty="Value"
+                           Change="OnSelectionChanged" />
+</div>

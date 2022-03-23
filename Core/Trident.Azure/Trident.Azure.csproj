@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Trident.Contracts.Api\Trident.Contracts.Api.csproj" />
     <ProjectReference Include="..\Trident.Contracts\Trident.Contracts.csproj" />
     <ProjectReference Include="..\Trident.Extensions.Autofac\Trident.Extensions.Autofac.csproj" />
     <ProjectReference Include="..\Trident\Trident.csproj" />
