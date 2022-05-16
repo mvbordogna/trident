@@ -1,10 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
-using Trident.IoC;
 
-namespace Trident.Extensions.DependencyInjection
+namespace Trident.IoC
 {
     /// <summary>
     /// Autofac implementation of the ASP.NET Core <see cref="IServiceProvider"/>.

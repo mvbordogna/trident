@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Threading.Tasks;
-using Trident.Extensions.DependencyInjection;
 using Trident.IoC;
 
 namespace Trident.Samples.AzureFunctions

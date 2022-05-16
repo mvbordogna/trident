@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using Trident.IoC;
 
-namespace Trident.Extensions.DependencyInjection
+namespace Trident.IoC
 {
     /// <summary>
     /// A factory for creating a <see cref="ContainerBuilder"/> and an <see cref="IServiceProvider" />.

@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using Trident.IoC;
 
-namespace Trident.Extensions.DependencyInjection
+namespace Trident.IoC
 {
     /// <summary>
     /// A factory for creating a <see cref="IServiceProvider"/> that wraps a child <see cref="ILifetimeScope"/> created from an existing parent <see cref="ILifetimeScope"/>.

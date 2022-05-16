@@ -1,4 +1,4 @@
-﻿namespace Trident.Extensions.DependencyInjection
+﻿namespace Trident.IoC
 {
     public enum ContainerBuildOptions
     {

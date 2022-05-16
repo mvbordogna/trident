@@ -1,23 +1,13 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
-using System.Net.Http;
 using System.Threading.Tasks;
+using Trident.IoC;
 using Trident.Samples.Blazor.Client;
-using Blazored.LocalStorage;
-using Blazored.SessionStorage;
+using Trident.Samples.Blazor.Client.Configuration;
 using Trident.UI.Blazor.Logging;
 using Trident.UI.Blazor.Logging.AppInsights;
-using Trident.Samples.Blazor.Client.Configuration;
-using Microsoft.Extensions.Logging;
-using Trident.IoC;
-using Autofac;
-using Trident.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging.Abstractions;
-using Trident.Sample.UI;
-using Trident.Samples.Contracts.Services;
-using Trident.Sample.UI.Servcies;
 
 public class Program
 {
@@ -31,12 +21,13 @@ public class Program
         builder.ConfigureSecurity();
         builder.ConfigureHttpClients();
         builder.ConfigureContainer(new IoCServiceProviderFactory<AutofacIoCProvider>(
-            (provider) => {                                 
+            (provider) =>
+            {
 
-                provider.Populate(builder.Services);                
-                provider.RegisterModules(new Type[] {                       
+                provider.Populate(builder.Services);
+                provider.RegisterModules(new Type[] {
                         typeof(Trident.UI.Blazor.PackageModule),
-                        typeof(Trident.Sample.UI.PackageModule),                   
+                        typeof(Trident.Sample.UI.PackageModule),
                         typeof(Trident.Samples.Blazor.Client.PackageModule)
                     })
                 .RegisterSelf();

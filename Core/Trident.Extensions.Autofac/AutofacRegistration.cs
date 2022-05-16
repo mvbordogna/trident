@@ -29,7 +29,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Autofac.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Trident.Extensions.DependencyInjection;
+using Trident.IoC;
 
 namespace Autofac.Extensions.DependencyInjection
 {

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Globalization;
-using Trident.IoC;
+﻿using System.Globalization;
 
-namespace Trident.Extensions.DependencyInjection
+namespace Trident.IoC
 {
     /// <summary>
     /// Extension methods for use with the <see cref="IoCServiceProvider"/>.
