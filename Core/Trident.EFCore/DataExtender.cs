@@ -75,14 +75,18 @@ namespace Trident.EFCore
             {
                 foreach (var conn in connStringManager)
                 {
-                    if (conn.ProviderName == null)
-                        throw new InvalidOperationException($"Provider name not found in connection string \"{conn.Name}\".");
-
-                    var pn = conn.ProviderName.ToLower();
-
-                    if (ProviderSetups.ContainsKey(pn))
+                    if (conn.ProviderName != null)
                     {
-                        ProviderSetups[pn](provider, targetAssemblies, conn);
+                        var pn = conn.ProviderName.ToLower();
+
+                        if (ProviderSetups.ContainsKey(pn))
+                        {
+                            ProviderSetups[pn](provider, targetAssemblies, conn);
+                        }
+                    }
+                    else
+                    {
+                        System.Diagnostics.Trace.WriteLine($"Provider name not found in connection string \"{conn.Name}\".");
                     }
                 }
             }
