@@ -6,10 +6,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
-using Trident.Api;
 using Trident.Contracts;
+using Trident.Contracts.Api;
 using Trident.Domain;
 using Trident.Logging;
+using Trident.Validation;
 
 namespace Trident.Azure.Functions
 {
@@ -50,6 +51,13 @@ namespace Trident.Azure.Functions
                 AppLogger.Information<HttpFunctionApiBase<TModel, TEntity, TId>>(messageTemplate: $"{logName} - Completed");
 
             }
+            catch (ValidationRollupException validationRollupException)
+            {
+                AppLogger.Error<HttpFunctionApiBase<TModel, TEntity, TId>>(messageTemplate: $"{nameof(TModel)} - Validation Exception - {validationRollupException.Message}");
+                response = req.CreateResponse();
+                await response.WriteAsJsonAsync(validationRollupException.ValidationResults);
+                response.StatusCode = HttpStatusCode.BadRequest;
+            }
             catch (ArgumentException argEx)
             {
                 AppLogger.Error<HttpFunctionApiBase<TModel, TEntity, TId>>(argEx, argEx.Message);
@@ -60,6 +68,8 @@ namespace Trident.Azure.Functions
                 AppLogger.Error<HttpFunctionApiBase<TModel, TEntity, TId>>(ex, ex.Message);
                 response = req.CreateResponse(HttpStatusCode.InternalServerError);
             }
+           
+
 
             return response;
         }
@@ -81,6 +91,13 @@ namespace Trident.Azure.Functions
                 await response.WriteAsJsonAsync(model);
                 AppLogger.Information<HttpFunctionApiBase<TModel, TEntity, TId>>(messageTemplate: $"{logName} - Completed");
 
+            }
+            catch (ValidationRollupException validationRollupException)
+            {
+                AppLogger.Error<HttpFunctionApiBase<TModel, TEntity, TId>>(messageTemplate: $"{nameof(TModel)} - Validation Exception - {validationRollupException.Message}");
+                response = req.CreateResponse();
+                await response.WriteAsJsonAsync(validationRollupException.ValidationResults);
+                response.StatusCode = HttpStatusCode.BadRequest;
             }
             catch (ArgumentException argEx)
             {
@@ -130,6 +147,13 @@ namespace Trident.Azure.Functions
                 AppLogger.Information<HttpFunctionApiBase<TModel, TEntity, TId>>(messageTemplate: $"{logName} - Completed");
 
             }
+            catch (ValidationRollupException validationRollupException)
+            {
+                AppLogger.Error<HttpFunctionApiBase<TModel, TEntity, TId>>(messageTemplate: $"{nameof(TModel)} - Validation Exception - {validationRollupException.Message}");
+                response = req.CreateResponse();
+                await response.WriteAsJsonAsync(validationRollupException.ValidationResults);
+                response.StatusCode = HttpStatusCode.BadRequest;
+            }
             catch (ArgumentOutOfRangeException argOutEx)
             {
                 AppLogger.Error<HttpFunctionApiBase<TModel, TEntity, TId>>(argOutEx, argOutEx.Message);
@@ -166,6 +190,13 @@ namespace Trident.Azure.Functions
 
                 AppLogger.Information<HttpFunctionApiBase<TModel, TEntity, TId>>(messageTemplate: $"{logName} - Completed");
 
+            }
+            catch (ValidationRollupException validationRollupException)
+            {
+                AppLogger.Error<HttpFunctionApiBase<TModel, TEntity, TId>>(messageTemplate: $"{nameof(TModel)} - Validation Exception - {validationRollupException.Message}");
+                response = req.CreateResponse();
+                await response.WriteAsJsonAsync(validationRollupException.ValidationResults);
+                response.StatusCode = HttpStatusCode.BadRequest;
             }
             catch (ArgumentException argEx)
             {

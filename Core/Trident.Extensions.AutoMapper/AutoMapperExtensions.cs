@@ -20,7 +20,7 @@ namespace Trident.Mapper
         public static IIoCProvider UsingTridentMapperProfiles(this IIoCProvider builder, params Assembly[] targetAssemblies)
         {
             builder.Register<ServiceMapperRegistry, IMapperRegistry>(LifeSpan.SingleInstance);
-            return builder.RegisterAll<AutoMapper.Profile>(targetAssemblies, LifeSpan.SingleInstance);
+            return builder.RegisterAllAsTarget<AutoMapper.Profile>(targetAssemblies, LifeSpan.SingleInstance);
 
         }
 

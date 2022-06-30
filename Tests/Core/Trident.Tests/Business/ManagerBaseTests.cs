@@ -9,6 +9,7 @@ using Trident.Validation;
 using Trident.Workflow;
 using System.Threading.Tasks;
 using Trident.Testing.TestScopes;
+using Trident.Logging;
 
 namespace Trident.Tests.Business
 {
@@ -32,7 +33,7 @@ namespace Trident.Tests.Business
             public Mock<IMapperRegistry> MapperMock { get; }
             public Mock<IValidationManager<TestEntity>> ValidationManager { get; }
             public Mock<IWorkflowManager<TestEntity>> WorkflowManager { get; }
-
+            public Mock<ILog> LoggerMock { get; }
 
             public DefaultTestScope()
             {
@@ -41,8 +42,10 @@ namespace Trident.Tests.Business
                 MapperMock = new Mock<IMapperRegistry>();
                 ValidationManager = new Mock<IValidationManager<TestEntity>>();
                 WorkflowManager = new Mock<IWorkflowManager<TestEntity>>();
+                LoggerMock = new Mock<ILog>();
 
                 InstanceUnderTest = new TestDerivedManager(
+                    LoggerMock.Object,
                     MapperMock.Object,
                     ProviderMock.Object,
                     ValidationManager.Object,
@@ -54,11 +57,12 @@ namespace Trident.Tests.Business
         private class TestDerivedManager : ManagerBase<int, TestEntity>, ITestDerivedManager
         {
             public TestDerivedManager(
+                ILog logger,
                 IMapperRegistry mapper,
                 IProvider<int, TestEntity> provider,
                 IValidationManager<TestEntity> validationManager,
                 IWorkflowManager<TestEntity> workflowManager = null)
-                : base(provider, validationManager, workflowManager)
+                : base(logger, provider, validationManager, workflowManager)
             { }
         }
 

@@ -11,6 +11,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Trident.Domain;
 using Trident.Search;
+using Trident.Logging;
 
 namespace Trident.Business
 {
@@ -41,15 +42,19 @@ namespace Trident.Business
         /// <param name="validationManager">The validation manager.</param>
         /// <param name="workflowManager">The workflow manager.</param>
         protected ManagerBase(
+            ILog logger,
             IProvider<TId, TEntity, TLookup, TSummary, TCriteria> provider,
             IValidationManager<TEntity> validationManager = null,
             IWorkflowManager<TEntity> workflowManager = null) : base(provider)
         {
             provider.GuardIsNotNull(nameof(provider));
+            Logger = logger;
             Provider = provider;
-            ValidationManager = validationManager;
-            WorkflowManager = workflowManager;
+            ValidationManager = validationManager ?? new DefaultValidationManager<TEntity>(null);
+            WorkflowManager = workflowManager ?? new DefaultWorkflowManager<TEntity>(null, logger);
         }
+
+        protected ILog Logger { get; }
 
         /// <summary>
         /// Gets the provider.
@@ -370,7 +375,7 @@ namespace Trident.Business
         public async Task<bool> BulkDelete(IEnumerable<TId> entityIds)
         {
             return await BulkDelete(await Get(x => entityIds.Contains(x.Id)));
-        }      
+        }
 
         public bool BulkDeleteSync(IEnumerable<TId> entityIds)
         {
@@ -633,9 +638,10 @@ namespace Trident.Business
         /// <param name="validationManager">The validation manager.</param>
         /// <param name="workflowManager">The workflow manager.</param>
         protected ManagerBase(
+            ILog logger,
             IProvider<TId, TEntity, TLookup, TSummary> provider,
             IValidationManager<TEntity> validationManager = null,
-            IWorkflowManager<TEntity> workflowManager = null) : base(provider, validationManager, workflowManager) { }
+            IWorkflowManager<TEntity> workflowManager = null) : base(logger, provider, validationManager, workflowManager) { }
     }
 
 
@@ -658,9 +664,10 @@ namespace Trident.Business
         /// <param name="validationManager">The validation manager.</param>
         /// <param name="workflowManager">The workflow manager.</param>
         protected ManagerBase(
+            ILog logger,
             IProvider<TId, TEntity, TLookup> provider,
             IValidationManager<TEntity> validationManager = null,
-            IWorkflowManager<TEntity> workflowManager = null) : base(provider, validationManager, workflowManager) { }
+            IWorkflowManager<TEntity> workflowManager = null) : base(logger, provider, validationManager, workflowManager) { }
     }
 
 
@@ -682,9 +689,10 @@ namespace Trident.Business
         /// <param name="validationManager">The validation manager.</param>
         /// <param name="workflowManager">The workflow manager.</param>
         protected ManagerBase(
+            ILog logger,
             IProvider<TId, TEntity> provider,
             IValidationManager<TEntity> validationManager = null,
-            IWorkflowManager<TEntity> workflowManager = null) : base(provider, validationManager, workflowManager) { }
+            IWorkflowManager<TEntity> workflowManager = null) : base(logger, provider, validationManager, workflowManager) { }
     }
 
 }

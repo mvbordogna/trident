@@ -1,4 +1,3 @@
-using Azure.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Primitives;
 using System;
@@ -6,13 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Trident.Common;
 using Trident.Extensions;
-using Az = Azure;
 
 namespace Trident.Azure.Functions
 {
     public abstract class FunctionAppSettingsBase : IAppSettings
     {
-
         /*
            * Settings in "local.settings.json" are stored in the "Values" section, meaning it must be referred to as "Values:SettingName" instead of "SettingName".
            * To synchronize how settings are retrieved (via indexer method) in Azure App Config Service and locally, flip this to true
@@ -26,31 +23,32 @@ namespace Trident.Azure.Functions
         private IConfigurationSection appSettingsSection;
         private IChangeToken reloadToken;
         private List<string> settingsIndex;
+        private ConfigurationBuilder builder;
 
-
-        public FunctionAppSettingsBase()
+        public FunctionAppSettingsBase(Action<IAppSettings, IConfigurationBuilder> configureCallback = null)
         {
-            Init();
+            Init(configureCallback);
         }
 
-
-        protected virtual void Init()
+        protected virtual void Init(Action<IAppSettings, IConfigurationBuilder> configureCallback)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Environment.CurrentDirectory)
+            builder = new ConfigurationBuilder();
+
+            builder.SetBasePath(Environment.CurrentDirectory)
                 .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
 
-            if (!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("KeyVaultUri")))
-            {
-                builder.AddAzureKeyVault(new Uri(Environment.GetEnvironmentVariable("KeyVaultUri")), new DefaultAzureCredential());
-            }
-
             _appSettings = builder.Build();
             ConnectionStrings = new JsonConnectionStringSettings(_appSettings);
+
+            if (configureCallback != null)
+            {
+                configureCallback?.Invoke(this, builder);
+                _appSettings = builder.Build();
+            }
+
             ConfigChangedCallback(null);
         }
-
 
         protected void ConfigChangedCallback(object state)
         {
@@ -63,7 +61,14 @@ namespace Trident.Azure.Functions
         }
 
 
-        public string this[string key] => _appSettings[key];
+        public virtual string this[string key]
+        {
+            get
+            {
+                return _appSettings[key];
+            }
+
+        }
 
 
         public T GetSection<T>(string sectionName = null)
@@ -83,7 +88,7 @@ namespace Trident.Azure.Functions
         }
 
 
-        public IConnectionStringSettings ConnectionStrings { get; private set; }
+        public IConnectionStringSettings ConnectionStrings { get; set; }
 
         public string this[int index] => settings.Values.ToList()[index];
     }
