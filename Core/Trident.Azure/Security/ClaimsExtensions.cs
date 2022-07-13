@@ -12,11 +12,6 @@ namespace Trident.Azure.Security
             return claims.GetClaimValue(ClaimConstants.Types.ObjectId);
         }
 
-        public static string GetEnterpriseUserId(this IEnumerable<Claim> claims)
-        {
-            return claims.GetClaimValue(ClaimConstants.Types.EnterpriseUserId);
-        }
-
         public static string GetAppId(this IEnumerable<Claim> claims)
         {
             return claims.GetClaimValue(ClaimConstants.Types.AppId);
@@ -30,22 +25,6 @@ namespace Trident.Azure.Security
         public static IEnumerable<string> GetRoles(this IEnumerable<Claim> claims)
         {
             return claims.GetClaimValues(ClaimConstants.Types.Role);
-        }
-
-        public static IEnumerable<string> GetExternalSystemAccess(this IEnumerable<Claim> claims)
-        {
-            return claims.GetClaimValues(ClaimConstants.Types.ExternalSystemAccess);
-        }
-
-        public static IEnumerable<Guid> GetAgencyIds(this IEnumerable<Claim> claims)
-        {
-            var accountIds = claims.GetClaimValues(ClaimConstants.Types.AccountId);
-
-            var agencyIds = accountIds
-                .Select(s => Guid.TryParse(s, out var g) ? g : Guid.Empty)
-                .Where(g => g != Guid.Empty);
-
-            return agencyIds;
         }
 
         public static string GetClaimValue(this IEnumerable<Claim> claims, string claimType)

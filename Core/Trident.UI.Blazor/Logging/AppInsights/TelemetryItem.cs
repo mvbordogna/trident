@@ -33,19 +33,19 @@ namespace Trident.UI.Blazor.Logging.AppInsights
         /// System context properties of the telemetry item, example: ip address, city etc
         /// </summary>
         [JsonProperty("ext")]
-        public Dictionary<string, object>? Ext { get; set; }
+        public Dictionary<string, object> Ext { get; set; }
 
         /// <summary>
         /// System context property extensions that are not global (not in ctx)
         /// </summary>
         [JsonProperty("tags")]
-        public Dictionary<string, object>? Tags { get; set; }
+        public Dictionary<string, object> Tags { get; set; }
 
         /// <summary>
         /// Custom data
         /// </summary>
         [JsonProperty("data")]
-        public Dictionary<string, object>? Data { get; set; }
+        public Dictionary<string, object> Data { get; set; }
 
         /// <summary>
         /// Telemetry type used for part B
@@ -57,6 +57,6 @@ namespace Trident.UI.Blazor.Logging.AppInsights
         /// Based on schema for part B
         /// </summary>
         [JsonProperty("baseData")]
-        public Dictionary<string, object>? BaseData { get; set; }
+        public Dictionary<string, object> BaseData { get; set; }
     }
 }

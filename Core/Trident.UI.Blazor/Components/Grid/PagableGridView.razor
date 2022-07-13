@@ -27,37 +27,32 @@
     <div class="grid-view-header__left-side">
         @if (CustomButton != null)
         {
-            @CustomButton
+           @CustomButton
         }
     </div>
 
     <div class="grid-view-header__right-side position-relative">
         @if (EnableSearch)
         {
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <div class="input-group-text">
-                        <i class="fa fa-search"></i>
-                    </div>
-                </div>
+            <div class="input-group">              
                 <RadzenTextBox Name="Keywords" Value="@GetKeywords()" ValueChanged="@SetKeywords" @onkeyup="@OnSearchKeyUp" class="form-control" id="txt_Grid_Search"/>
+                <RadzenButton Id="main_Grid_Search" Click="@OnSearchButtonClick" >SEARCH</RadzenButton>
             </div>
+                  
+          
 
-            <ButtonComponent ParentMethod="@OnSearchButtonClick" ButtonType="@BsButtonType.Secondary" Id="main_Grid_Search">
-                @Localizer.GetText("SEARCH")
-            </ButtonComponent>
         }
 
         @if (EnableFilters)
         {
-            <ButtonComponent ParentMethod="@OnFilterButtonClick" ButtonType="@BsButtonType.Secondary" Id="main_Grid_Search">
-                <img src="img/icon-filter.svg" alt="filter icon"/> @Localizer.GetText("FILTERS")
-            </ButtonComponent>
+             <RadzenButton Id="main_Grid_Search" Click="@OnFilterButtonClick" >
+                     <img src="img/icon-filter.svg" alt="filter icon"/> FILTERS
+             </RadzenButton>
         }
 
         @if (ShowExport)
         {
-            <CsvExport FileName="@ExportFileName" GetDataAsync="@ExportGetData"></CsvExport>
+         
         }
     </div>
 </div>

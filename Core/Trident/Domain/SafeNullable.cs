@@ -169,6 +169,7 @@ namespace Trident.Domain
 
         public static bool operator ==(SafeNullable<T> obj1, T obj2)
         {
+            #pragma warning disable CA2013 // Do not use ReferenceEquals with value types
             if (ReferenceEquals(obj1, obj2))
             {
                 return true;
@@ -183,11 +184,14 @@ namespace Trident.Domain
             }
 
             return obj1.Equals(obj2);
+            #pragma warning restore CA2013 // Do not use ReferenceEquals with value types
         }
 
         public static bool operator !=(SafeNullable<T> obj1, T obj2)
         {
+            #pragma warning disable CA2013 // Do not use ReferenceEquals with value types
             if (ReferenceEquals(obj1, obj2))
+
             {
                 return false;
             }
@@ -200,7 +204,8 @@ namespace Trident.Domain
                 return true;
             }
 
-            return !obj1.Equals(obj2);
+            return !obj1.Equals(obj2);  
+            #pragma warning restore CA2013 // Do not use ReferenceEquals with value types
         }
 
         public override bool Equals(object obj)

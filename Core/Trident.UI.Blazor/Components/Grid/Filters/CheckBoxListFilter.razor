@@ -6,9 +6,9 @@
         <RadzenLabel Text="@FilterOptions.Label" Component="@Name"></RadzenLabel>
 		@if (Value?.Any() ?? false)
 		{
-		    <ButtonComponent ButtonType="@BsButtonType.Link" ParentMethod="@ResetToDefault">
-                Clear
-            </ButtonComponent>
+            <RadzenButton Id="main_Grid_Search" Click="@ResetToDefault" CssClass="move-role-btn">
+                 Clear
+            </RadzenButton>       		
 		}
     </div>
     <RadzenCheckBoxList TValue="TOutputValue"

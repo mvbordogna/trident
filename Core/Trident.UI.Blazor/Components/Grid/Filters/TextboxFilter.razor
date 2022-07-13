@@ -6,9 +6,9 @@
         <RadzenLabel Text="@FilterOptions.Label" Component="@(InstanceId + "_textbox")"></RadzenLabel>
         @if (Value != null)
         {
-            <ButtonComponent ButtonType="@BsButtonType.Link" ParentMethod="@ResetToDefault">
-                Clear
-            </ButtonComponent>
+            <RadzenButton Id="main_Grid_Search" Click="@ResetToDefault" ButtonType="ButtonType.Button">
+                 Clear
+            </RadzenButton>           
         }
     </div>
     <RadzenTextBox Name="@(InstanceId + "_textbox")" Change="ValueChanged" Value="@(Value as string)" class="form-control" />

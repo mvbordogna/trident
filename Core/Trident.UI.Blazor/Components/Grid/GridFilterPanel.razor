@@ -8,20 +8,20 @@
         {
             @fragment
         }
-        <hr class="col-11"/>
+        <hr class="col-11" />
     }
 
-    <br class="col-12"/>
+    <br class="col-12" />
 
     <div class="filter-btn-group">
-        <ButtonComponent ParentMethod="OnApplyFilters" ButtonType="@BsButtonType.Danger" Disabled="@EnableApply">
-            APPLY
-        </ButtonComponent>
-        <ButtonComponent ParentMethod="OnCloseRequested" ButtonType="@BsButtonType.Secondary" CssClass="ml-2">
+        <RadzenButton Id="main_Grid_Search" Click="@OnApplyFilters" ButtonType="ButtonType.Button">
+                APPLY
+        </RadzenButton> 
+        <RadzenButton Id="main_Grid_Search" Click="@OnCloseRequested" ButtonType="ButtonType.Button">
             CLOSE
-        </ButtonComponent>
-        <ButtonComponent ParentMethod="ClearAllFilters" ButtonType="@BsButtonType.Link" CssClass="mt-1 ml-2">
+        </RadzenButton> 
+        <RadzenButton Id="main_Grid_Search" Click="@ClearAllFilters" ButtonType="ButtonType.Button">
             Clear All Filters
-        </ButtonComponent>
+        </RadzenButton>
     </div>
 </form>

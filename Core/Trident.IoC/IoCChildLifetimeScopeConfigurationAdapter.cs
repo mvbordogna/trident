@@ -1,4 +1,7 @@
-﻿namespace Trident.IoC
+﻿using System;
+using System.Collections.Generic;
+
+namespace Trident.IoC
 {
     /// <summary>
     /// Configuration adapter for <see cref="IoCChildLifetimeScopeServiceProviderFactory" />.

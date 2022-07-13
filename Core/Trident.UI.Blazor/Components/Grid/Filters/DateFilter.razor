@@ -12,9 +12,10 @@
                      Style="font-size: 14px !important; line-height: 22px; font-weight: 400 !important"></RadzenLabel>
         @if (LowerBoundValue != null)
         {
-            <ButtonComponent ButtonType="@BsButtonType.Link" ParentMethod="@ResetToDefault">
-                Clear
-            </ButtonComponent>
+            
+            <RadzenButton Id="main_Grid_Search" Click="@ResetToDefault">
+                 Clear
+            </RadzenButton> 
         }
     </div>
 
@@ -32,9 +33,9 @@
                      Style="font-size: 14px !important; line-height: 22px; font-weight: 400 !important"></RadzenLabel>
         @if (UpperBoundValue != null)
         {
-            <ButtonComponent ButtonType="@BsButtonType.Link" ParentMethod="@ResetToDefault">
-                Clear
-            </ButtonComponent>
+            <RadzenButton Id="main_Grid_Search" Click="@ResetToDefault">
+                 Clear
+            </RadzenButton> 
         }
     </div>
     <RadzenDatePicker TValue="DateTime?"

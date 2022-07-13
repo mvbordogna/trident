@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Trident.Contracts.Api.Client;
@@ -12,7 +13,7 @@ using Trident.UI.Client;
 
 namespace Trident.Sample.UI.Servcies
 {
-    [Service(Services.TridentInfrastructureApi, Services.Resources.organization)]
+    [Service(Services.TridentSampleApi, Services.Resources.organization)]
     public class OrganizationService : ServiceBase<OrganizationService, OrganizationModel, Guid>, IOrganizationService
     {
         private readonly ILogger<OrganizationService> _logger;

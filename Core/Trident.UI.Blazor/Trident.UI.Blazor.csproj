@@ -1,97 +1,33 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Components\Forms\DualListBox.razor" />
-    <None Remove="Components\Forms\RadioButtonGroupComponent.razor" />
-    <None Remove="Components\Grid\ColumnDefinition.razor" />
-    <None Remove="Components\Grid\Filters\CheckBoxListFilter.razor" />
-    <None Remove="Components\Grid\Filters\DateFilter.razor" />
-    <None Remove="Components\Grid\Filters\FilterComponentBase.razor" />
-    <None Remove="Components\Grid\Filters\RadioListFilter.razor" />
-    <None Remove="Components\Grid\Filters\TextboxFilter.razor" />
-    <None Remove="Components\Grid\Filters\TypeAheadFilter.razor" />
-    <None Remove="Components\Grid\GridFilterPanel.razor" />
-    <None Remove="Components\Grid\PagableGridView.razor" />
-    <None Remove="Components\Modals\ErrorAlert.razor" />
-    <None Remove="Components\Modals\MessageAlert.razor" />
-    <None Remove="Components\Modals\ModalBase.razor" />
-    <None Remove="Components\Security\Authentication.razor" />
-    <None Remove="Components\Security\ClaimsAuthorizeView.razor" />
-    <None Remove="Components\Security\NotAutoriziedView.razor" />
-    <None Remove="Components\Security\RedirectToLogin.razor" />
+    <Content Remove="Components\LocalTimeComponent.razor" />
+    <Content Remove="Components\Security\CascadingApplicationState.razor" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Components\Forms\DualListBox.razor">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-    <Content Include="Components\Forms\RadioButtonGroupComponent.razor">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-    <Content Include="Components\Grid\ColumnDefinition.razor">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-    <Content Include="Components\Grid\Filters\CheckBoxListFilter.razor">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-    <Content Include="Components\Grid\Filters\DateFilter.razor">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-    <Content Include="Components\Grid\Filters\FilterComponentBase.razor">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-    <Content Include="Components\Grid\Filters\RadioListFilter.razor">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-    <Content Include="Components\Grid\Filters\TextboxFilter.razor">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-    <Content Include="Components\Grid\Filters\TypeAheadFilter.razor">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-    <Content Include="Components\Grid\GridFilterPanel.razor">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-    <Content Include="Components\Grid\PagableGridView.razor">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-    <Content Include="Components\Modals\ErrorAlert.razor">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-    <Content Include="Components\Modals\MessageAlert.razor">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-    <Content Include="Components\Modals\ModalBase.razor">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-    <Content Include="Components\Security\Authentication.razor">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-    <Content Include="Components\Security\ClaimsAuthorizeView.razor">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-    <Content Include="Components\Security\NotAutoriziedView.razor">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-    <Content Include="Components\Security\RedirectToLogin.razor">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
+    <None Include="Components\LocalTimeComponent.razor" />
+    <None Include="Components\Security\CascadingApplicationState.razor" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.4" />
-	<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="6.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Radzen.Blazor" Version="3.12.1" />
-	<PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
-	<PackageReference Include="Blazored.LocalStorage" Version="4.1.5" />
-	<PackageReference Include="Blazored.SessionStorage" Version="2.2.0" />
-	<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.0" />
-	  
+	  <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.7" />
+	  <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="6.0.7" />
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	  <PackageReference Include="Radzen.Blazor" Version="3.19.4" />
+	  <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
+	  <PackageReference Include="Blazored.LocalStorage" Version="4.2.0" />
+	  <PackageReference Include="Blazored.SessionStorage" Version="2.2.0" />
+	  <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.7" />
   </ItemGroup>
 
   <ItemGroup>

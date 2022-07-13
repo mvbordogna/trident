@@ -70,7 +70,7 @@ namespace Trident.UI.Blazor.Logging.Browser
             }
         }
 
-        private void WriteMessage(LogLevel logLevel, string logName, int eventId, string message, Exception? exception)
+        private void WriteMessage(LogLevel logLevel, string logName, int eventId, string message, Exception exception)
         {
             lock (_logBuilder)
             {

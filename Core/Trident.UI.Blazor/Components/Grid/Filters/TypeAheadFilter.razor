@@ -1,4 +1,3 @@
-@using Trident.UI.Blazor.Components.Buttons
 @using Trident.UI.Blazor.Components.Grid.Filters
 @inherits TypeAheadFilter
 @typeparam TOutputValue
@@ -8,9 +7,9 @@
         <RadzenLabel Text="@FilterOptions.Label" Component="@($"typeAheadFilter{InstanceId}")"></RadzenLabel>
         @if (Value != null)
         {
-            <ButtonComponent ButtonType="@BsButtonType.Link" ParentMethod="@ResetToDefault">
-                Clear
-            </ButtonComponent>
+            <RadzenButton Id="main_Grid_Search" Click="@ResetToDefault" ButtonType="ButtonType.Button">
+                 Clear
+            </RadzenButton>              
         }
     </div>
     <RadzenAutoComplete LoadData="OnLoadData"

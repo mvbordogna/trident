@@ -51,50 +51,15 @@ namespace Trident.Azure.Security
             /// </summary>
             public const string Role = "role";
 
-            /// <summary>
-            /// any accounts user is associated with
-            /// </summary>
-            public const string AccountId = "accountId";
+            public const string Sub = "sub";
 
-            /// <summary>
-            /// source of the token
-            /// </summary>
-            public const string TokenSource = "source";
-
-            /// <summary>
-            /// any employer groups user is associated with
-            /// </summary>
-            public const string EmployerGroup = "employerGroup";
-
-            /// <summary>
-            /// any EAS user is associated with
-            /// </summary>
-            public const string Eas = "eas";
 
             /// <summary>
             /// represents app id if authentication was performed using app registration
             /// </summary>
             public const string AppId = "appid";
 
-            /// <summary>
-            /// id that identifies the user within the enterprise
-            /// </summary>
-            public static string EnterpriseUserId = "enterpriseUserId";
 
-            /// <summary>
-            /// claim used to identify access user has for templates
-            /// </summary>
-            public static string Template = "template";
-
-            /// <summary>
-            /// claim used to identify ExternalSystemAccess permissions for user
-            /// </summary>
-            public static string ExternalSystemAccess = "externalSystemAccess";
-
-            /// <summary>
-            /// claim used to identify access user has for managing or retrieving content
-            /// </summary>
-            public static string ContentAccess = "contentAccess";
         }
 
         public static class Values

@@ -95,7 +95,7 @@ namespace Trident.UI.Blazor.Components
         {
             parameters ??= new Dictionary<string, object>();
             parameters["Application"] = Application;
-
+           
             return await DialogService.OpenAsync<T>(title, parameters,
                  new DialogOptions() { ShowClose = showClose, Style = "min-height:auto;min-width:auto;width:auto;" }
              );

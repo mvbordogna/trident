@@ -35,6 +35,18 @@ namespace Trident.Azure.Functions
             public string Authorization { get; set; }
         }
 
+
+        protected virtual Task<bool> IsAuthorizedPrecheck(JwtSecurityToken principal)
+        {
+            return Task.FromResult(true);
+        }
+
+        protected virtual Task<bool> IsAuthorizedPostcheck(JwtSecurityToken principal)
+        {
+            return Task.FromResult(true);
+        }
+
+
         public async Task Invoke(FunctionContext context, FunctionExecutionDelegate next)
         {
             try
@@ -57,6 +69,8 @@ namespace Trident.Azure.Functions
                         var token = headers.Authorization.Replace("bearer", string.Empty, StringComparison.InvariantCultureIgnoreCase).Trim();
                         var principal = ReadJwtToken(token);
 
+                        authorized &= await IsAuthorizedPrecheck(principal);
+
                         foreach (var claim in claims)
                         {
                             var userClaimValue = principal.Claims.GetClaimValue(claim.Type);
@@ -68,6 +82,8 @@ namespace Trident.Azure.Functions
                                 break;
                             }
                         }
+
+                        authorized &= await IsAuthorizedPrecheck(principal);
                     }
 
                     if (authorized)

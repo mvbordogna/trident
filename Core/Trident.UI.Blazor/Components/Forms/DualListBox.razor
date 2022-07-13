@@ -13,17 +13,13 @@
         </RadzenListBox>
     </div>
     <div class="col-sm-2 move-role-btn-group">
-        <ButtonComponent ParentMethod="MoveRight" CssClass="move-role-btn">
-            <ChildContent>
-                ADD <i class="fa fa-arrow-right"></i>
-            </ChildContent>
-        </ButtonComponent>
+        <RadzenButton Id="main_Grid_Search" Click="@MoveRight" CssClass="move-role-btn">
+             ADD <i class="fa fa-arrow-right"></i>
+        </RadzenButton>      
 
-        <ButtonComponent ParentMethod="MoveLeft" CssClass="move-role-btn">
-            <ChildContent>
-                <i class="fa fa-arrow-left"></i> REMOVE
-            </ChildContent>
-        </ButtonComponent>
+        <RadzenButton Id="main_Grid_Search" Click="@MoveLeft" CssClass="move-role-btn">
+            <i class="fa fa-arrow-left"></i> REMOVE
+        </RadzenButton>        
     </div>
     <div class="col-sm-5">
         <RadzenListBox @ref="RightControl"

@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 
 namespace Trident.IoC
 {

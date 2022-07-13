@@ -11,7 +11,6 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Trident.Api.Search;
 using Trident.Extensions;
-using Trident.UI.Blazor.Components;
 
 namespace Trident.UI.Blazor.Components.Grid
 {
@@ -264,7 +263,7 @@ namespace Trident.UI.Blazor.Components.Grid
                 Results.Info.Keywords = value;
         }
 
-        private async Task OnFilterButtonClick()
+        private Task OnFilterButtonClick()
         {
             if (!FilterVisible)
             {
@@ -272,6 +271,8 @@ namespace Trident.UI.Blazor.Components.Grid
             }
 
             ShowFilters = !ShowFilters;
+
+            return Task.CompletedTask;
         }
 
         private SearchResultInfoModel<SearchCriteriaModel> MapNew(LoadDataArgs args, SearchResultInfoModel<SearchCriteriaModel> info)

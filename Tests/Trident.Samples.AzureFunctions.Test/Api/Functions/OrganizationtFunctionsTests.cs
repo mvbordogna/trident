@@ -2,7 +2,10 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.Net;
+using System.Threading.Tasks;
 using Trident.Contracts;
 using Trident.Logging;
 using Trident.Mapper;
