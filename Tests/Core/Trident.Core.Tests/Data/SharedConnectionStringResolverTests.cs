@@ -1,11 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Trident.Common;
-using Trident.Configuration;
 using Trident.Data;
 using Trident.Data.Contracts;
 using Trident.EFCore;
 using Trident.Testing.TestScopes;
+using Trident.Contracts.Configuration;
 
 namespace Trident.Core.Tests.Data
 {

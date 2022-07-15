@@ -11,6 +11,7 @@ using Trident.Configuration;
 using Trident.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Trident.Contracts.Configuration;
 
 namespace Trident
 {
@@ -31,7 +32,7 @@ namespace Trident
                 .RegisterMicrosoftDiServiceProvider(options.ServicesCollection);
             
             SetupConfiguration(options, configMethod);
-            Common.IConnectionStringSettings connStringManager = null;
+            IConnectionStringSettings connStringManager = null;
 
 
             if (options.UsingJsonConfig)

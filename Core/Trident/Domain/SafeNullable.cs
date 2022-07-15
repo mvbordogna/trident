@@ -171,6 +171,7 @@ namespace Trident.Domain
         {
             #pragma warning disable CA2013 // Do not use ReferenceEquals with value types
             if (ReferenceEquals(obj1, obj2))
+
             {
                 return true;
             }

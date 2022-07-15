@@ -159,6 +159,12 @@ namespace Trident.IoC
         /// Verifies the and throw.
         /// </summary>
         void VerifyAndThrow();
+
+        /// <summary>
+        /// Verifies this instance items can be resoved and logs.
+        /// </summary>
+        void Verify();
+
         /// <summary>
         /// Builds this instance.
         /// </summary>

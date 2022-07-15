@@ -11,7 +11,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using Trident.Common;
+using Trident.Contracts.Configuration;
 using Trident.Data;
 using Trident.EFCore.Contracts;
 using Trident.IoC;

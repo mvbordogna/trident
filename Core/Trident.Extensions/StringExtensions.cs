@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Trident.Extensions
@@ -59,7 +60,7 @@ namespace Trident.Extensions
         /// <param name="stringToSecure">Converts to secure.</param>
         /// <returns>SecureString.</returns>
         public static SecureString ToSecureString(this string stringToSecure)
-        {            
+        {
             SecureString sec_pass = new SecureString();
             Array.ForEach(stringToSecure.ToArray(), sec_pass.AppendChar);
             sec_pass.MakeReadOnly();
@@ -89,6 +90,19 @@ namespace Trident.Extensions
                 Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString);
             }
         }
+
+        public static string FromBase64(this string encoded)
+        {
+            byte[] bytes = Convert.FromBase64String(encoded);
+            return Encoding.UTF8.GetString(bytes);
+        }
+
+        public static string ToBase64(this string unencoded)
+        {
+            byte[] bytes = Encoding.UTF8.GetBytes(unencoded);
+            return Convert.ToBase64String(bytes);
+        }
+
     }
 }
 

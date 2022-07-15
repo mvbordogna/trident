@@ -11,6 +11,7 @@ using System.Linq;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Options;
 using Trident.Azure;
+using Trident.Contracts.Configuration;
 
 namespace Trident.Samples.AzureFunctions
 {

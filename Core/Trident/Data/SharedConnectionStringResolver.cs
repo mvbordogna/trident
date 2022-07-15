@@ -5,6 +5,7 @@ using System.Data.Common;
 using Trident.Contracts.Enums;
 using Trident.Common;
 using Trident.Configuration;
+using Trident.Contracts.Configuration;
 
 namespace Trident.Data
 {

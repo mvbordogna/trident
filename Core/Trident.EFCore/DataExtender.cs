@@ -2,10 +2,11 @@
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Reflection;
-using Trident.Common;
 using Trident.Contracts;
+using C = Trident.Contracts.Configuration;
 using Trident.Data;
 using Trident.Data.Contracts;
 using Trident.EFCore.Contracts;
@@ -21,8 +22,8 @@ namespace Trident.EFCore
             internal const string CosmosDB = "cosmosdb";
         }
 
-        private Dictionary<string, Action<IIoCProvider, Assembly[], ConnectionStringSettings>> ProviderSetups
-            = new Dictionary<string, Action<IIoCProvider, Assembly[], ConnectionStringSettings>>()
+        private Dictionary<string, Action<IIoCProvider, Assembly[], C.ConnectionStringSettings>> ProviderSetups
+            = new Dictionary<string, Action<IIoCProvider, Assembly[], C.ConnectionStringSettings>>()
             {
                 {    Providers.SQL , (p, targetAssemblies, connStr)=>{
 
@@ -59,7 +60,7 @@ namespace Trident.EFCore
             };
 
 
-        public void RegisterSupportedConnections(Assembly[] targetAssemblies, IConnectionStringSettings connStringManager, IIoCProvider provider)
+        public void RegisterSupportedConnections(Assembly[] targetAssemblies, C.IConnectionStringSettings connStringManager, IIoCProvider provider)
         {
             provider.Register<OptionsFactory, IOptionsFactory>(LifeSpan.SingleInstance);
             provider.Register<EFCoreModelBuilderFactory, IEFCoreModelBuilderFactory>(LifeSpan.SingleInstance);

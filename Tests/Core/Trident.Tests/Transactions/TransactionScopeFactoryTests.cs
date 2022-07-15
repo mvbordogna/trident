@@ -5,6 +5,7 @@ using Trident.Common;
 using Trident.Transactions;
 using System.Reflection;
 using System.Transactions;
+using Trident.Contracts.Configuration;
 
 namespace Trident.Tests.Transactions
 {

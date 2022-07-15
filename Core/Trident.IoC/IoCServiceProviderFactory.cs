@@ -12,6 +12,9 @@ namespace Trident.IoC
         private readonly Action<IIoCProvider> _configurationAction;
         private readonly ContainerBuildOptions _containerBuildOptions = ContainerBuildOptions.None;
 
+        public bool EnableThrowOnIncompleteRegistration { get; private set; }
+        public bool EnableDebugOutput { get; private set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="IoCServiceProviderFactory"/> class.
         /// </summary>
@@ -19,9 +22,14 @@ namespace Trident.IoC
         /// <param name="configurationAction">Action on a <see cref="ContainerBuilder"/> that adds component registrations to the container.</param>
         public IoCServiceProviderFactory(
             ContainerBuildOptions containerBuildOptions,
-            Action<IIoCProvider> configurationAction = null)
-            : this(configurationAction) =>
+            Action<IIoCProvider> configurationAction = null,
+            bool enableDebugOutput = false, bool enableThrowOnIncompleteRegistration = false)
+            : this(configurationAction)
+        {
             _containerBuildOptions = containerBuildOptions;
+            EnableDebugOutput = enableDebugOutput;
+            EnableThrowOnIncompleteRegistration = enableThrowOnIncompleteRegistration;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IoCServiceProviderFactory"/> class.
@@ -56,6 +64,15 @@ namespace Trident.IoC
             if (containerBuilder == null) throw new ArgumentNullException(nameof(containerBuilder));
 
             containerBuilder.Build();
+            if (this.EnableThrowOnIncompleteRegistration)
+            {
+                containerBuilder.VerifyAndThrow();
+            }
+            else
+            if (this.EnableDebugOutput)
+            {
+                containerBuilder.Verify();
+            }   
 
             return new IoCServiceProvider(containerBuilder);
         }

@@ -3,6 +3,7 @@ using Trident.Business;
 using Trident.Caching;
 using Trident.Common;
 using Trident.Contracts;
+using Trident.Contracts.Configuration;
 using Trident.Data;
 using Trident.Data.Contracts;
 using Trident.Rest;
@@ -44,12 +45,12 @@ namespace Trident.IoC
         public static IIoCProvider UsingTridentAppSettingsXmlManager(this IIoCProvider builder)
 
         {
-            return builder.RegisterSingleton<Common.XmlAppSettings, Common.IAppSettings>(true);         
+            return builder.RegisterSingleton<Common.XmlAppSettings, IAppSettings>(true);         
         }
 
         public static IIoCProvider UsingTridentAppSettingsJsonManager(this IIoCProvider builder)
         {
-            return builder.RegisterSingleton<Common.JsonAppSettings, Common.IAppSettings>(true);
+            return builder.RegisterSingleton<Common.JsonAppSettings, IAppSettings>(true);
         }
 
         public static IIoCProvider UsingTridentConnectionStringXmlManager(this IIoCProvider builder)

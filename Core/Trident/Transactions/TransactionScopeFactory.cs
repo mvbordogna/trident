@@ -1,6 +1,7 @@
 ﻿using Trident.Common;
 using System;
 using System.Transactions;
+using Trident.Contracts.Configuration;
 
 namespace Trident.Transactions
 {

@@ -658,12 +658,12 @@ namespace Trident.IoC
                         object actual = null;
                         if (reg.NameKey != null)
                         {
-                            System.Diagnostics.Debug.WriteLine(string.Format("Named: {0} - {1} ", reg.NameKey, reg.RegistrationType.FullName));
+                            WriteToLogAnConsole(string.Format("Named: {0} - {1} : {2}", reg.NameKey, reg.RegistrationType.FullName, reg.InstanceType.FullName));
                             actual = requestScope.ResolveKeyed(reg.NameKey, reg.RegistrationType);
                         }
                         else
                         {
-                            System.Diagnostics.Debug.WriteLine(string.Format("Named: Default - {0}", reg.RegistrationType.FullName));
+                            WriteToLogAnConsole(string.Format("Named: Default - {0} : {1}", reg.RegistrationType.FullName, reg.InstanceType.FullName));
 
                             actual = requestScope.Resolve(reg.RegistrationType);
                         }
@@ -681,7 +681,7 @@ namespace Trident.IoC
 
                         //log overwritten registrations
                         if (!reg.InstanceType.IsAssignableFrom(actual.GetType()))
-                            System.Diagnostics.Debug.WriteLine(
+                            WriteToLogAnConsole(
                                 string.Format("Resolved named registration with key {0} but type was unexpected. Unexpected type {1}, expected {2}.",
                                    reg.NameKey, actual.GetType().FullName, reg.InstanceType.FullName));
 
@@ -693,13 +693,26 @@ namespace Trident.IoC
                             //this longing is only good in vs, we need a way to
                             // log in production but this is the container, and we can't
                             //rely on a ioc registered logger.
-                            System.Diagnostics.Debug.WriteLine(ex);
+                            WriteToLogAnConsole(ex);
+
                         }
 
                         if (throwExceptions) throw;
                     }
                 }
             }
+        }
+
+        private void WriteToLogAnConsole(string message)
+        {
+            System.Diagnostics.Debug.WriteLine(message);
+            Console.WriteLine(message);
+        }
+
+        private void WriteToLogAnConsole(Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex);
+            Console.WriteLine(ex);
         }
 
 

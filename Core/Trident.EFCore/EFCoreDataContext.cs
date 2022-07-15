@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Trident.Common;
+using Trident.Contracts.Configuration;
 using Trident.Data;
 using Trident.Data.Contracts;
 using Trident.Domain;

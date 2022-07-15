@@ -1,4 +1,5 @@
 ﻿using System;
+using Trident.Contracts.Configuration;
 using Trident.Extensions;
 
 namespace Trident.Common
@@ -10,6 +11,8 @@ namespace Trident.Common
     /// <seealso cref="TridentOptionsBuilder.Common.IAppSettings" />
     public class XmlAppSettings : IAppSettings
     {
+        public Contracts.Configuration.IConnectionStringSettings ConnectionStrings => throw new NotImplementedException();
+
         /// <summary>
         /// Gets the <see cref="System.String" /> with the specified key.
         /// </summary>

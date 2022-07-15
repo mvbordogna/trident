@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Trident.Common;
+using Trident.Contracts.Configuration;
 using Trident.IoC;
 
 namespace Trident.Contracts

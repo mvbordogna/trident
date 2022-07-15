@@ -53,11 +53,14 @@ namespace Trident.Azure.Security
 
             public const string Sub = "sub";
 
+            public const string NameIdentifier = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier";
+
 
             /// <summary>
             /// represents app id if authentication was performed using app registration
             /// </summary>
             public const string AppId = "appid";
+
 
 
         }

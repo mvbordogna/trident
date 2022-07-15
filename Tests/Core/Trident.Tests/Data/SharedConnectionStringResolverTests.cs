@@ -1,7 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Trident.Common;
-using Trident.Configuration;
+using Trident.Contracts.Configuration;
 using Trident.Data;
 using Trident.Data.Contracts;
 using Trident.EFCore;

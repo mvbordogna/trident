@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Trident.Common;
+using Trident.Contracts.Configuration;
 using Trident.Testing.TestScopes;
 
 namespace Trident.Tests.Common

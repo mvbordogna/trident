@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Trident.Contracts.Api.Client
@@ -9,6 +10,7 @@ namespace Trident.Contracts.Api.Client
         Task<Response<TModel>> Update(TModel model);
         Task<Response<TModel>> Delete(TModel model);
         Task<Response<TModel>> Create(TModel model);
-        Task<Response<TModel>> Patch(Guid id, TModel model);
+  
+        Task<Response<TModel>> Patch(TId id, IDictionary<string, object> patches);
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Trident.Common;
 using Trident.Contracts;
+using Trident.Contracts.Configuration;
 using Trident.Data.Contracts;
 using Trident.Data.RestSharp;
 using Trident.IoC;

@@ -3,6 +3,7 @@ using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Trident.Contracts.Configuration;
 using Trident.Extensions;
 
 namespace Trident.Common
@@ -20,6 +21,8 @@ namespace Trident.Common
          * to have the value accessor coalesce to "Environment.GetEnvironmentVariable" if the json provider returns null.
          */
         public static bool CoalesceEnvironmentVariables { get; set; } = false;
+
+        public Contracts.Configuration.IConnectionStringSettings ConnectionStrings => throw new NotImplementedException();
 
         private readonly IConfigurationRoot configurationRoot;
         private IConfigurationSection appSettingsSection;

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Trident.Common;
 using Trident.Configuration;
+using Trident.Contracts.Configuration;
 using Trident.Contracts.Enums;
 using Trident.Rest.Contracts;
 
