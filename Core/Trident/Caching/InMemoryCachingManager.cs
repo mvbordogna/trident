@@ -172,9 +172,9 @@ namespace Trident.Caching
             {
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                //log
+                
             }
         }
 

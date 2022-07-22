@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\Trident.UI.Client\Trident.UI.Client.csproj" />
+    <ProjectReference Include="..\..\Core\Trident.Contracts.Api\Trident.Contracts.Api.csproj" />
   </ItemGroup>
 
 </Project>

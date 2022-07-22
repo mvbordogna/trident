@@ -19,7 +19,7 @@ namespace Trident.Extensions.OpenApi.Abstractions
         /// <summary>
         /// Adds server details.
         /// </summary>
-        /// <param name="req"><see cref="HttpRequest"/> instance.</param>
+        /// <param name="req"><see cref="HttpRequestData"/> instance.</param>
         /// <param name="routePrefix">Route prefix value.</param>
         /// <returns><see cref="IDocument"/> instance.</returns>
         ISwaggerUI AddServer(HttpRequestData req, string routePrefix);

@@ -23,8 +23,9 @@
 	  <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.7" />
 	  <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="6.0.7" />
 	  <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.7" />
+	  <PackageReference Include="Microsoft.Authentication.WebAssembly.Msal" Version="6.0.7" />
 	  <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-	  <PackageReference Include="Radzen.Blazor" Version="3.19.4" />
+	  <PackageReference Include="Radzen.Blazor" Version="3.14.5" />
 	  <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
 	  <PackageReference Include="Blazored.LocalStorage" Version="4.2.0" />
 	  <PackageReference Include="Blazored.SessionStorage" Version="2.2.0" />

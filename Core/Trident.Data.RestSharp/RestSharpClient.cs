@@ -62,7 +62,7 @@ namespace Trident.Data.RestSharp
         {
             var client = await BuildRestClient(restConnection);
             var restRequest = _mapper.Map<RestSharpRestRequest>(request);
-            var restResponse = await client.ExecuteTaskAsync(restRequest);
+            var restResponse = await client.ExecuteAsync(restRequest);
             var response = _mapper.Map<Rest.RestResponse>(restResponse);
             NormalizeErrorsToExceptions(restResponse, response);
             return response;
@@ -102,7 +102,7 @@ namespace Trident.Data.RestSharp
             //
             // make the REST request and wait for the response
             //
-            var restResponse = await client.ExecuteTaskAsync<T>(restRequest);
+            var restResponse = await client.ExecuteAsync<T>(restRequest);
 
 
             var response = _mapper.Map<Rest.RestResponse<T>>(restResponse);
@@ -163,11 +163,11 @@ namespace Trident.Data.RestSharp
             };
 
             // use Newtonsoft's for a) proper handling of DateTimeOffset types, b) performance and c) extensability
-            client.AddHandler("application/json", NewtonsoftJsonSerializer.Default);
-            client.AddHandler("text/json", NewtonsoftJsonSerializer.Default);
-            client.AddHandler("text/x-json", NewtonsoftJsonSerializer.Default);
-            client.AddHandler("text/javascript", NewtonsoftJsonSerializer.Default);
-            client.AddHandler("*+json", NewtonsoftJsonSerializer.Default);
+            client.AddHandler("application/json", ()=> NewtonsoftJsonSerializer.Default);
+            client.AddHandler("text/json", () => NewtonsoftJsonSerializer.Default);
+            client.AddHandler("text/x-json", () => NewtonsoftJsonSerializer.Default);
+            client.AddHandler("text/javascript", () => NewtonsoftJsonSerializer.Default);
+            client.AddHandler("*+json", () => NewtonsoftJsonSerializer.Default);
 
             return client;
         }
@@ -183,11 +183,11 @@ namespace Trident.Data.RestSharp
             };
 
             // use Newtonsoft's for a) proper handling of DateTimeOffset types, b) performance and c) extensability
-            client.AddHandler("application/json", NewtonsoftJsonSerializer.Default);
-            client.AddHandler("text/json", NewtonsoftJsonSerializer.Default);
-            client.AddHandler("text/x-json", NewtonsoftJsonSerializer.Default);
-            client.AddHandler("text/javascript", NewtonsoftJsonSerializer.Default);
-            client.AddHandler("*+json", NewtonsoftJsonSerializer.Default);
+            client.AddHandler("application/json", () => NewtonsoftJsonSerializer.Default);
+            client.AddHandler("text/json", () => NewtonsoftJsonSerializer.Default);
+            client.AddHandler("text/x-json", () => NewtonsoftJsonSerializer.Default);
+            client.AddHandler("text/javascript", () => NewtonsoftJsonSerializer.Default);
+            client.AddHandler("*+json", () => NewtonsoftJsonSerializer.Default);
 
             return client;
         }

@@ -65,7 +65,7 @@ namespace Trident.IoC
                 service = _containerScope.Resolve<T>();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 service = default(T);
                 return false;

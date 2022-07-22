@@ -127,10 +127,11 @@ namespace Trident.Azure.Functions
                     throw new ArgumentException("Invalid Id provided.");
                 }
 
-                if (!isValidUrlParameters(request))
+                if (isValidUrlParameters != null && !isValidUrlParameters(request))
                 {
                     throw new ArgumentException("Invalid Url Parameters.");
                 }
+
                 var entity = Mapper.Map<TEntity>(request);
                 try
                 {

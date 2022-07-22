@@ -46,6 +46,7 @@ namespace Trident.Azure.Functions
             {
                 configureCallback?.Invoke(this, builder);
                 _appSettings = builder.Build();
+                ConnectionStrings = new JsonConnectionStringSettings(_appSettings);
             }
 
             ConfigChangedCallback(null);

@@ -54,6 +54,6 @@
         /// Content type of the parameter
         /// </summary>
         /// <value>The type of the content.</value>
-        public string? ContentType { get; set; }
+        public string ContentType { get; set; }
     }
 }

@@ -24,23 +24,8 @@ namespace Trident.Extensions
             {
                 return default(T);
             }
-
-            if (typeof(T).IsSerializable)
-            {
-                IFormatter formatter = new BinaryFormatter();
-                Stream stream = new MemoryStream();
-                using (stream)
-                {
-                    formatter.Serialize(stream, source);
-                    stream.Seek(0, SeekOrigin.Begin);
-                    return (T)formatter.Deserialize(stream);
-                }
-            }
-            else
-            {
-                //if not serializable use JsonConvert to serialize
-                return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(source));
-            }
+            
+            return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(source));
         }
 
         /// <summary>
@@ -52,7 +37,7 @@ namespace Trident.Extensions
         public static T ConvertTo<T>(this string source)
         {
             var function = TypeExtensions.GetParserFunction(typeof(T));
-            return (T) function(source);
+            return (T)function(source);
         }
 
         /// <summary>
@@ -74,7 +59,7 @@ namespace Trident.Extensions
         /// <typeparam name="TDest">The type of the t dest.</typeparam>
         /// <param name="source">The source.</param>
         /// <returns>TDest.</returns>
-        public static TDest CloneTo<T, TDest>(this T source)           
+        public static TDest CloneTo<T, TDest>(this T source)
         {
             // Don't serialize a null object, simply return the default for that object
             if (Object.ReferenceEquals(source, null))
@@ -82,8 +67,9 @@ namespace Trident.Extensions
                 return default(TDest);
             }
 
-            var settings = new JsonSerializerSettings() {
-                MissingMemberHandling = MissingMemberHandling.Ignore,               
+            var settings = new JsonSerializerSettings()
+            {
+                MissingMemberHandling = MissingMemberHandling.Ignore,
             };
 
             return JsonConvert.DeserializeObject<TDest>(JsonConvert.SerializeObject(source, settings), settings);
@@ -95,7 +81,7 @@ namespace Trident.Extensions
         /// </summary>
         /// <param name="source">The source.</param>
         /// <returns>System.String.</returns>
-        public static string ToJson(this object source)            
+        public static string ToJson(this object source)
         {
             // Don't serialize a null object, simply return the default for that object
             if (Object.ReferenceEquals(source, null))

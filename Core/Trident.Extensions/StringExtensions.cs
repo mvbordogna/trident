@@ -27,13 +27,17 @@ namespace Trident.Extensions
             return str.TrimEnd(' ');
         }
 
-        public static Dictionary<string, string> ToDictionary(this string target, char pairDelimiter, char keyValueDelimiter)
+        public static Dictionary<string, string> ToDictionary(this string target, char pairDelimiter, char keyValueDelimiter, bool lowerCaseKeys = false)
         {
             var pairs = target.Split(pairDelimiter)
                 .Select(x =>
                 {
                     var pair = x.Split(new char[] { keyValueDelimiter }, 2);
-                    return new KeyValuePair<string, string>(pair.First()?.Trim(), pair.Last()?.Trim());
+                    var key = pair.First()?.Trim();
+
+                    if (lowerCaseKeys) key = key.ToLower();
+
+                    return new KeyValuePair<string, string>(key, pair.Last()?.Trim());
                 }).ToDictionary(x => x.Key, x => x.Value);
 
             return new Dictionary<string, string>(pairs, StringComparer.InvariantCultureIgnoreCase);

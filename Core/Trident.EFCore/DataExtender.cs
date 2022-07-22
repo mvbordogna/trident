@@ -94,8 +94,12 @@ namespace Trident.EFCore
             else
             {
                 if (!AllowNoDatasources)
+                {
                     //add warning
-                    throw new Exception("No Connection Strings Configured");
+                    var msg = "No Connection Strings Configured";
+                    System.Diagnostics.Trace.WriteLine(msg);
+                    throw new Exception(msg);
+                }
             }
         }
 

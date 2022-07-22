@@ -191,12 +191,6 @@ namespace Trident.UI.Client
             return output;
         }
 
-        //private Response<M> MapValidationResults<M>(Response<M> output, HttpResponseMessage response)
-        //    where M : class
-        //{
-        //    return MapValidationResults<Response<M>, M, Framework.Core.Validation.ErrorCodes>(output, response);
-        //}
-
         private static string ParseValidationResults(IEnumerable<ValidationResult> validationResults)
         {
             StringBuilder sb = new StringBuilder();

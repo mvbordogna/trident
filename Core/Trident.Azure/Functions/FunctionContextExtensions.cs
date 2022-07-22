@@ -26,7 +26,17 @@ namespace Trident.Azure.Functions
             KeyValuePair<Type, object> keyValuePair = functionContext.Features.SingleOrDefault(f => f.Key.Name == "IFunctionBindingsFeature");
             object functionBindingsFeature = keyValuePair.Value;
             Type type = functionBindingsFeature.GetType();
-            return type.GetProperties().Single(p => p.Name == "InvocationResult").GetValue(functionBindingsFeature);
+            var streamPropertyInfo = type.GetProperties().Single(p => p.Name == "InvocationResult");
+            var existing = streamPropertyInfo.GetValue(functionBindingsFeature);
+
+            if (existing == null)
+            {
+                var req = functionContext.GetHttpRequestData();
+                existing = req.CreateResponse();
+                streamPropertyInfo.SetValue(functionBindingsFeature, existing);
+            }
+
+            return existing;
         }
 
 
@@ -34,12 +44,11 @@ namespace Trident.Azure.Functions
         public static void OverwriteResponseStream(this FunctionContext functionContext, string output, HttpStatusCode httpStatusCode)
         {
             var grpcRespponse = functionContext.GetHttpResponseObject();
+
             if (grpcRespponse != null)
             {
                 //set status code
                 grpcRespponse.GetType().GetProperty("StatusCode").SetValue(grpcRespponse, httpStatusCode);
-
-
 
                 //overwrite stream
                 var stream = grpcRespponse.GetType().GetProperty("Body").GetValue(grpcRespponse) as Stream;
@@ -47,6 +56,7 @@ namespace Trident.Azure.Functions
                 stream.SetLength(0);
                 var sw = new StreamWriter(stream);
                 sw.Write(output);
+                sw.Flush();
             }
         }
 
@@ -64,8 +74,6 @@ namespace Trident.Azure.Functions
                 var sr = new StreamReader(stream);
                 return sr.ReadToEnd();
             }
-
-
 
             return null;
         }

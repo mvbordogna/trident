@@ -69,8 +69,9 @@ namespace Trident.Security
 			catch (Exception ex)
 			{
 				_logger.LogError(ex, "Error occured while validating the users authorization token.");
-			}
-			return null;
+				throw;
+			}		
+		
 		}
 
 		public string GetClaim(ClaimsPrincipal user, string name)

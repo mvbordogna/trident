@@ -14,6 +14,10 @@ using Trident.Extensions.OpenApi.Visitors;
 
 namespace Trident.Extensions.OpenApi
 {
+    /// <summary>
+    /// Open Api Http Trigger Context
+    /// </summary>
+    /// <seealso cref="Trident.Extensions.OpenApi.Abstractions.IOpenApiHttpTriggerContext" />
     public class OpenApiHttpTriggerContext : IOpenApiHttpTriggerContext
     {
         /// <summary>
