@@ -7,5 +7,7 @@
         public string ValidAudience { get; set; }
 
         public string IssuerSigningKey { get; set; }
+
+        public bool UseRotationalKeys { get; set; }
     }
 }
